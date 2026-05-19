@@ -62,7 +62,7 @@ export default function Pacientes({ pacientes }: PacientesProps) {
   return (
     <div className="pacientes-page">
       <PageHeader title="Pacientes" backTo="/">
-        <button className="btn-novo-paciente"><Plus size={16} /> Novo Paciente</button>
+        <button className="btn-novo-paciente" onClick={() => navigate("/pacientes/novo")}><Plus size={16} /> Novo Paciente</button>
       </PageHeader>
 
       <div className="pacientes-filters">

@@ -1,0 +1,448 @@
+.cadex-page {
+  max-width: 780px;
+}
+
+/* ─── Form layout ─── */
+.cadex-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ─── Preview card ─── */
+.cadex-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeInUp 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.cadex-preview-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cadex-preview-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+  width: 260px;
+  border: 1.5px solid var(--border-light);
+  transition: box-shadow 0.2s;
+  flex-direction: column;
+}
+
+.cadex-prev-thumb {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+}
+
+.cadex-prev-play {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cadex-prev-info {
+  width: 100%;
+  padding: 10px 14px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cadex-prev-nome {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cadex-prev-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cadex-prev-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cadex-prev-footer {
+  width: 100%;
+  padding: 6px 14px 12px;
+}
+
+.cadex-prev-nivel {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 9px;
+}
+
+/* ─── Sections ─── */
+.cadex-section {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 24px 28px;
+  animation: fadeInUp 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.cadex-section:nth-child(2) { animation-delay: 0.05s; }
+.cadex-section:nth-child(3) { animation-delay: 0.1s; }
+.cadex-section:nth-child(4) { animation-delay: 0.15s; }
+
+.cadex-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.cadex-section-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cadex-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ─── Grid ─── */
+.cadex-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.cadex-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cadex-group.col-2 {
+  grid-column: span 2;
+}
+
+/* ─── Labels & inputs ─── */
+.cadex-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.required {
+  color: var(--danger);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.cadex-input {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+.cadex-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+.cadex-input::placeholder {
+  color: var(--text-muted);
+}
+
+.cadex-textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.has-error .cadex-input {
+  border-color: var(--danger);
+}
+
+.has-error .cadex-input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.1);
+}
+
+.cadex-error {
+  font-size: 12px;
+  color: var(--danger);
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+/* ─── Category grid ─── */
+.cadex-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.cadex-cat-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.cadex-cat-btn:hover {
+  border-color: var(--text-muted);
+  background: var(--card-bg-alt);
+}
+
+.cadex-cat-btn.active {
+  font-weight: 600;
+}
+
+/* ─── Nivel group ─── */
+.cadex-nivel-group {
+  display: flex;
+  gap: 8px;
+}
+
+.cadex-nivel-btn {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.cadex-nivel-btn:hover {
+  border-color: var(--text-muted);
+}
+
+.cadex-nivel-btn.active {
+  font-weight: 600;
+}
+
+/* ─── Chips ─── */
+.cadex-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.cadex-chip {
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.cadex-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cadex-chip.active {
+  background: rgba(0, 122, 255, 0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ─── Toggle ─── */
+.cadex-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  background: var(--bg);
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.cadex-toggle-row:hover {
+  border-color: var(--text-muted);
+}
+
+.cadex-toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cadex-toggle-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cadex-toggle-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.cadex-toggle {
+  width: 44px;
+  height: 26px;
+  border-radius: 13px;
+  border: none;
+  background: var(--border);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.cadex-toggle.on {
+  background: var(--accent);
+}
+
+.cadex-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cadex-toggle.on .cadex-toggle-knob {
+  transform: translateX(18px);
+}
+
+/* ─── Actions ─── */
+.cadex-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 4px;
+  animation: fadeInUp 0.3s 0.2s both;
+}
+
+.btn-cancelar {
+  padding: 11px 24px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-cancelar:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.btn-salvar {
+  padding: 11px 28px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-salvar:hover {
+  opacity: 0.85;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 640px) {
+  .cadex-section {
+    padding: 18px 16px;
+  }
+
+  .cadex-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cadex-group.col-2 {
+    grid-column: span 1;
+  }
+
+  .cadex-cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cadex-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancelar,
+  .btn-salvar {
+    width: 100%;
+    text-align: center;
+  }
+}
