@@ -81,7 +81,7 @@ export default function Dashboard({ stats, agendaHoje, alertas, doctorName }: Da
         <div className="card agenda-card">
           <div className="card-header">
             <h2>Agenda de Hoje</h2>
-            <a href="/agenda" className="card-link">Ver completa →</a>
+            <a href="/agenda" className="card-link">Ver completa <ChevronRight size={14} /></a>
           </div>
           <div className="agenda-list">
             {agendaHoje.map((item, i) => (
