@@ -42,6 +42,17 @@ export interface Exercicio {
   categoria: string;
   series: string;
   temVideo: boolean;
+  videoUrl?: string;
+  descricao?: string;
+}
+
+export interface RegistroSessao {
+  id: string;
+  data: string;
+  sessaoNum: number;
+  observacoes: string;
+  exerciciosFeitos: number;
+  totalExercicios: number;
 }
 
 export interface FaseTratamento {
@@ -108,6 +119,7 @@ export interface Paciente {
   adesaoSemanal: AdesaoDia[];
   planoTratamento: PlanoTratamento | null;
   avaliacoes?: AvaliacaoTeste[];
+  registrosSessoes?: RegistroSessao[];
 }
 
 export interface AgendaSemanal {

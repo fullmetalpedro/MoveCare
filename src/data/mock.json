@@ -69,31 +69,37 @@
             "id": "f1",
             "nome": "Fase 1 — Analgesia",
             "exercicios": [
-              { "id": "e1", "nome": "Alongamento Lombar", "categoria": "Flexibilidade", "series": "2×30s", "temVideo": true },
-              { "id": "e2", "nome": "Respiração Diafragmática", "categoria": "Relaxamento", "series": "3×10", "temVideo": true }
+              { "id": "e1", "nome": "Alongamento Lombar", "categoria": "Flexibilidade", "series": "2×30s", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "descricao": "Deite de costas, leve os joelhos ao peito e segure por 30 segundos." },
+              { "id": "e2", "nome": "Respiração Diafragmática", "categoria": "Relaxamento", "series": "3×10", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "descricao": "Inspire pelo nariz expandindo o abdômen, expire lentamente pela boca." }
             ]
           },
           {
             "id": "f2",
             "nome": "Fase 2 — Fortalecimento",
             "exercicios": [
-              { "id": "e3", "nome": "Ponte Glútea", "categoria": "Fortalecimento", "series": "3×15", "temVideo": true },
-              { "id": "e4", "nome": "Prancha Frontal", "categoria": "Estabilização", "series": "3×30s", "temVideo": true },
-              { "id": "e5", "nome": "Bird Dog", "categoria": "Estabilização", "series": "3×10 (cada lado)", "temVideo": true },
-              { "id": "e6", "nome": "Along. Piriforme", "categoria": "Flexibilidade", "series": "2×30s", "temVideo": false },
-              { "id": "e7", "nome": "Mob. Quadril (CAR)", "categoria": "Mobilidade", "series": "2×8", "temVideo": true }
+              { "id": "e3", "nome": "Ponte Glútea", "categoria": "Fortalecimento", "series": "3×15", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+              { "id": "e4", "nome": "Prancha Frontal", "categoria": "Estabilização", "series": "3×30s", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+              { "id": "e5", "nome": "Bird Dog", "categoria": "Estabilização", "series": "3×10 (cada lado)", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+              { "id": "e6", "nome": "Along. Piriforme", "categoria": "Flexibilidade", "series": "2×30s", "temVideo": false, "descricao": "Deitado, cruze a perna e puxe o joelho em direção ao ombro oposto, mantendo 30 segundos." },
+              { "id": "e7", "nome": "Mob. Quadril (CAR)", "categoria": "Mobilidade", "series": "2×8", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
             ]
           },
           {
             "id": "f3",
             "nome": "Fase 3 — Funcional",
             "exercicios": [
-              { "id": "e8", "nome": "Agachamento Parcial", "categoria": "Funcional", "series": "3×12", "temVideo": true },
-              { "id": "e9", "nome": "Step-up Lateral", "categoria": "Equilíbrio", "series": "3×10", "temVideo": true }
+              { "id": "e8", "nome": "Agachamento Parcial", "categoria": "Funcional", "series": "3×12", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+              { "id": "e9", "nome": "Step-up Lateral", "categoria": "Equilíbrio", "series": "3×10", "temVideo": false, "descricao": "Suba e desça do step lateralmente, mantendo o tronco ereto e o joelho alinhado com o pé." }
             ]
           }
         ]
       },
+      "registrosSessoes": [
+        { "id": "rs1", "data": "15/03/2026", "sessaoNum": 3, "observacoes": "Paciente realizou todos os exercícios com boa técnica. Relatou dor EVA 5 no início, EVA 3 ao fim. Progresso satisfatório no Bird Dog.", "exerciciosFeitos": 5, "totalExercicios": 7 },
+        { "id": "rs2", "data": "22/03/2026", "sessaoNum": 5, "observacoes": "Dificuldade na prancha frontal — limitado a 20s. Restante dos exercícios concluídos. Orientada sobre técnica respiratória.", "exerciciosFeitos": 6, "totalExercicios": 7 },
+        { "id": "rs3", "data": "05/04/2026", "sessaoNum": 8, "observacoes": "Excelente adesão. Conseguiu completar 3×30s na prancha. Iniciamos fase de fortalecimento funcional.", "exerciciosFeitos": 7, "totalExercicios": 7 },
+        { "id": "rs4", "data": "28/04/2026", "sessaoNum": 11, "observacoes": "Paciente relata melhora na dor lombar. Adicionado exercício de mobilidade de quadril. EVA: 3/10.", "exerciciosFeitos": 6, "totalExercicios": 9 }
+      ],
       "avaliacoes": [
         { "id": "av1", "data": "10/03/2026", "doutor": "Dr. Carlos", "testes": [
           { "tipo": "tug", "tempoSegundos": 14.2, "distanciaMetros": 3 },

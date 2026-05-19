@@ -89,14 +89,6 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
 
       <div className="detail-body">
         <nav className="detail-sidebar-nav">
-          <div className="ctx-label">PACIENTE ATIVO</div>
-          <div className="ctx-patient">
-            <img className="ctx-avatar" src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(paciente.nome)}`} alt={paciente.initials} />
-            <div>
-              <div className="ctx-name">{paciente.nome}</div>
-              <div className="ctx-cond">{paciente.condicao}</div>
-            </div>
-          </div>
           <NavLink to={`/pacientes/${id}`} end className={({ isActive }) => `ctx-link ${isActive ? "active" : ""}`}>
             <ClipboardList size={16} /> Resumo
           </NavLink>

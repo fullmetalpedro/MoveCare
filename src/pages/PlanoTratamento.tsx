@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { useOutletContext } from "react-router-dom";
-import { Download, Plus, Play, GripVertical, Pencil, Trash2 } from "lucide-react";
+import { MessageCircle, Plus, Play, GripVertical, Pencil, Trash2, X, Copy, Check } from "lucide-react";
 import type { Paciente, Exercicio } from "../types";
 import "./PlanoTratamento.css";
 
@@ -15,6 +16,90 @@ const CATEGORIA_COLORS: Record<string, string> = {
   Equilíbrio: "#007AFF",
 };
 
+function buildWhatsAppText(paciente: Paciente, exercicios: Exercicio[]): string {
+  const lines: string[] = [];
+  lines.push(`🏥 *Plano de Tratamento*`);
+  lines.push(`👤 *${paciente.nome}*`);
+  lines.push(`📋 ${paciente.condicao}`);
+  lines.push(``);
+  lines.push(`*Exercícios:*`);
+  lines.push(``);
+
+  exercicios.forEach((ex, idx) => {
+    const num = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"][idx] ?? `${idx + 1}.`;
+    lines.push(`${num} *${ex.nome}*`);
+    lines.push(`   📌 ${ex.categoria}`);
+    lines.push(`   🔁 ${ex.series}`);
+    if (ex.videoUrl) {
+      lines.push(`   🎥 ${ex.videoUrl}`);
+    } else if (ex.descricao) {
+      lines.push(`   📝 ${ex.descricao}`);
+    }
+    lines.push(``);
+  });
+
+  lines.push(`_Dúvidas? Entre em contato com seu fisioterapeuta._`);
+  return lines.join("\n");
+}
+
+function WhatsAppModal({ paciente, exercicios, onClose }: {
+  paciente: Paciente;
+  exercicios: Exercicio[];
+  onClose: () => void;
+}) {
+  const [closing, setClosing] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const text = buildWhatsAppText(paciente, exercicios);
+
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(onClose, 180);
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* fallback silent */
+    }
+  };
+
+  return createPortal(
+    <div
+      className={`wa-modal-overlay${closing ? " closing" : ""}`}
+      role="dialog"
+      aria-modal="true"
+      onMouseDown={e => { if (e.target === e.currentTarget) handleClose(); }}
+    >
+      <div className="wa-modal">
+        <div className="wa-modal-header">
+          <div className="wa-modal-title-row">
+            <span className="wa-icon-badge"><MessageCircle size={18} /></span>
+            <div>
+              <div className="wa-modal-title">Compartilhar no WhatsApp</div>
+              <div className="wa-modal-sub">Copie o texto e cole na conversa com o paciente</div>
+            </div>
+          </div>
+          <button className="wa-close-btn" onClick={handleClose}><X size={18} /></button>
+        </div>
+
+        <div className="wa-modal-body">
+          <pre className="wa-text-block">{text}</pre>
+        </div>
+
+        <div className="wa-modal-footer">
+          <button className={`wa-copy-btn${copied ? " copied" : ""}`} onClick={handleCopy}>
+            {copied ? <><Check size={15} /> Copiado!</> : <><Copy size={15} /> Copiar texto</>}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 export default function PlanoTratamento() {
   const paciente = useOutletContext<Paciente>();
   const plano = paciente.planoTratamento;
@@ -23,6 +108,7 @@ export default function PlanoTratamento() {
   );
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const [showWaModal, setShowWaModal] = useState(false);
 
   if (!plano) {
     return (
@@ -73,7 +159,9 @@ export default function PlanoTratamento() {
           <p className="plano-subtitle">{paciente.nome} · {paciente.condicao}</p>
         </div>
         <div className="plano-actions">
-          <button className="btn-outline-sm"><Download size={14} /> Exportar PDF</button>
+          <button className="btn-outline-sm btn-whatsapp" onClick={() => setShowWaModal(true)}>
+            <MessageCircle size={14} /> Enviar pelo WhatsApp
+          </button>
           <button className="btn-primary-sm"><Plus size={14} /> Adicionar da Biblioteca</button>
         </div>
       </div>
@@ -85,9 +173,7 @@ export default function PlanoTratamento() {
           exercicios.map((ex, idx) => {
             const isDragging = draggingId === ex.id;
             const isOver = dragOverId === ex.id;
-            // Line before: dragging from below, will land above this item
             const lineBefore = isOver && draggingIdx > idx;
-            // Line after: dragging from above, will land below this item
             const lineAfter = isOver && draggingIdx < idx;
 
             return (
@@ -138,6 +224,14 @@ export default function PlanoTratamento() {
         <h2>Observações do Plano</h2>
         <blockquote className="obs-text">{plano.observacoes}</blockquote>
       </div>
+
+      {showWaModal && (
+        <WhatsAppModal
+          paciente={paciente}
+          exercicios={exercicios}
+          onClose={() => setShowWaModal(false)}
+        />
+      )}
     </div>
   );
 }

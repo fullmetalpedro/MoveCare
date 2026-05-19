@@ -275,6 +275,341 @@
   line-height: 1.5;
 }
 
+/* ─── Header buttons ─── */
+.evolucao-header-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ─── Botão Registrar Sessão ─── */
+.btn-nova-sessao {
+  background: #FF9500;
+}
+
+.btn-nova-sessao:hover {
+  opacity: 0.85;
+}
+
+/* ─── Formulário de nova sessão ─── */
+.sessao-form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sessao-form-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.sessao-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.sessao-obs-group {
+  grid-column: 1 / -1;
+}
+
+.sessao-form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* ─── Reuse cadex form styles ─── */
+.cadex-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cadex-group.has-error .cadex-input {
+  border-color: var(--danger);
+}
+
+.cadex-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.cadex-input {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  font-size: 14px;
+  color: var(--text-primary);
+  font-family: inherit;
+  transition: border-color 0.15s;
+  outline: none;
+}
+
+.cadex-input:focus {
+  border-color: var(--accent);
+}
+
+.cadex-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.cadex-error {
+  font-size: 12px;
+  color: var(--danger);
+}
+
+/* ─── Sessões card ─── */
+.sessoes-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sessoes-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.sessoes-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sessoes-card-title-row h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.sessoes-icon {
+  color: var(--accent);
+}
+
+.sessoes-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--border-light);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.sessoes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sessao-item {
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.sessao-item.expanded {
+  border-color: var(--accent);
+}
+
+.sessao-item-header {
+  width: 100%;
+  background: var(--card-bg-alt);
+  border: none;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  gap: 12px;
+  transition: background 0.15s;
+}
+
+.sessao-item-header:hover {
+  background: var(--border-light);
+}
+
+.sessao-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sessao-num-badge {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sessao-data {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.sessao-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.sessao-adesao-inline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sessao-item-body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--card-bg);
+  border-top: 1px solid var(--border-light);
+}
+
+.sess-adesao-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sess-adesao-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: var(--border-light);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.sess-adesao-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.sess-adesao-label {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sessao-obs-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── Avaliações expandíveis ─── */
+.av-item-header {
+  cursor: pointer;
+}
+
+.av-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.av-expand-hint {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.av-item-body {
+  gap: 14px;
+}
+
+.av-testes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.av-teste-card {
+  background: var(--border-light);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.av-teste-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.av-teste-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.av-teste-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.av-teste-key {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.av-teste-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.wa-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  border: 1.5px solid #25D366;
+  background: transparent;
+  color: #25D366;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  align-self: flex-start;
+}
+
+.wa-share-btn:hover {
+  background: rgba(37, 211, 102, 0.07);
+}
+
+/* ─── cadex-label hint ─── */
+.cadex-label-hint {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .evolucao-header {
     flex-direction: column;
@@ -292,5 +627,32 @@
   .ev-chart-area svg {
     width: 100%;
     height: auto;
+  }
+
+  .evolucao-header-btns {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .evolucao-header-btns .btn-nova-av {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sessao-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sessao-form-actions {
+    flex-direction: column;
+  }
+
+  .sessao-form-actions .btn-cancelar,
+  .sessao-form-actions .btn-salvar {
+    width: 100%;
+  }
+
+  .av-chips-row {
+    display: none;
   }
 }

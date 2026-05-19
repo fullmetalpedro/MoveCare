@@ -36,6 +36,9 @@
 }
 
 .btn-primary-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: var(--accent);
   color: #fff;
   border: none;
@@ -52,8 +55,11 @@
 }
 
 .btn-outline-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: var(--card-bg);
-  border: none;
+  border: 1.5px solid var(--border);
   border-radius: 10px;
   padding: 8px 18px;
   font-size: 13px;
