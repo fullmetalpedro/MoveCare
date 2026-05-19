@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Play, Plus, Search, Dumbbell, StretchHorizontal, Activity, Footprints, HeartPulse, Wind } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import "./Biblioteca.css";
@@ -61,6 +62,7 @@ function NivelBadge({ nivel }: { nivel: string }) {
 }
 
 export default function Biblioteca() {
+  const navigate = useNavigate();
   const [filtro, setFiltro] = useState("Todos");
   const [search, setSearch] = useState("");
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -94,7 +96,7 @@ export default function Biblioteca() {
   return (
     <div className="biblioteca-page">
       <PageHeader title="Biblioteca de Exercícios" backTo="/">
-        <button className="btn-novo-exercicio"><Plus size={16} /> Novo Exercício</button>
+        <button className="btn-novo-exercicio" onClick={() => navigate("/biblioteca/novo")}><Plus size={16} /> Novo Exercício</button>
       </PageHeader>
 
       <div className="biblioteca-filters">
@@ -153,7 +155,7 @@ export default function Biblioteca() {
           );
         })}
 
-        <div className="add-doc-zone">
+        <div className="add-doc-zone" onClick={() => navigate("/biblioteca/novo")} style={{ cursor: "pointer" }}>
           <Plus size={24} />
           <span>Clique para adicionar um novo exercício à biblioteca</span>
         </div>

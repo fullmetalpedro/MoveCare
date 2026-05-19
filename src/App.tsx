@@ -9,6 +9,8 @@ import PlanoTratamento from "./pages/PlanoTratamento";
 import PacienteDocumentos from "./pages/PacienteDocumentos";
 import Documentos from "./pages/Documentos";
 import Biblioteca from "./pages/Biblioteca";
+import CadastroPaciente from "./pages/CadastroPaciente";
+import CadastroExercicio from "./pages/CadastroExercicio";
 import mockData from "./data/mock.json";
 import type { MockData } from "./types";
 
@@ -46,6 +48,8 @@ export default function App() {
           <Route path="documentos" element={<PacienteDocumentos />} />
         </Route>
         <Route path="biblioteca" element={<Biblioteca />} />
+        <Route path="biblioteca/novo" element={<CadastroExercicio />} />
+        <Route path="pacientes/novo" element={<CadastroPaciente />} />
         <Route path="documentos" element={<Documentos />} />
       </Route>
     </Routes>
