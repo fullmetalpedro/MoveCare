@@ -1,14 +1,15 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import {
   ChevronDown, ChevronUp, Play, Square, CheckCircle2,
   Timer, Dumbbell, Activity, FootprintsIcon, RotateCcw,
-  Camera, Brain, ClipboardList, Footprints,
+  Camera, Brain, ClipboardList, Footprints, X, Plus, Minus,
 } from "lucide-react";
 import type { Paciente } from "../types";
 import "./NovaAvaliacao.css";
 
-// ─── Timer Widget ──────────────────────────────────────────────────────────────
+// ─── Up/down timer (freerunning) ──────────────────────────────────────────────
 function TimerWidget({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [running, setRunning] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -25,8 +26,7 @@ function TimerWidget({ value, onChange }: { value: string; onChange: (v: string)
   const stop = () => {
     if (ref.current) clearInterval(ref.current);
     setRunning(false);
-    const v = elapsed.toFixed(1);
-    onChange(v);
+    onChange(elapsed.toFixed(1));
   };
 
   const reset = () => {
@@ -40,19 +40,89 @@ function TimerWidget({ value, onChange }: { value: string; onChange: (v: string)
     <div className="timer-widget">
       <div className="timer-display">{running ? elapsed.toFixed(1) : (value || "0.0")}s</div>
       <div className="timer-btns">
-        {!running ? (
+        {!running
+          ? <button className="timer-btn timer-start" type="button" onClick={start}><Play size={13} /> Iniciar</button>
+          : <button className="timer-btn timer-stop"  type="button" onClick={stop}><Square size={13} /> Parar</button>
+        }
+        <button className="timer-btn timer-reset" type="button" onClick={reset}><RotateCcw size={13} /></button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Countdown timer (fixed duration) ────────────────────────────────────────
+function CountdownWidget({ totalSeconds }: { totalSeconds: number }) {
+  const [remaining, setRemaining] = useState(totalSeconds);
+  const [running, setRunning] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const ref = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => () => { if (ref.current) clearInterval(ref.current); }, []);
+
+  const start = () => {
+    if (finished || remaining <= 0) return;
+    setRunning(true);
+    ref.current = setInterval(() => {
+      setRemaining(r => {
+        if (r <= 1) {
+          clearInterval(ref.current!);
+          setRunning(false);
+          setFinished(true);
+          return 0;
+        }
+        return r - 1;
+      });
+    }, 1000);
+  };
+
+  const reset = () => {
+    if (ref.current) clearInterval(ref.current);
+    setRunning(false);
+    setFinished(false);
+    setRemaining(totalSeconds);
+  };
+
+  const urgent = running && remaining <= 5;
+
+  return (
+    <div className={`timer-widget${finished ? " timer-widget-done" : urgent ? " timer-widget-urgent" : ""}`}>
+      <div className={`timer-display${finished ? " timer-done" : urgent ? " timer-urgent" : ""}`}>
+        {remaining}s
+      </div>
+      <div className="timer-btns">
+        {!running && !finished && (
           <button className="timer-btn timer-start" type="button" onClick={start}>
             <Play size={13} /> Iniciar
           </button>
-        ) : (
-          <button className="timer-btn timer-stop" type="button" onClick={stop}>
+        )}
+        {running && (
+          <button className="timer-btn timer-stop" type="button" onClick={reset}>
             <Square size={13} /> Parar
           </button>
         )}
-        <button className="timer-btn timer-reset" type="button" onClick={reset}>
-          <RotateCcw size={13} />
-        </button>
+        {finished && <span className="timer-done-label">Tempo esgotado!</span>}
+        <button className="timer-btn timer-reset" type="button" onClick={reset}><RotateCcw size={13} /></button>
       </div>
+    </div>
+  );
+}
+
+// ─── Rep counter ──────────────────────────────────────────────────────────────
+function RepCounter({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  return (
+    <div className="rep-counter">
+      <button
+        type="button"
+        className="rep-btn"
+        onClick={() => onChange(Math.max(0, value - 1))}
+        disabled={value === 0}
+      >
+        <Minus size={16} />
+      </button>
+      <span className="rep-value">{value}</span>
+      <button type="button" className="rep-btn rep-btn-add" onClick={() => onChange(value + 1)}>
+        <Plus size={16} />
+      </button>
     </div>
   );
 }
@@ -78,77 +148,322 @@ function ScoreRow({ label, max, value, onChange }: { label: string; max: number;
 
 // ─── MRC muscle groups ────────────────────────────────────────────────────────
 const MRC_GROUPS = [
-  "Abdutores do ombro D",
-  "Abdutores do ombro E",
-  "Flexores do cotovelo D",
-  "Flexores do cotovelo E",
-  "Extensores do punho D",
-  "Extensores do punho E",
-  "Flexores do quadril D",
-  "Flexores do quadril E",
-  "Extensores do joelho D",
-  "Extensores do joelho E",
-  "Dorsiflexores D",
-  "Dorsiflexores E",
+  "Abdutores do ombro D", "Abdutores do ombro E",
+  "Flexores do cotovelo D", "Flexores do cotovelo E",
+  "Extensores do punho D", "Extensores do punho E",
+  "Flexores do quadril D", "Flexores do quadril E",
+  "Extensores do joelho D", "Extensores do joelho E",
+  "Dorsiflexores D", "Dorsiflexores E",
 ];
 
 // ─── DGI items ────────────────────────────────────────────────────────────────
 const DGI_ITEMS = [
-  "Marcha em superfície plana",
-  "Mudança de velocidade",
-  "Rotação horizontal da cabeça",
-  "Rotação vertical da cabeça",
-  "Marcha e pivô (180°)",
-  "Degrau",
-  "Obstáculos",
-  "Escadas",
+  "Marcha em superfície plana", "Mudança de velocidade",
+  "Rotação horizontal da cabeça", "Rotação vertical da cabeça",
+  "Marcha e pivô (180°)", "Degrau", "Obstáculos", "Escadas",
 ];
+
+// ─── MMSE sections ────────────────────────────────────────────────────────────
+interface ScoreItem { id: string; label: string; max: number }
+interface TestSection { title: string; hint: string; items: ScoreItem[] }
+
+const MMSE_SECTIONS: TestSection[] = [
+  {
+    title: "Orientação Temporal",
+    hint: 'Pergunte: "Em que ano estamos? Estação? Mês? Dia do mês? Dia da semana?"',
+    items: [
+      { id: "t_ano",    label: "Ano atual",          max: 1 },
+      { id: "t_est",    label: "Estação do ano",      max: 1 },
+      { id: "t_mes",    label: "Mês atual",           max: 1 },
+      { id: "t_dia_m",  label: "Dia do mês",          max: 1 },
+      { id: "t_dia_s",  label: "Dia da semana",       max: 1 },
+    ],
+  },
+  {
+    title: "Orientação Espacial",
+    hint: 'Pergunte: "Em que país, estado, cidade, local e andar estamos?"',
+    items: [
+      { id: "e_pais",   label: "País",                max: 1 },
+      { id: "e_estado", label: "Estado",              max: 1 },
+      { id: "e_cidade", label: "Cidade",              max: 1 },
+      { id: "e_local",  label: "Local / prédio",      max: 1 },
+      { id: "e_andar",  label: "Andar / sala",        max: 1 },
+    ],
+  },
+  {
+    title: "Registro",
+    hint: 'Diga pausadamente: "Carro, Vaso, Tijolo". Peça para repetir imediatamente.',
+    items: [
+      { id: "r_carro",  label: "Carro",               max: 1 },
+      { id: "r_vaso",   label: "Vaso",                max: 1 },
+      { id: "r_tijolo", label: "Tijolo",              max: 1 },
+    ],
+  },
+  {
+    title: "Atenção e Cálculo",
+    hint: '"Subtraia 7 de 100 e continue subtraindo." Sequência: 93 → 86 → 79 → 72 → 65. Alternativa: soletre MUNDO de trás para frente (O-D-N-U-M).',
+    items: [
+      { id: "c_93",  label: "93  (ou O)", max: 1 },
+      { id: "c_86",  label: "86  (ou D)", max: 1 },
+      { id: "c_79",  label: "79  (ou N)", max: 1 },
+      { id: "c_72",  label: "72  (ou U)", max: 1 },
+      { id: "c_65",  label: "65  (ou M)", max: 1 },
+    ],
+  },
+  {
+    title: "Evocação",
+    hint: '"Lembra das três palavras que pedí para repetir? Quais eram?" (Carro, Vaso, Tijolo)',
+    items: [
+      { id: "ev_carro",  label: "Carro",  max: 1 },
+      { id: "ev_vaso",   label: "Vaso",   max: 1 },
+      { id: "ev_tijolo", label: "Tijolo", max: 1 },
+    ],
+  },
+  {
+    title: "Linguagem e Práxis",
+    hint: "Avalie cada item individualmente conforme as instruções.",
+    items: [
+      { id: "l_nom_can",  label: "Nomeação — Caneta",                              max: 1 },
+      { id: "l_nom_rel",  label: "Nomeação — Relógio de pulso",                    max: 1 },
+      { id: "l_rep",      label: 'Repetição — "Nem aqui, nem ali, nem lá"',        max: 1 },
+      { id: "l_cmd1",     label: "Comando — Pegar papel com mão direita",          max: 1 },
+      { id: "l_cmd2",     label: "Comando — Dobrar ao meio",                       max: 1 },
+      { id: "l_cmd3",     label: "Comando — Colocar no chão",                      max: 1 },
+      { id: "l_leitura",  label: 'Leitura — Fechar os olhos ao ver "FECHE OS OLHOS"', max: 1 },
+      { id: "l_escrita",  label: "Escrita — Frase completa com sentido",           max: 1 },
+      { id: "l_copia",    label: "Cópia — Dois pentágonos cruzados",               max: 1 },
+    ],
+  },
+];
+
+// ─── MoCA sections ────────────────────────────────────────────────────────────
+const MOCA_SECTIONS: TestSection[] = [
+  {
+    title: "Visoespacial / Executiva",
+    hint: "Trilha alternada (1→A→2→B→3→C…), cópia do cubo, relógio com ponteiros às 11h10.",
+    items: [
+      { id: "ve_trilha",    label: "Trilha alternada",            max: 1 },
+      { id: "ve_cubo",      label: "Cópia do cubo 3D",           max: 1 },
+      { id: "ve_rel_cont",  label: "Relógio — contorno circular", max: 1 },
+      { id: "ve_rel_nums",  label: "Relógio — números corretos",  max: 1 },
+      { id: "ve_rel_pont",  label: "Relógio — ponteiros em 11h10", max: 1 },
+    ],
+  },
+  {
+    title: "Nomeação",
+    hint: "Mostre imagens de animais incomuns: leão, rinoceronte, camelo/dromedário.",
+    items: [
+      { id: "n_leao",   label: "Leão",                 max: 1 },
+      { id: "n_rino",   label: "Rinoceronte",          max: 1 },
+      { id: "n_camelo", label: "Camelo / Dromedário",  max: 1 },
+    ],
+  },
+  {
+    title: "Atenção",
+    hint: "Dígitos diretos (5 números), inversos (3 números), vigilância (tapinha na letra A) e cálculo subtrativo.",
+    items: [
+      { id: "a_dig_d",  label: "Dígitos diretos (ex: 2 1 8 5 4)",          max: 1 },
+      { id: "a_dig_i",  label: "Dígitos inversos (repetir de trás)",         max: 1 },
+      { id: "a_vigil",  label: "Vigilância — tapinha ao ouvir letra A",      max: 1 },
+      { id: "a_calc",   label: "Cálculo — subtração de 7 (0 erros=3 pts, 1=2, 2-3=1, 4-5=0)", max: 3 },
+    ],
+  },
+  {
+    title: "Linguagem",
+    hint: "Repetir duas frases longas exatamente. Dizer o máximo de palavras com letra F em 1 min (≥11 = 1 pt).",
+    items: [
+      { id: "l_frase1", label: 'Frase 1 — "O gato sempre se escondia sob o sofá quando os cachorros estavam na sala"', max: 1 },
+      { id: "l_frase2", label: "Frase 2 — segunda frase complexa padronizada",    max: 1 },
+      { id: "l_fluenc", label: "Fluência verbal — ≥11 palavras com letra F em 1 min", max: 1 },
+    ],
+  },
+  {
+    title: "Abstração",
+    hint: 'Pergunte o que têm em comum: "laranja e banana" → frutas; "trem e bicicleta" → transporte.',
+    items: [
+      { id: "ab1", label: "Laranja e banana (Frutas)",                 max: 1 },
+      { id: "ab2", label: "Trem e bicicleta (Meios de transporte)",    max: 1 },
+    ],
+  },
+  {
+    title: "Evocação Tardia",
+    hint: "Palavras lidas no início: Rosto, Seda, Igreja, Cravo, Vermelho. Perguntar ao final do teste.",
+    items: [
+      { id: "ev_rosto",    label: "Rosto",     max: 1 },
+      { id: "ev_seda",     label: "Seda",      max: 1 },
+      { id: "ev_igreja",   label: "Igreja",    max: 1 },
+      { id: "ev_cravo",    label: "Cravo",     max: 1 },
+      { id: "ev_vermelho", label: "Vermelho",  max: 1 },
+    ],
+  },
+  {
+    title: "Orientação",
+    hint: "1 ponto por resposta correta.",
+    items: [
+      { id: "or_dia_m",  label: "Dia do mês",          max: 1 },
+      { id: "or_mes",    label: "Mês",                 max: 1 },
+      { id: "or_ano",    label: "Ano",                 max: 1 },
+      { id: "or_dia_s",  label: "Dia da semana",       max: 1 },
+      { id: "or_local",  label: "Local / instituição", max: 1 },
+      { id: "or_cidade", label: "Cidade",              max: 1 },
+    ],
+  },
+];
+
+function initVals(sections: TestSection[]): Record<string, number> {
+  return Object.fromEntries(sections.flatMap(s => s.items.map(i => [i.id, 0])));
+}
+
+// ─── Test modal (MMSE / MoCA) ─────────────────────────────────────────────────
+function TestModal({
+  testId,
+  title,
+  subtitle,
+  preamble,
+  sections,
+  maxTotal,
+  values,
+  onChange,
+  onClose,
+  onConfirm,
+}: {
+  testId: string;
+  title: string;
+  subtitle: string;
+  preamble?: React.ReactNode;
+  sections: TestSection[];
+  maxTotal: number;
+  values: Record<string, number>;
+  onChange: (id: string, v: number) => void;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
+  const total = Object.values(values).reduce((a, b) => a + b, 0);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  const isBelowNormal = testId === "moca" ? total < 26 : total < 24;
+
+  return createPortal(
+    <div className="test-modal-overlay" onClick={onClose}>
+      <div className="test-modal" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
+        <div className="test-modal-header">
+          <div>
+            <div className="test-modal-title">{title}</div>
+            <div className="test-modal-sub">{subtitle}</div>
+          </div>
+          <button className="test-modal-close" type="button" onClick={onClose} aria-label="Fechar">
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="test-modal-body">
+          {preamble && <div className="test-modal-preamble">{preamble}</div>}
+          {sections.map(section => {
+            const sectionTotal = section.items.reduce((a, i) => a + (values[i.id] ?? 0), 0);
+            const sectionMax   = section.items.reduce((a, i) => a + i.max, 0);
+            return (
+              <div key={section.title} className="modal-section">
+                <div className="modal-section-header">
+                  <span className="modal-section-title">{section.title}</span>
+                  <span className="modal-section-pts">{sectionTotal} / {sectionMax}</span>
+                </div>
+                {section.hint && <p className="modal-section-hint">{section.hint}</p>}
+                {section.items.map(item => (
+                  <ScoreRow
+                    key={item.id}
+                    label={item.label}
+                    max={item.max}
+                    value={values[item.id] ?? 0}
+                    onChange={v => onChange(item.id, v)}
+                  />
+                ))}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="test-modal-footer">
+          <div className="test-modal-total">
+            Total: <strong>{total} / {maxTotal}</strong>
+            {isBelowNormal && (
+              <span className="modal-below-normal">
+                {testId === "moca" ? " · Abaixo do normal (< 26)" : " · Sugestivo de comprometimento (< 24)"}
+              </span>
+            )}
+          </div>
+          <button className="btn-confirmar" type="button" onClick={onConfirm}>
+            Confirmar {title}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
 
 // ─── Test definitions ─────────────────────────────────────────────────────────
 const TESTS = [
-  { id: "mrc",         label: "Escala MRC",               desc: "Força muscular 0–5 por grupo",          icon: Activity,       color: "#FF3B30" },
-  { id: "dinamometria",label: "Dinamometria de Preensão",  desc: "Força de preensão em kgf (D e E)",       icon: Dumbbell,       color: "#34C759" },
-  { id: "sit_to_stand",label: "Sentar-Levantar 30s",       desc: "Repetições em 30 segundos",             icon: Footprints,     color: "#FF9500" },
-  { id: "tug",         label: "TUG",                       desc: "Timed Up and Go — 3 metros",            icon: Timer,          color: "#007AFF" },
-  { id: "10mwt",       label: "10MWT",                     desc: "Velocidade de marcha — 10 metros",      icon: FootprintsIcon, color: "#AF52DE" },
-  { id: "dgi",         label: "DGI",                       desc: "Dynamic Gait Index — 8 itens (0–3)",    icon: Activity,       color: "#5AC8FA" },
-  { id: "tdr",         label: "Teste do Relógio",          desc: "Upload ou foto do desenho do relógio",  icon: Camera,         color: "#FF9500" },
-  { id: "mmse",        label: "MMSE",                      desc: "Mini-Exame do Estado Mental (0–30)",    icon: Brain,          color: "#007AFF" },
-  { id: "moca",        label: "MoCA",                      desc: "Montreal Cognitive Assessment (0–30)",  icon: ClipboardList,  color: "#AF52DE" },
+  { id: "mrc",          label: "Escala MRC",              desc: "Força muscular 0–5 por grupo",         icon: Activity,       color: "#E04F5F" },
+  { id: "dinamometria", label: "Dinamometria de Preensão", desc: "Força de preensão em kgf (D e E)",      icon: Dumbbell,       color: "#34C759" },
+  { id: "sit_to_stand", label: "Sentar-Levantar 30s",      desc: "Repetições em 30 segundos",            icon: Footprints,     color: "#E8973A" },
+  { id: "tug",          label: "TUG",                      desc: "Timed Up and Go — 3 metros",           icon: Timer,          color: "#007AFF" },
+  { id: "10mwt",        label: "10MWT",                    desc: "Velocidade de marcha — 10 metros",     icon: FootprintsIcon, color: "#AF52DE" },
+  { id: "dgi",          label: "DGI",                      desc: "Dynamic Gait Index — 8 itens (0–3)",   icon: Activity,       color: "#5AC8FA" },
+  { id: "tdr",          label: "Teste do Relógio",         desc: "Upload ou foto do desenho do relógio", icon: Camera,         color: "#E8973A" },
+  { id: "mmse",         label: "MMSE",                     desc: "Mini-Exame do Estado Mental (0–30)",   icon: Brain,          color: "#007AFF" },
+  { id: "moca",         label: "MoCA",                     desc: "Montreal Cognitive Assessment (0–30)", icon: ClipboardList,  color: "#AF52DE" },
 ];
 
+// ─── Main component ────────────────────────────────────────────────────────────
 export default function NovaAvaliacao() {
   const paciente = useOutletContext<Paciente>();
-  const navigate = useNavigate();
-  const [expanded, setExpanded] = useState<string | null>(null);
-  const [done, setDone] = useState<Set<string>>(new Set());
+  const navigate  = useNavigate();
+
+  const [expanded,  setExpanded]  = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState<"mmse" | "moca" | null>(null);
+  const [done,      setDone]      = useState<Set<string>>(new Set());
 
   // Per-test state
-  const [mrcVals, setMrcVals] = useState<Record<string, number>>(Object.fromEntries(MRC_GROUPS.map(g => [g, 5])));
-  const [dinaEsq, setDinaEsq] = useState("");
-  const [dinaDrt, setDinaDrt] = useState("");
-  const [sitReps, setSitReps] = useState("");
-  const [tugTempo, setTugTempo] = useState("");
-  const [tugDist] = useState("3");
-  const [mwtTempo, setMwtTempo] = useState("");
-  const [mwtDist, setMwtDist] = useState("10");
-  const [dgiVals, setDgiVals] = useState<Record<string, number>>(Object.fromEntries(DGI_ITEMS.map(g => [g, 0])));
-  const [tdrFile, setTdrFile] = useState<File | null>(null);
-  const [tdrPreview, setTdrPreview] = useState<string | null>(null);
-  const [mmseTotal, setMmseTotal] = useState("");
-  const [mocaTotal, setMocaTotal] = useState("");
+  const [mrcVals,   setMrcVals]  = useState<Record<string, number>>(Object.fromEntries(MRC_GROUPS.map(g => [g, 5])));
+  const [dinaEsq,   setDinaEsq]  = useState("");
+  const [dinaDrt,   setDinaDrt]  = useState("");
+  const [sitReps,   setSitReps]  = useState(0);
+  const [tugTempo,  setTugTempo] = useState("");
+  const [mwtTempo,  setMwtTempo] = useState("");
+  const [mwtDist,   setMwtDist]  = useState("10");
+  const [dgiVals,   setDgiVals]  = useState<Record<string, number>>(Object.fromEntries(DGI_ITEMS.map(g => [g, 0])));
+  const [tdrFile,   setTdrFile]  = useState<File | null>(null);
+  const [tdrPreview,setTdrPreview] = useState<string | null>(null);
+  const [mmseVals,  setMmseVals] = useState<Record<string, number>>(initVals(MMSE_SECTIONS));
+  const [mocaVals,  setMocaVals] = useState<Record<string, number>>(initVals(MOCA_SECTIONS));
 
-  const mwtSpeed = mwtTempo && mwtDist
-    ? (parseFloat(mwtDist) / parseFloat(mwtTempo)).toFixed(2)
-    : "";
+  const mwtSpeed  = mwtTempo && mwtDist ? (parseFloat(mwtDist) / parseFloat(mwtTempo)).toFixed(2) : "";
+  const dgiTotal  = Object.values(dgiVals).reduce((a, b) => a + b, 0);
+  const mmseTotal = Object.values(mmseVals).reduce((a, b) => a + b, 0);
+  const mocaTotal = Object.values(mocaVals).reduce((a, b) => a + b, 0);
 
-  const dgiTotal = Object.values(dgiVals).reduce((a, b) => a + b, 0);
-
-  const toggle = (id: string) => setExpanded(e => (e === id ? null : id));
+  const toggle = (id: string) => {
+    if (id === "mmse" || id === "moca") {
+      setOpenModal(prev => (prev === id ? null : id as "mmse" | "moca"));
+      return;
+    }
+    setExpanded(e => (e === id ? null : id));
+  };
 
   const markDone = (id: string) => {
     setDone(d => { const n = new Set(d); n.add(id); return n; });
     setExpanded(null);
+    setOpenModal(null);
   };
 
   const handleTDRFile = (file: File) => {
@@ -171,7 +486,7 @@ export default function NovaAvaliacao() {
           <p className="nova-av-sub">{paciente.nome} · {paciente.condicao}</p>
         </div>
         {done.size > 0 && (
-          <button className="btn-salvar-av" onClick={handleSave}>
+          <button className="btn-salvar-av" type="button" onClick={handleSave}>
             Salvar {done.size} teste{done.size !== 1 ? "s" : ""}
           </button>
         )}
@@ -179,8 +494,8 @@ export default function NovaAvaliacao() {
 
       <div className="nova-av-list">
         {TESTS.map(test => {
-          const Icon = test.icon;
-          const isOpen = expanded === test.id;
+          const Icon  = test.icon;
+          const isOpen = expanded === test.id || openModal === test.id;
           const isDone = done.has(test.id);
 
           return (
@@ -199,15 +514,17 @@ export default function NovaAvaliacao() {
                 </span>
               </button>
 
-              {isOpen && (
+              {/* Inline forms — not for mmse/moca */}
+              {expanded === test.id && (
                 <div className="nav-test-form">
+
                   {test.id === "mrc" && (
                     <div className="form-mrc">
                       <p className="form-hint">Selecione a pontuação (0 = sem contração, 5 = normal)</p>
                       {MRC_GROUPS.map(g => (
                         <ScoreRow key={g} label={g} max={5} value={mrcVals[g]} onChange={v => setMrcVals(p => ({ ...p, [g]: v }))} />
                       ))}
-                      <button className="btn-confirmar" onClick={() => markDone(test.id)}>Confirmar MRC</button>
+                      <button className="btn-confirmar" type="button" onClick={() => markDone(test.id)}>Confirmar MRC</button>
                     </div>
                   )}
 
@@ -223,66 +540,66 @@ export default function NovaAvaliacao() {
                           <input className="nav-input" type="number" step="0.5" min="0" placeholder="ex: 24.0" value={dinaDrt} onChange={e => setDinaDrt(e.target.value)} />
                         </div>
                       </div>
-                      <button className="btn-confirmar" disabled={!dinaEsq || !dinaDrt} onClick={() => markDone(test.id)}>Confirmar Dinamometria</button>
+                      <button className="btn-confirmar" type="button" disabled={!dinaEsq || !dinaDrt} onClick={() => markDone(test.id)}>Confirmar Dinamometria</button>
                     </div>
                   )}
 
                   {test.id === "sit_to_stand" && (
-                    <div className="form-simple">
-                      <p className="form-hint">Conte o número de repetições completas em 30 segundos.</p>
+                    <div className="form-sit">
+                      <p className="form-hint">Inicie o cronômetro de 30 s e conte as repetições completas enquanto o tempo corre.</p>
                       <div className="form-group">
-                        <label>Repetições</label>
-                        <input className="nav-input" type="number" min="0" placeholder="ex: 12" value={sitReps} onChange={e => setSitReps(e.target.value)} />
+                        <label>Cronômetro 30 s</label>
+                        <CountdownWidget totalSeconds={30} />
                       </div>
-                      <button className="btn-confirmar" disabled={!sitReps} onClick={() => markDone(test.id)}>Confirmar</button>
+                      <div className="form-group">
+                        <label>Repetições completas</label>
+                        <RepCounter value={sitReps} onChange={setSitReps} />
+                      </div>
+                      <button className="btn-confirmar" type="button" onClick={() => markDone(test.id)}>
+                        Confirmar — {sitReps} rep{sitReps !== 1 ? "s" : ""}
+                      </button>
                     </div>
                   )}
 
                   {test.id === "tug" && (
                     <div className="form-tug">
-                      <p className="form-hint">Paciente deve levantar, caminhar 3 m, girar e sentar. Use o cronômetro.</p>
+                      <p className="form-hint">Paciente levanta, caminha 3 m, gira e senta. Inicie o cronômetro no movimento.</p>
                       <div className="form-group">
                         <label>Tempo</label>
                         <TimerWidget value={tugTempo} onChange={setTugTempo} />
                       </div>
-                      <div className="form-group">
-                        <label>Distância (m)</label>
-                        <input className="nav-input" type="number" step="0.5" value={tugDist} readOnly />
-                      </div>
-                      <button className="btn-confirmar" disabled={!tugTempo} onClick={() => markDone(test.id)}>Confirmar TUG</button>
+                      <button className="btn-confirmar" type="button" disabled={!tugTempo} onClick={() => markDone(test.id)}>Confirmar TUG</button>
                     </div>
                   )}
 
                   {test.id === "10mwt" && (
                     <div className="form-mwt">
-                      <p className="form-hint">Velocidade de marcha confortável. Use cronômetro para medir o trecho.</p>
-                      <div className="dina-row">
-                        <div className="form-group">
-                          <label>Distância (m)</label>
-                          <input className="nav-input" type="number" step="1" value={mwtDist} onChange={e => setMwtDist(e.target.value)} />
-                        </div>
-                        <div className="form-group">
-                          <label>Tempo</label>
-                          <TimerWidget value={mwtTempo} onChange={setMwtTempo} />
-                        </div>
+                      <p className="form-hint">Velocidade de marcha confortável em pista de 10 m.</p>
+                      <div className="form-group">
+                        <label>Tempo</label>
+                        <TimerWidget value={mwtTempo} onChange={setMwtTempo} />
+                      </div>
+                      <div className="form-group">
+                        <label>Distância (m)</label>
+                        <input className="nav-input" type="number" step="1" value={mwtDist} onChange={e => setMwtDist(e.target.value)} />
                       </div>
                       {mwtSpeed && (
                         <div className="mwt-speed">
                           Velocidade calculada: <strong>{mwtSpeed} m/s</strong>
                         </div>
                       )}
-                      <button className="btn-confirmar" disabled={!mwtTempo} onClick={() => markDone(test.id)}>Confirmar 10MWT</button>
+                      <button className="btn-confirmar" type="button" disabled={!mwtTempo} onClick={() => markDone(test.id)}>Confirmar 10MWT</button>
                     </div>
                   )}
 
                   {test.id === "dgi" && (
                     <div className="form-dgi">
-                      <p className="form-hint">0 = alteração grave, 1 = moderada, 2 = leve, 3 = normal</p>
+                      <p className="form-hint">0 = alteração grave · 1 = moderada · 2 = leve · 3 = normal</p>
                       {DGI_ITEMS.map(item => (
                         <ScoreRow key={item} label={item} max={3} value={dgiVals[item]} onChange={v => setDgiVals(p => ({ ...p, [item]: v }))} />
                       ))}
-                      <div className="dgi-total">Total: <strong>{dgiTotal}/24</strong></div>
-                      <button className="btn-confirmar" onClick={() => markDone(test.id)}>Confirmar DGI</button>
+                      <div className="dgi-total">Total: <strong>{dgiTotal} / 24</strong></div>
+                      <button className="btn-confirmar" type="button" onClick={() => markDone(test.id)}>Confirmar DGI</button>
                     </div>
                   )}
 
@@ -307,29 +624,7 @@ export default function NovaAvaliacao() {
                           />
                         </label>
                       )}
-                      <button className="btn-confirmar" disabled={!tdrFile} onClick={() => markDone(test.id)}>Confirmar Teste do Relógio</button>
-                    </div>
-                  )}
-
-                  {test.id === "mmse" && (
-                    <div className="form-mmse">
-                      <p className="form-hint">Mini-Exame do Estado Mental. Pontuação total 0–30.</p>
-                      <div className="form-group">
-                        <label>Pontuação total (0–30)</label>
-                        <input className="nav-input" type="number" min="0" max="30" placeholder="ex: 26" value={mmseTotal} onChange={e => setMmseTotal(e.target.value)} />
-                      </div>
-                      <button className="btn-confirmar" disabled={!mmseTotal} onClick={() => markDone(test.id)}>Confirmar MMSE</button>
-                    </div>
-                  )}
-
-                  {test.id === "moca" && (
-                    <div className="form-moca">
-                      <p className="form-hint">Montreal Cognitive Assessment. Pontuação total 0–30 (≥26 = normal).</p>
-                      <div className="form-group">
-                        <label>Pontuação total (0–30)</label>
-                        <input className="nav-input" type="number" min="0" max="30" placeholder="ex: 24" value={mocaTotal} onChange={e => setMocaTotal(e.target.value)} />
-                      </div>
-                      <button className="btn-confirmar" disabled={!mocaTotal} onClick={() => markDone(test.id)}>Confirmar MoCA</button>
+                      <button className="btn-confirmar" type="button" disabled={!tdrFile} onClick={() => markDone(test.id)}>Confirmar Teste do Relógio</button>
                     </div>
                   )}
                 </div>
@@ -338,6 +633,42 @@ export default function NovaAvaliacao() {
           );
         })}
       </div>
+
+      {/* MMSE modal */}
+      {openModal === "mmse" && (
+        <TestModal
+          testId="mmse"
+          title="MMSE"
+          subtitle="Mini-Exame do Estado Mental · 0–30 pontos"
+          sections={MMSE_SECTIONS}
+          maxTotal={30}
+          values={mmseVals}
+          onChange={(id, v) => setMmseVals(p => ({ ...p, [id]: v }))}
+          onClose={() => setOpenModal(null)}
+          onConfirm={() => markDone("mmse")}
+        />
+      )}
+
+      {/* MoCA modal */}
+      {openModal === "moca" && (
+        <TestModal
+          testId="moca"
+          title="MoCA"
+          subtitle="Montreal Cognitive Assessment · 0–30 pontos (normal ≥ 26)"
+          preamble={
+            <div className="test-modal-preamble-box">
+              <strong>Antes de começar:</strong> leia estas 5 palavras ao paciente e peça para memorizar —{" "}
+              <em>Rosto, Seda, Igreja, Cravo, Vermelho</em>. A evocação será avaliada no final.
+            </div>
+          }
+          sections={MOCA_SECTIONS}
+          maxTotal={30}
+          values={mocaVals}
+          onChange={(id, v) => setMocaVals(p => ({ ...p, [id]: v }))}
+          onClose={() => setOpenModal(null)}
+          onConfirm={() => markDone("moca")}
+        />
+      )}
 
       {done.size > 0 && (
         <div className="nova-av-footer">
