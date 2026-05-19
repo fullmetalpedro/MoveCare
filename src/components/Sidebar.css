@@ -11,7 +11,8 @@
   left: 0;
   top: 0;
   z-index: 100;
-  transition: width 0.2s ease;
+  overflow: hidden;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   border-right: 1px solid var(--border);
 }
 
@@ -23,12 +24,21 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 20px 20px 12px;
-  justify-content: center;
+  padding: 20px 16px 12px;
+  flex-shrink: 0;
+  min-width: 220px;
 }
 
-.sidebar:not(.collapsed) .sidebar-logo {
-  justify-content: flex-start;
+.logo-text {
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.collapsed .logo-text {
+  opacity: 0;
 }
 
 .logo-icon {
@@ -61,15 +71,17 @@
 .sidebar-toggle {
   background: transparent;
   border: none;
+  border-top: 1px solid var(--border);
   color: var(--text-muted);
   cursor: pointer;
-  padding: 8px;
-  margin: 0 8px 4px;
-  border-radius: 8px;
+  padding: 12px;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.15s;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 .sidebar-toggle:hover {
@@ -101,7 +113,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 14px;
+  padding: 9px 16px;
   border-radius: 8px;
   color: var(--text-secondary);
   text-decoration: none;
@@ -111,12 +123,20 @@
   position: relative;
   white-space: nowrap;
   z-index: 1;
+  min-width: 204px;
 }
 
-.collapsed .nav-item {
-  justify-content: center;
-  padding: 11px;
+.nav-label {
+  overflow: hidden;
+  flex: 1;
+  opacity: 1;
+  transition: opacity 0.15s ease;
 }
+
+.collapsed .nav-label {
+  opacity: 0;
+}
+
 
 .nav-item:hover {
   color: var(--text-primary);
@@ -138,7 +158,6 @@
 }
 
 .nav-badge {
-  margin-left: auto;
   background: var(--danger);
   color: #fff;
   font-size: 11px;
@@ -147,6 +166,14 @@
   border-radius: 10px;
   min-width: 18px;
   text-align: center;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+  flex-shrink: 0;
+}
+
+.collapsed .nav-badge {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .nav-badge-dot {
@@ -157,6 +184,12 @@
   height: 8px;
   border-radius: 50%;
   background: var(--danger);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.collapsed .nav-badge-dot {
+  opacity: 1;
 }
 
 .sidebar-footer {
@@ -165,11 +198,7 @@
   gap: 10px;
   padding: 14px 16px 18px;
   border-top: 1px solid var(--border);
-  justify-content: center;
-}
-
-.sidebar:not(.collapsed) .sidebar-footer {
-  justify-content: flex-start;
+  min-width: 220px;
 }
 
 .doctor-avatar {
@@ -189,6 +218,13 @@
 .doctor-info {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
+.collapsed .doctor-info {
+  opacity: 0;
 }
 
 .doctor-name {
@@ -210,6 +246,14 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
+.collapsed .settings-icon {
+  opacity: 0;
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {
@@ -235,7 +279,10 @@
   }
 
   .collapsed .nav-item {
-    justify-content: flex-start;
-    padding: 11px 16px;
+    min-width: 204px;
+  }
+
+  .collapsed .nav-label {
+    opacity: 1;
   }
 }

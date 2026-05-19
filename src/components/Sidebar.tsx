@@ -38,17 +38,11 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
     <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
       <div className="sidebar-logo">
         <span className="logo-icon"><Heart size={22} /></span>
-        {!collapsed && (
-          <div>
-            <div className="logo-title">MoveCare</div>
-            <div className="logo-subtitle">FISIOTERAPIA</div>
-          </div>
-        )}
+        <div className="logo-text">
+          <div className="logo-title">MoveCare</div>
+          <div className="logo-subtitle">FISIOTERAPIA</div>
+        </div>
       </div>
-
-      <button className="sidebar-toggle" onClick={onToggle} title={collapsed ? "Expandir menu" : "Recolher menu"}>
-        {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-      </button>
 
       <nav className="sidebar-nav" ref={navRef}>
         <div
@@ -61,38 +55,40 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
         />
         <NavLink to="/" end className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Dashboard">
           <span className="nav-icon"><LayoutDashboard size={18} /></span>
-          {!collapsed && <span>Dashboard</span>}
-          {!collapsed && alertCount > 0 && <span className="nav-badge">{alertCount}</span>}
-          {collapsed && alertCount > 0 && <span className="nav-badge-dot" />}
+          <span className="nav-label">Dashboard</span>
+          {alertCount > 0 && <span className="nav-badge">{alertCount}</span>}
+          {alertCount > 0 && <span className="nav-badge-dot" />}
         </NavLink>
         <NavLink to="/agenda" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Agenda">
           <span className="nav-icon"><Calendar size={18} /></span>
-          {!collapsed && <span>Agenda</span>}
+          <span className="nav-label">Agenda</span>
         </NavLink>
         <NavLink to="/pacientes" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Pacientes">
           <span className="nav-icon"><Users size={18} /></span>
-          {!collapsed && <span>Pacientes</span>}
+          <span className="nav-label">Pacientes</span>
         </NavLink>
         <NavLink to="/biblioteca" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Biblioteca">
           <span className="nav-icon"><BookOpen size={18} /></span>
-          {!collapsed && <span>Biblioteca</span>}
+          <span className="nav-label">Biblioteca</span>
         </NavLink>
         <NavLink to="/documentos" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Documentos">
           <span className="nav-icon"><FileText size={18} /></span>
-          {!collapsed && <span>Documentos</span>}
+          <span className="nav-label">Documentos</span>
         </NavLink>
       </nav>
 
       <div className="sidebar-footer">
         <div className="doctor-avatar">{doctor.initials}</div>
-        {!collapsed && (
-          <div className="doctor-info">
-            <div className="doctor-name">{doctor.name}</div>
-            <div className="doctor-role">{doctor.role} · {doctor.crefito}</div>
-          </div>
-        )}
-        {!collapsed && <span className="settings-icon"><Settings size={16} /></span>}
+        <div className="doctor-info">
+          <div className="doctor-name">{doctor.name}</div>
+          <div className="doctor-role">{doctor.role} · {doctor.crefito}</div>
+        </div>
+        <span className="settings-icon"><Settings size={16} /></span>
       </div>
+
+      <button className="sidebar-toggle" onClick={onToggle} title={collapsed ? "Expandir menu" : "Recolher menu"}>
+        {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+      </button>
     </aside>
   );
 }
