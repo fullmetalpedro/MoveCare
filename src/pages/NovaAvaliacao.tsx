@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import {
@@ -338,30 +338,37 @@ function TestModal({
   onClose: () => void;
   onConfirm: () => void;
 }) {
+  const [closing, setClosing] = useState(false);
   const total = Object.values(values).reduce((a, b) => a + b, 0);
+
+  const handleClose = useCallback(() => {
+    setClosing(true);
+    setTimeout(() => onClose(), 180);
+  }, [onClose]);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") handleClose(); };
     document.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [onClose]);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [handleClose]);
 
   const isBelowNormal = testId === "moca" ? total < 26 : total < 24;
 
   return createPortal(
-    <div className="test-modal-overlay" onClick={onClose}>
+    <div className={`test-modal-overlay${closing ? " closing" : ""}`} onClick={handleClose}>
       <div className="test-modal" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
         <div className="test-modal-header">
           <div>
             <div className="test-modal-title">{title}</div>
             <div className="test-modal-sub">{subtitle}</div>
           </div>
-          <button className="test-modal-close" type="button" onClick={onClose} aria-label="Fechar">
+          <button className="test-modal-close" type="button" onClick={handleClose} aria-label="Fechar">
             <X size={18} />
           </button>
         </div>

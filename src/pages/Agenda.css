@@ -240,6 +240,24 @@
   to { opacity: 1; }
 }
 
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes slideDown {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(10px) scale(0.97); }
+}
+
+.modal-overlay.closing {
+  animation: fadeOut 0.18s ease forwards;
+}
+
+.modal-overlay.closing .modal-dialog {
+  animation: slideDown 0.18s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
 .modal-dialog {
   background: var(--card-bg);
   border-radius: 16px;

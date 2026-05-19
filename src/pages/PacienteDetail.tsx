@@ -1,4 +1,4 @@
-import { useParams, useNavigate, NavLink, Outlet } from "react-router-dom";
+import { useParams, useNavigate, NavLink, Outlet, useLocation } from "react-router-dom";
 import { MessageSquare, FileText, ChevronLeft, TrendingUp, CalendarDays, Heart, Clock, ClipboardList, Stethoscope, BarChart3, FolderOpen, ClipboardPlus } from "lucide-react";
 import type { Paciente } from "../types";
 import "./PacienteDetail.css";
@@ -10,6 +10,7 @@ interface PacienteDetailProps {
 export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const paciente = pacientes.find(p => p.id === id);
 
   if (!paciente) {
@@ -114,7 +115,9 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
         </nav>
 
         <div className="detail-main">
-          <Outlet context={paciente} />
+          <div key={location.pathname} className="detail-outlet-wrap">
+            <Outlet context={paciente} />
+          </div>
         </div>
       </div>
     </div>

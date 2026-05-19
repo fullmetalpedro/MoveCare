@@ -34,6 +34,7 @@ export default function Agenda({ eventos: initialEventos }: AgendaProps) {
   const [draggingKey, setDraggingKey] = useState<string | null>(null);
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
   const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
+  const [closingModal, setClosingModal] = useState(false);
 
   const updateViewSlider = useCallback(() => {
     if (!viewRef.current) return;
@@ -103,6 +104,11 @@ export default function Agenda({ eventos: initialEventos }: AgendaProps) {
     setDragOverKey(null);
   }
 
+  function closeModal() {
+    setClosingModal(true);
+    setTimeout(() => { setPendingMove(null); setClosingModal(false); }, 180);
+  }
+
   function confirmMove() {
     if (!pendingMove) return;
     const { evento, toDia, toHora } = pendingMove;
@@ -113,7 +119,7 @@ export default function Agenda({ eventos: initialEventos }: AgendaProps) {
           : e
       )
     );
-    setPendingMove(null);
+    closeModal();
   }
 
   const diaLabel: Record<string, string> = {
@@ -184,7 +190,7 @@ export default function Agenda({ eventos: initialEventos }: AgendaProps) {
       </div>
 
       {pendingMove && createPortal(
-        <div className="modal-overlay" onClick={() => setPendingMove(null)}>
+        <div className={`modal-overlay${closingModal ? " closing" : ""}`} onClick={closeModal}>
           <div className="modal-dialog" onClick={e => e.stopPropagation()}>
             <div className="modal-warning-icon">
               <AlertTriangle size={24} />
@@ -198,7 +204,7 @@ export default function Agenda({ eventos: initialEventos }: AgendaProps) {
               Lembre-se de alinhar essa alteração com o paciente antes de confirmar.
             </p>
             <div className="modal-actions">
-              <button className="modal-btn-cancel" onClick={() => setPendingMove(null)}>
+              <button className="modal-btn-cancel" onClick={closeModal}>
                 Cancelar
               </button>
               <button className="modal-btn-confirm" onClick={confirmMove}>

@@ -33,7 +33,7 @@ export default function Layout({ doctor, alertCount }: LayoutProps) {
       </button>
       {mobileOpen && <div className="sidebar-backdrop" onClick={() => setMobileOpen(false)} />}
       <Sidebar doctor={doctor} alertCount={alertCount} collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
-      <main className="main-content" key={location.pathname}>
+      <main className="main-content" key={location.pathname.split("/").slice(0, 3).join("/")}>
         <Outlet />
       </main>
     </div>
