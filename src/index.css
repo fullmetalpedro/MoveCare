@@ -1,0 +1,146 @@
+:root {
+  --primary-dark: #1D1D1F;
+  --primary: #007AFF;
+  --accent: #007AFF;
+  --accent-light: #5AC8FA;
+  --bg: #F5F5F7;
+  --card-bg: #FFFFFF;
+  --card-bg-alt: #FBFBFD;
+  --text-primary: #1D1D1F;
+  --text-secondary: #6E6E73;
+  --text-muted: #86868B;
+  --border: #E8E8ED;
+  --border-light: #F2F2F7;
+  --success: #34C759;
+  --warning: #FF9500;
+  --danger: #FF3B30;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 28px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  --radius: 12px;
+  --radius-lg: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1;
+  letter-spacing: -0.01em;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+  border: none;
+  min-height: 100vh;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C7C7CC;
+  border-radius: 3px;
+}
+
+/* ─── Slide Tabs (global) ─── */
+.slide-tabs {
+  display: flex;
+  position: relative;
+  background: var(--border-light);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 0;
+}
+
+.slide-indicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.slide-tabs .filter-tab {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  padding: 6px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-radius: 8px;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.slide-tabs .filter-tab:hover {
+  color: var(--text-primary);
+}
+
+.slide-tabs .filter-tab.active {
+  color: var(--text-primary);
+  font-weight: 600;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ─── Fade-in stagger animation ─── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-list > * {
+  animation: fadeInUp 0.35s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.fade-list > *:nth-child(1) { animation-delay: 0s; }
+.fade-list > *:nth-child(2) { animation-delay: 0.03s; }
+.fade-list > *:nth-child(3) { animation-delay: 0.06s; }
+.fade-list > *:nth-child(4) { animation-delay: 0.09s; }
+.fade-list > *:nth-child(5) { animation-delay: 0.12s; }
+.fade-list > *:nth-child(6) { animation-delay: 0.15s; }
+.fade-list > *:nth-child(7) { animation-delay: 0.18s; }
+.fade-list > *:nth-child(8) { animation-delay: 0.21s; }
+.fade-list > *:nth-child(9) { animation-delay: 0.24s; }
+.fade-list > *:nth-child(10) { animation-delay: 0.27s; }
+.fade-list > *:nth-child(n+11) { animation-delay: 0.3s; }

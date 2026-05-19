@@ -1,0 +1,134 @@
+.resumo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.evolucao-card h2,
+.adesao-card h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 14px;
+  letter-spacing: -0.02em;
+}
+
+.evolucao-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.evolucao-texto {
+  background: var(--card-bg-alt);
+  border-left: 3px solid var(--border);
+  padding: 14px 16px;
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  border-radius: 0 10px 10px 0;
+}
+
+.evolucao-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary-sm {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-primary-sm:hover {
+  opacity: 0.85;
+}
+
+.btn-outline-sm {
+  background: var(--card-bg);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s;
+}
+
+.btn-outline-sm:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.adesao-weekly {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.adesao-day {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.adesao-day-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  width: 32px;
+  font-weight: 500;
+}
+
+.adesao-day-bar-bg {
+  flex: 1;
+  height: 10px;
+  background: var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.adesao-day-bar {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.3s;
+}
+
+.adesao-check {
+  font-size: 14px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.adesao-check.done {
+  color: var(--success);
+  background: rgba(52, 199, 89, 0.1);
+}
+
+.adesao-check.miss {
+  color: #C7C7CC;
+  background: var(--border-light);
+}
+
+.adesao-summary {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .resumo-grid {
+    grid-template-columns: 1fr;
+  }
+}

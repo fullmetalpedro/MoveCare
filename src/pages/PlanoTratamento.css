@@ -1,0 +1,258 @@
+.plano-page {
+  max-width: 900px;
+}
+
+.plano-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.plano-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.plano-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.plano-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.fase-tabs {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.fase-tabs .fase-tab {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  border-radius: 10px;
+  transition: color 0.2s;
+}
+
+.fase-tabs .fase-tab.active {
+  color: var(--text-primary);
+  font-weight: 600;
+  background: transparent;
+  box-shadow: none;
+}
+
+.exercicios-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.exercicio-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card-bg);
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s;
+}
+
+.exercicio-row:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.ex-drag {
+  color: #C7C7CC;
+  font-size: 16px;
+  cursor: grab;
+  letter-spacing: -2px;
+}
+
+.ex-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ex-thumb.has-video {
+  background: rgba(0, 122, 255, 0.08);
+  color: var(--accent);
+}
+
+.ex-thumb.no-video {
+  background: var(--border-light);
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.ex-info {
+  flex: 1;
+}
+
+.ex-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.ex-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ex-cat-badge {
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.ex-series {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.ex-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.ex-btn {
+  background: var(--card-bg-alt);
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: background 0.15s;
+}
+
+.ex-btn:hover {
+  background: var(--border);
+}
+
+.ex-btn-del {
+  color: var(--danger);
+}
+
+.ex-btn-del:hover {
+  background: rgba(255, 59, 48, 0.08);
+}
+
+.add-exercise-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--accent);
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  background: transparent;
+  transition: all 0.15s;
+}
+
+.add-exercise-zone:hover {
+  border-color: var(--accent);
+  background: rgba(0, 122, 255, 0.03);
+}
+
+.add-icon {
+  font-size: 22px;
+  color: var(--accent);
+}
+
+.observacoes-card h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.obs-text {
+  background: var(--card-bg-alt);
+  border-left: 3px solid var(--border);
+  padding: 14px 16px;
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  border-radius: 0 10px 10px 0;
+}
+
+.empty-fase {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 32px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .plano-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .plano-actions {
+    width: 100%;
+  }
+
+  .plano-actions .btn-outline-sm,
+  .plano-actions .btn-primary-sm {
+    flex: 1;
+    text-align: center;
+  }
+
+  .exercicio-row {
+    flex-wrap: wrap;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .ex-drag {
+    display: none;
+  }
+
+  .ex-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .fase-tab {
+    font-size: 12px;
+    padding: 10px 0;
+  }
+}

@@ -1,0 +1,249 @@
+.agenda-page {
+  max-width: 1100px;
+}
+
+.agenda-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-nav {
+  background: var(--card-bg);
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s;
+}
+
+.btn-nav:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.btn-hoje {
+  background: var(--text-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.agenda-periodo {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-left: 8px;
+}
+
+.view-toggle {
+  display: flex;
+}
+
+.view-toggle .view-btn {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  padding: 7px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-radius: 8px;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.view-toggle .view-btn.active {
+  color: var(--text-primary);
+  font-weight: 600;
+  background: transparent;
+  box-shadow: none;
+}
+
+.btn-agendar {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-agendar:hover {
+  opacity: 0.85;
+}
+
+.agenda-grid {
+  display: grid;
+  grid-template-columns: 60px repeat(5, 1fr);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: none;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.agenda-corner {
+  background: var(--card-bg-alt);
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+.agenda-day-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  background: var(--card-bg-alt);
+}
+
+.agenda-day-header:last-child {
+  border-right: none;
+}
+
+.day-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.day-num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
+  letter-spacing: -0.02em;
+}
+
+.hoje-circle {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agenda-time {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 8px 8px 8px 12px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.agenda-cell {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
+  padding: 4px;
+  min-height: 52px;
+}
+
+.agenda-cell:nth-child(6n+1) {
+  border-right: none;
+}
+
+.agenda-event {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.agenda-event:hover {
+  opacity: 0.85;
+}
+
+.event-green {
+  background: rgba(0, 122, 255, 0.08);
+  border-left: 3px solid var(--accent);
+}
+
+.event-yellow {
+  background: rgba(255, 149, 0, 0.08);
+  border-left: 3px solid var(--warning);
+}
+
+.event-blue {
+  background: rgba(52, 199, 89, 0.08);
+  border-left: 3px solid var(--success);
+}
+
+.event-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.event-tipo {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+@media (max-width: 1024px) {
+  .agenda-grid {
+    overflow-x: auto;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .agenda-nav {
+    order: 2;
+  }
+
+  .agenda-periodo {
+    display: none;
+  }
+
+  .agenda-grid {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .agenda-event {
+    padding: 4px 6px;
+  }
+
+  .event-name {
+    font-size: 11px;
+  }
+
+  .event-tipo {
+    font-size: 10px;
+  }
+
+  .day-num {
+    font-size: 18px;
+  }
+}
