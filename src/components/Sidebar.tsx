@@ -78,7 +78,7 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
       </nav>
 
       <div className="sidebar-footer">
-        <div className="doctor-avatar">{doctor.initials}</div>
+        <img className="doctor-avatar" src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(doctor.name)}`} alt={doctor.initials} />
         <div className="doctor-info">
           <div className="doctor-name">{doctor.name}</div>
           <div className="doctor-role">{doctor.role} · {doctor.crefito}</div>

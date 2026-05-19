@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(wmic process *)",
+      "Bash(gh pr create --title 'fix: smooth sidebar collapse, centered icons, toggle at bottom' --body ' *)",
+      "Bash(gh auth *)",
+      "Bash(gh repo *)",
+      "Bash(gh api *)",
+      "Bash(grep -E \"\\\\.\\(ts|tsx|js|jsx\\)$\")",
+      "Bash(xargs grep -l \"mockData\\\\|mock\\\\|getData\\\\|agendaHoje\\\\|agendaSemanal\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\([{'id':p['id'],'nome':p['nome']} for p in d['pacientes']]\\)\")"
+    ]
+  }
+}

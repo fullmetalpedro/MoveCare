@@ -1,5 +1,5 @@
 .dashboard {
-  max-width: 1100px;
+  width: 100%;
 }
 
 .dashboard-header {
@@ -113,11 +113,6 @@
   color: var(--danger);
 }
 
-.dashboard-bottom {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 16px;
-}
 
 .card {
   background: var(--card-bg);
@@ -213,51 +208,10 @@
   font-size: 18px;
 }
 
-.alertas-count {
-  font-size: 12px;
-  color: var(--danger);
-  font-weight: 600;
-}
-
-.alertas-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.alerta-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 10px;
-}
-
-.alerta-icon {
-  flex-shrink: 0;
-  margin-top: 2px;
-  color: var(--warning);
-}
-
-.alerta-paciente {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.alerta-msg {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
 
 @media (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .dashboard-bottom {
-    grid-template-columns: 1fr;
   }
 }
 

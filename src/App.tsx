@@ -7,6 +7,8 @@ import PacienteDetail from "./pages/PacienteDetail";
 import PacienteResumo from "./pages/PacienteResumo";
 import PlanoTratamento from "./pages/PlanoTratamento";
 import PacienteDocumentos from "./pages/PacienteDocumentos";
+import Evolucao from "./pages/Evolucao";
+import NovaAvaliacao from "./pages/NovaAvaliacao";
 import Documentos from "./pages/Documentos";
 import Biblioteca from "./pages/Biblioteca";
 import CadastroPaciente from "./pages/CadastroPaciente";
@@ -34,7 +36,6 @@ export default function App() {
             <Dashboard
               stats={data.stats}
               agendaHoje={data.agendaHoje}
-              alertas={data.alertas}
               doctorName={data.doctor.name}
             />
           }
@@ -44,7 +45,8 @@ export default function App() {
         <Route path="pacientes/:id" element={<PacienteDetail pacientes={data.pacientes} />}>
           <Route index element={<PacienteResumo />} />
           <Route path="plano" element={<PlanoTratamento />} />
-          <Route path="evolucao" element={<PlaceholderPage title="Evolução" />} />
+          <Route path="evolucao" element={<Evolucao />} />
+          <Route path="avaliacao/nova" element={<NovaAvaliacao />} />
           <Route path="documentos" element={<PacienteDocumentos />} />
         </Route>
         <Route path="biblioteca" element={<Biblioteca />} />

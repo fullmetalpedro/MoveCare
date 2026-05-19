@@ -1,0 +1,296 @@
+.evolucao-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.evolucao-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.evolucao-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.evolucao-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.btn-nova-av {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-nova-av:hover {
+  opacity: 0.85;
+}
+
+/* ─── Charts grid ─── */
+.evolucao-charts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.ev-chart-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ev-chart-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ev-chart-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ev-chart-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.ev-chart-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ev-chart-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.delta-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.delta-good {
+  background: rgba(52, 199, 89, 0.12);
+  color: #34C759;
+}
+
+.delta-bad {
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--danger);
+}
+
+.ev-chart-area {
+  display: flex;
+  justify-content: center;
+}
+
+.spark-na {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 20px 0;
+}
+
+.ev-chart-points {
+  display: flex;
+  gap: 0;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-light);
+  padding-top: 10px;
+}
+
+.ev-point {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+.ev-point-date {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.ev-point-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ─── Timeline (horizontal) ─── */
+.evolucao-timeline h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 20px;
+  letter-spacing: -0.02em;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+  gap: 0;
+}
+
+.tl-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 130px;
+}
+
+.tl-dot-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+.tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
+}
+
+.tl-connector {
+  flex: 1;
+  height: 1.5px;
+  background: var(--border);
+  margin-left: 4px;
+}
+
+.tl-content {
+  padding-right: 12px;
+}
+
+.tl-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.tl-doc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.tl-tests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tl-chip {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--border-light);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ─── Empty state ─── */
+.evolucao-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 40px;
+  gap: 12px;
+}
+
+.evolucao-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--border-light);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.evolucao-empty h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.evolucao-empty p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 320px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .evolucao-header {
+    flex-direction: column;
+  }
+
+  .btn-nova-av {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .evolucao-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .ev-chart-area svg {
+    width: 100%;
+    height: auto;
+  }
+}

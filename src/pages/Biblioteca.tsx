@@ -25,9 +25,9 @@ const CATEGORIA_ICONS: Record<string, React.ReactNode> = {
 };
 
 const CATEGORIA_COLORS: Record<string, string> = {
-  Fortalecimento: "#FF3B30",
+  Fortalecimento: "#E04F5F",
   Estabilização: "#007AFF",
-  Flexibilidade: "#FF9500",
+  Flexibilidade: "#E8973A",
   Mobilidade: "#AF52DE",
   Funcional: "#34C759",
   Relaxamento: "#5AC8FA",
@@ -54,19 +54,44 @@ const MOCK_EXERCICIOS: Exercicio[] = [
 function NivelBadge({ nivel }: { nivel: string }) {
   const colors: Record<string, string> = {
     Iniciante: "#34C759",
-    Intermediário: "#FF9500",
-    Avançado: "#FF3B30",
+    Intermediário: "#007AFF",
+    Avançado: "#AF52DE",
   };
   const c = colors[nivel] ?? "#86868B";
   return <span className="nivel-badge" style={{ background: `${c}15`, color: c }}>{nivel}</span>;
 }
 
+function BibliotecaSkeleton() {
+  return (
+    <div className="biblioteca-grid">
+      {[...Array(8)].map((_, i) => (
+        <div key={i} className="bib-card">
+          <div className="skel" style={{ height: 100 }} />
+          <div style={{ padding: "14px 16px 8px", display: "flex", flexDirection: "column", gap: 8 }}>
+            <div className="skel" style={{ height: 15, width: "80%" }} />
+            <div className="skel" style={{ height: 12, width: "60%" }} />
+          </div>
+          <div style={{ padding: "8px 16px 14px" }}>
+            <div className="skel" style={{ height: 20, width: 80, borderRadius: 10 }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function Biblioteca() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("Todos");
   const [search, setSearch] = useState("");
   const tabsRef = useRef<HTMLDivElement>(null);
   const [slider, setSlider] = useState({ left: 0, width: 0 });
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(t);
+  }, []);
 
   const updateSlider = useCallback(() => {
     if (!tabsRef.current) return;
@@ -126,7 +151,8 @@ export default function Biblioteca() {
         </div>
       </div>
 
-      <div className="biblioteca-grid fade-list" key={filtro}>
+      {loading ? <BibliotecaSkeleton /> : null}
+      <div className="biblioteca-grid fade-list" key={filtro} style={loading ? { display: "none" } : {}}>
         {filtered.map(ex => {
           const color = CATEGORIA_COLORS[ex.categoria] ?? "#86868B";
           const icon = CATEGORIA_ICONS[ex.categoria] ?? <Dumbbell size={28} />;
