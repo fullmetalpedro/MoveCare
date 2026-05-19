@@ -1,5 +1,5 @@
 import { useParams, useNavigate, NavLink, Outlet } from "react-router-dom";
-import { MessageSquare, FileText, ChevronLeft, TrendingUp, CalendarDays, Heart, Clock, ClipboardList, Stethoscope, BarChart3, FolderOpen } from "lucide-react";
+import { MessageSquare, FileText, ChevronLeft, TrendingUp, CalendarDays, Heart, Clock, ClipboardList, Stethoscope, BarChart3, FolderOpen, ClipboardPlus } from "lucide-react";
 import type { Paciente } from "../types";
 import "./PacienteDetail.css";
 
@@ -23,9 +23,11 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
           <button className="back-btn" onClick={() => navigate("/pacientes")}>
             <ChevronLeft size={20} />
           </button>
-          <div className="detail-avatar">
-            {paciente.initials}
-          </div>
+          <img
+            className="detail-avatar"
+            src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(paciente.nome)}`}
+            alt={paciente.initials}
+          />
           <div>
             <h1 className="detail-name">{paciente.nome}</h1>
             <p className="detail-meta">
@@ -88,7 +90,7 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
         <nav className="detail-sidebar-nav">
           <div className="ctx-label">PACIENTE ATIVO</div>
           <div className="ctx-patient">
-            <span className="ctx-avatar">{paciente.initials}</span>
+            <img className="ctx-avatar" src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(paciente.nome)}`} alt={paciente.initials} />
             <div>
               <div className="ctx-name">{paciente.nome}</div>
               <div className="ctx-cond">{paciente.condicao}</div>
@@ -105,6 +107,9 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
           </NavLink>
           <NavLink to={`/pacientes/${id}/documentos`} className={({ isActive }) => `ctx-link ${isActive ? "active" : ""}`}>
             <FolderOpen size={16} /> Documentos
+          </NavLink>
+          <NavLink to={`/pacientes/${id}/avaliacao/nova`} className={({ isActive }) => `ctx-link ctx-link-nova ${isActive ? "active" : ""}`}>
+            <ClipboardPlus size={16} /> Nova avaliação
           </NavLink>
         </nav>
 

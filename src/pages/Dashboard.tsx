@@ -1,34 +1,75 @@
-import { Users, TrendingUp, DollarSign, HeartPulse, Bell, AlertTriangle, ChevronRight } from "lucide-react";
-import type { Stats, AgendaItem, Alerta } from "../types";
+import { useState, useEffect } from "react";
+import { Users, TrendingUp, DollarSign, HeartPulse, Bell, ChevronRight } from "lucide-react";
+import type { Stats, AgendaItem } from "../types";
 import "./Dashboard.css";
 
 interface DashboardProps {
   stats: Stats;
   agendaHoje: AgendaItem[];
-  alertas: Alerta[];
   doctorName: string;
 }
 
 function StatusDot({ status }: { status: string }) {
   const colors: Record<string, string> = {
     confirmado: "#34C759",
-    avaliacao: "#FF9500",
+    avaliacao: "#007AFF",
     livre: "#C7C7CC",
   };
   return <span className="status-dot" style={{ background: colors[status] || "#C7C7CC" }} />;
 }
 
-function AlertSeverityColor(sev: string): string {
-  switch (sev) {
-    case "alta": return "rgba(255, 59, 48, 0.06)";
-    case "media": return "rgba(255, 149, 0, 0.06)";
-    case "baixa": return "rgba(255, 149, 0, 0.06)";
-    default: return "var(--border-light)";
-  }
+function DashboardSkeleton() {
+  return (
+    <div className="dashboard">
+      <div className="dashboard-header">
+        <div>
+          <div className="skel" style={{ height: 32, width: 220, marginBottom: 8 }} />
+          <div className="skel" style={{ height: 16, width: 300 }} />
+        </div>
+        <div className="skel" style={{ width: 40, height: 40, borderRadius: "50%" }} />
+      </div>
+      <div className="stats-grid">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="stat-card">
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
+              <div className="skel" style={{ height: 14, width: 100 }} />
+              <div className="skel" style={{ height: 28, width: 28, borderRadius: 8 }} />
+            </div>
+            <div className="skel" style={{ height: 36, width: 80, marginBottom: 8 }} />
+            <div className="skel" style={{ height: 13, width: 140 }} />
+          </div>
+        ))}
+      </div>
+      <div className="card agenda-card">
+        <div className="card-header">
+          <div className="skel" style={{ height: 20, width: 140 }} />
+          <div className="skel" style={{ height: 14, width: 90 }} />
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, padding: "4px 0" }}>
+          {[...Array(5)].map((_, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0", borderBottom: "1px solid var(--border-light)" }}>
+              <div className="skel" style={{ height: 14, width: 44 }} />
+              <div className="skel" style={{ height: 8, width: 8, borderRadius: "50%", flexShrink: 0 }} />
+              <div className="skel" style={{ height: 14, width: 120 }} />
+              <div className="skel" style={{ height: 12, width: 80, marginLeft: "auto" }} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default function Dashboard({ stats, agendaHoje, alertas, doctorName }: DashboardProps) {
+export default function Dashboard({ stats, agendaHoje, doctorName }: DashboardProps) {
+  const [loading, setLoading] = useState(true);
   const firstName = doctorName.split(" ").slice(1).join(" ");
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) return <DashboardSkeleton />;
 
   return (
     <div className="dashboard">
@@ -77,51 +118,27 @@ export default function Dashboard({ stats, agendaHoje, alertas, doctorName }: Da
         </div>
       </div>
 
-      <div className="dashboard-bottom">
-        <div className="card agenda-card">
-          <div className="card-header">
-            <h2>Agenda de Hoje</h2>
-            <a href="/agenda" className="card-link">Ver completa <ChevronRight size={14} /></a>
-          </div>
-          <div className="agenda-list">
-            {agendaHoje.map((item, i) => (
-              <div key={i} className={`agenda-row ${item.status === "livre" ? "livre" : ""}`}>
-                <span className="agenda-hora">{item.hora}</span>
-                <StatusDot status={item.status} />
-                {item.paciente ? (
-                  <>
-                    <span className="agenda-paciente">{item.paciente}</span>
-                    <span className="agenda-tipo">{item.tipo}</span>
-                  </>
-                ) : (
-                  <span className="agenda-livre">— {item.tipo} —</span>
-                )}
-                {item.paciente && <span className="agenda-arrow"><ChevronRight size={16} /></span>}
-              </div>
-            ))}
-          </div>
+      <div className="card agenda-card">
+        <div className="card-header">
+          <h2>Agenda de Hoje</h2>
+          <a href="/agenda" className="card-link">Ver completa <ChevronRight size={14} /></a>
         </div>
-
-        <div className="card alertas-card">
-          <div className="card-header">
-            <h2>Alertas de Adesão</h2>
-            <span className="alertas-count">{alertas.length} alertas</span>
-          </div>
-          <div className="alertas-list">
-            {alertas.map((alerta) => (
-              <div
-                key={alerta.id}
-                className="alerta-item"
-                style={{ background: AlertSeverityColor(alerta.severidade) }}
-              >
-                <span className="alerta-icon"><AlertTriangle size={16} /></span>
-                <div>
-                  <div className="alerta-paciente">{alerta.paciente}</div>
-                  <div className="alerta-msg">{alerta.mensagem}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="agenda-list">
+          {agendaHoje.map((item, i) => (
+            <div key={i} className={`agenda-row ${item.status === "livre" ? "livre" : ""}`}>
+              <span className="agenda-hora">{item.hora}</span>
+              <StatusDot status={item.status} />
+              {item.paciente ? (
+                <>
+                  <span className="agenda-paciente">{item.paciente}</span>
+                  <span className="agenda-tipo">{item.tipo}</span>
+                </>
+              ) : (
+                <span className="agenda-livre">— {item.tipo} —</span>
+              )}
+              {item.paciente && <span className="agenda-arrow"><ChevronRight size={16} /></span>}
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 .plano-page {
-  max-width: 900px;
+  width: 100%;
 }
 
 .plano-header {
@@ -59,8 +59,32 @@
 .exercicios-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
   margin-bottom: 16px;
+}
+
+.ex-row-wrap {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+}
+
+.ex-drop-line {
+  height: 0;
+  opacity: 0;
+  border-radius: 2px;
+  background: var(--accent);
+  margin: 0;
+  transition: height 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.15s,
+              margin 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.ex-drop-line.visible {
+  height: 3px;
+  opacity: 1;
+  margin: 3px 0;
 }
 
 .exercicio-row {
@@ -79,11 +103,25 @@
   box-shadow: var(--shadow-md);
 }
 
+.exercicio-row {
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.exercicio-row.ex-dragging {
+  opacity: 0.3;
+  cursor: grabbing;
+  box-shadow: none;
+}
+
 .ex-drag {
   color: #C7C7CC;
   font-size: 16px;
   cursor: grab;
-  letter-spacing: -2px;
+  flex-shrink: 0;
+}
+
+.ex-drag:active {
+  cursor: grabbing;
 }
 
 .ex-thumb {

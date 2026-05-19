@@ -93,7 +93,21 @@
             ]
           }
         ]
-      }
+      },
+      "avaliacoes": [
+        { "id": "av1", "data": "10/03/2026", "doutor": "Dr. Carlos", "testes": [
+          { "tipo": "tug", "tempoSegundos": 14.2, "distanciaMetros": 3 },
+          { "tipo": "dinamometria", "esquerda": 22.5, "direita": 24.0 }
+        ]},
+        { "id": "av2", "data": "15/04/2026", "doutor": "Dr. Carlos", "testes": [
+          { "tipo": "tug", "tempoSegundos": 11.8, "distanciaMetros": 3 },
+          { "tipo": "dinamometria", "esquerda": 25.0, "direita": 26.5 }
+        ]},
+        { "id": "av3", "data": "12/05/2026", "doutor": "Dr. Carlos", "testes": [
+          { "tipo": "tug", "tempoSegundos": 9.4, "distanciaMetros": 3 },
+          { "tipo": "dinamometria", "esquerda": 27.5, "direita": 28.0 }
+        ]}
+      ]
     },
     {
       "id": "p2",
@@ -238,7 +252,17 @@
             "exercicios": []
           }
         ]
-      }
+      },
+      "avaliacoes": [
+        { "id": "av1", "data": "08/03/2026", "doutor": "Dr. Carlos", "testes": [
+          { "tipo": "tug", "tempoSegundos": 16.5, "distanciaMetros": 3 },
+          { "tipo": "dinamometria", "esquerda": 28.0, "direita": 31.5 }
+        ]},
+        { "id": "av2", "data": "14/04/2026", "doutor": "Dr. Carlos", "testes": [
+          { "tipo": "tug", "tempoSegundos": 13.2, "distanciaMetros": 3 },
+          { "tipo": "dinamometria", "esquerda": 30.5, "direita": 33.0 }
+        ]}
+      ]
     },
     {
       "id": "p5",

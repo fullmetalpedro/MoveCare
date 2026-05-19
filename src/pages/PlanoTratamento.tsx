@@ -1,42 +1,28 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Download, Plus, Play, GripVertical, Pencil, Trash2 } from "lucide-react";
-import type { Paciente } from "../types";
+import type { Paciente, Exercicio } from "../types";
 import "./PlanoTratamento.css";
 
 const CATEGORIA_COLORS: Record<string, string> = {
-  Fortalecimento: "#FF3B30",
+  Fortalecimento: "#E04F5F",
   Estabilização: "#007AFF",
-  Flexibilidade: "#FF9500",
+  Flexibilidade: "#E8973A",
   Mobilidade: "#AF52DE",
   Funcional: "#34C759",
   Relaxamento: "#5AC8FA",
-  Propriocepção: "#FF9500",
+  Propriocepção: "#E8973A",
   Equilíbrio: "#007AFF",
 };
 
 export default function PlanoTratamento() {
   const paciente = useOutletContext<Paciente>();
   const plano = paciente.planoTratamento;
-  const [faseAtiva, setFaseAtiva] = useState(plano?.fases[1]?.id ?? plano?.fases[0]?.id ?? "");
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const [slider, setSlider] = useState({ left: 0, width: 0 });
-
-  const updateSlider = useCallback(() => {
-    if (!tabsRef.current) return;
-    const active = tabsRef.current.querySelector(".fase-tab.active") as HTMLElement | null;
-    if (active) {
-      const parentRect = tabsRef.current.getBoundingClientRect();
-      const rect = active.getBoundingClientRect();
-      setSlider({ left: rect.left - parentRect.left, width: rect.width });
-    }
-  }, []);
-
-  useEffect(() => { updateSlider(); }, [faseAtiva, updateSlider]);
-  useEffect(() => {
-    window.addEventListener("resize", updateSlider);
-    return () => window.removeEventListener("resize", updateSlider);
-  }, [updateSlider]);
+  const [exercicios, setExercicios] = useState<Exercicio[]>(() =>
+    plano ? plano.fases.flatMap(f => f.exercicios) : []
+  );
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   if (!plano) {
     return (
@@ -46,7 +32,38 @@ export default function PlanoTratamento() {
     );
   }
 
-  const fase = plano.fases.find(f => f.id === faseAtiva) ?? plano.fases[0];
+  const draggingIdx = draggingId ? exercicios.findIndex(e => e.id === draggingId) : -1;
+
+  const handleDragStart = (e: React.DragEvent, id: string) => {
+    setDraggingId(id);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: React.DragEvent, id: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (id !== draggingId) setDragOverId(id);
+  };
+
+  const handleDrop = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    if (!draggingId || draggingId === targetId) return;
+    setExercicios(prev => {
+      const list = [...prev];
+      const from = list.findIndex(ex => ex.id === draggingId);
+      const to = list.findIndex(ex => ex.id === targetId);
+      const [item] = list.splice(from, 1);
+      list.splice(to, 0, item);
+      return list;
+    });
+    setDraggingId(null);
+    setDragOverId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggingId(null);
+    setDragOverId(null);
+  };
 
   return (
     <div className="plano-page">
@@ -61,47 +78,54 @@ export default function PlanoTratamento() {
         </div>
       </div>
 
-      <div className="fase-tabs slide-tabs" ref={tabsRef}>
-        <div className="slide-indicator" style={{ left: slider.left, width: slider.width }} />
-        {plano.fases.map(f => (
-          <button
-            key={f.id}
-            className={`fase-tab ${faseAtiva === f.id ? "active" : ""}`}
-            onClick={() => setFaseAtiva(f.id)}
-          >
-            {f.nome}
-          </button>
-        ))}
-      </div>
-
-      <div className="exercicios-list fade-list" key={faseAtiva}>
-        {fase.exercicios.length === 0 ? (
-          <div className="empty-fase">Nenhum exercício nesta fase ainda.</div>
+      <div className="exercicios-list">
+        {exercicios.length === 0 ? (
+          <div className="empty-fase">Nenhum exercício cadastrado no plano.</div>
         ) : (
-          fase.exercicios.map((ex) => (
-            <div key={ex.id} className="exercicio-row">
-              <span className="ex-drag"><GripVertical size={16} /></span>
-              <div className={`ex-thumb ${ex.temVideo ? "has-video" : "no-video"}`}>
-                {ex.temVideo ? <Play size={18} /> : "Sem vídeo"}
-              </div>
-              <div className="ex-info">
-                <div className="ex-name-row">
-                  <span className="ex-name">{ex.nome}</span>
-                  <span
-                    className="ex-cat-badge"
-                    style={{ background: `${CATEGORIA_COLORS[ex.categoria] ?? "#888"}20`, color: CATEGORIA_COLORS[ex.categoria] ?? "#888" }}
-                  >
-                    {ex.categoria}
-                  </span>
+          exercicios.map((ex, idx) => {
+            const isDragging = draggingId === ex.id;
+            const isOver = dragOverId === ex.id;
+            // Line before: dragging from below, will land above this item
+            const lineBefore = isOver && draggingIdx > idx;
+            // Line after: dragging from above, will land below this item
+            const lineAfter = isOver && draggingIdx < idx;
+
+            return (
+              <div key={ex.id} className="ex-row-wrap">
+                <div className={`ex-drop-line${lineBefore ? " visible" : ""}`} />
+                <div
+                  className={`exercicio-row${isDragging ? " ex-dragging" : ""}`}
+                  draggable
+                  onDragStart={e => handleDragStart(e, ex.id)}
+                  onDragOver={e => handleDragOver(e, ex.id)}
+                  onDrop={e => handleDrop(e, ex.id)}
+                  onDragEnd={handleDragEnd}
+                >
+                  <span className="ex-drag"><GripVertical size={16} /></span>
+                  <div className={`ex-thumb ${ex.temVideo ? "has-video" : "no-video"}`}>
+                    {ex.temVideo ? <Play size={18} /> : "Sem vídeo"}
+                  </div>
+                  <div className="ex-info">
+                    <div className="ex-name-row">
+                      <span className="ex-name">{ex.nome}</span>
+                      <span
+                        className="ex-cat-badge"
+                        style={{ background: `${CATEGORIA_COLORS[ex.categoria] ?? "#888"}20`, color: CATEGORIA_COLORS[ex.categoria] ?? "#888" }}
+                      >
+                        {ex.categoria}
+                      </span>
+                    </div>
+                    <div className="ex-series">Séries: {ex.series}</div>
+                  </div>
+                  <div className="ex-actions">
+                    <button className="ex-btn"><Pencil size={14} /></button>
+                    <button className="ex-btn ex-btn-del"><Trash2 size={14} /></button>
+                  </div>
                 </div>
-                <div className="ex-series">Séries: {ex.series}</div>
+                <div className={`ex-drop-line${lineAfter ? " visible" : ""}`} />
               </div>
-              <div className="ex-actions">
-                <button className="ex-btn"><Pencil size={14} /></button>
-                <button className="ex-btn ex-btn-del"><Trash2 size={14} /></button>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 

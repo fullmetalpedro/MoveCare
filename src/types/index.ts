@@ -62,6 +62,25 @@ export interface Evolucao {
   texto: string;
 }
 
+export interface TUGResult { tipo: "tug"; tempoSegundos: number; distanciaMetros: number; }
+export interface DinamometriaResult { tipo: "dinamometria"; esquerda: number; direita: number; }
+export interface MRCResult { tipo: "mrc"; grupos: { nome: string; valor: number }[]; }
+export interface SitToStandResult { tipo: "sit_to_stand"; repeticoes: number; }
+export interface TenMWTResult { tipo: "10mwt"; tempoSegundos: number; distanciaMetros: number; velocidade: number; }
+export interface DGIResult { tipo: "dgi"; itens: { nome: string; valor: number }[]; total: number; }
+export interface TDRResult { tipo: "tdr"; observacao?: string; }
+export interface MMSEResult { tipo: "mmse"; total: number; orientacaoTemporal?: number; orientacaoEspacial?: number; registro?: number; atencao?: number; evocacao?: number; linguagem?: number; }
+export interface MoCAResult { tipo: "moca"; total: number; visuoespacial?: number; nomeacao?: number; atencao?: number; linguagem?: number; abstracao?: number; evocacao?: number; orientacao?: number; }
+
+export type TesteResult = TUGResult | DinamometriaResult | MRCResult | SitToStandResult | TenMWTResult | DGIResult | TDRResult | MMSEResult | MoCAResult;
+
+export interface AvaliacaoTeste {
+  id: string;
+  data: string;
+  doutor: string;
+  testes: TesteResult[];
+}
+
 export interface ProximaSessao {
   data: string;
   hora: string;
@@ -88,6 +107,7 @@ export interface Paciente {
   ultimaEvolucao: Evolucao | null;
   adesaoSemanal: AdesaoDia[];
   planoTratamento: PlanoTratamento | null;
+  avaliacoes?: AvaliacaoTeste[];
 }
 
 export interface AgendaSemanal {

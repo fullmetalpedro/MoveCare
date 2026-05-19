@@ -13,8 +13,8 @@ type FilterType = "Todos" | "Ativos" | "Avaliação" | "Alta";
 
 function AdesaoBar({ value }: { value: number }) {
   let color = "#34C759";
-  if (value < 50) color = "#FF3B30";
-  else if (value < 70) color = "#FF9500";
+  if (value < 50) color = "#E04F5F";
+  else if (value < 70) color = "#E8973A";
   return (
     <div className="adesao-cell">
       <div className="adesao-bar-bg">
@@ -103,9 +103,11 @@ export default function Pacientes({ pacientes }: PacientesProps) {
         {filtered.map(p => (
           <div key={p.id} className="table-row" onClick={() => navigate(`/pacientes/${p.id}`)}>
             <span className="col-paciente">
-              <span className="pac-avatar" style={{ background: p.status === "Alta" ? "#8E8E93" : undefined }}>
-                {p.initials}
-              </span>
+                  <img
+                className="pac-avatar"
+                src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(p.nome)}`}
+                alt={p.initials}
+              />
               <span className="pac-nome">{p.nome}</span>
             </span>
             <span className="col-idade">{p.idade}</span>

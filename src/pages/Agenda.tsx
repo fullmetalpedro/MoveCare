@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
+import { AlertTriangle } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import type { AgendaSemanal } from "../types";
 import "./Agenda.css";
@@ -18,10 +20,20 @@ const DIAS = [
 
 const VIEWS = ["Dia", "Semana", "Mês"] as const;
 
-export default function Agenda({ eventos }: AgendaProps) {
+type PendingMove = {
+  evento: AgendaSemanal;
+  toDia: string;
+  toHora: string;
+};
+
+export default function Agenda({ eventos: initialEventos }: AgendaProps) {
+  const [eventos, setEventos] = useState<AgendaSemanal[]>(initialEventos);
   const [view, setView] = useState<string>("Semana");
   const viewRef = useRef<HTMLDivElement>(null);
   const [vSlider, setVSlider] = useState({ left: 0, width: 0 });
+  const [draggingKey, setDraggingKey] = useState<string | null>(null);
+  const [dragOverKey, setDragOverKey] = useState<string | null>(null);
+  const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
 
   const updateViewSlider = useCallback(() => {
     if (!viewRef.current) return;
@@ -42,6 +54,71 @@ export default function Agenda({ eventos }: AgendaProps) {
   function getEvento(dia: string, hora: string) {
     return eventos.find(e => e.dia === dia && e.hora === hora);
   }
+
+  function cellKey(dia: string, hora: string) {
+    return `${dia}::${hora}`;
+  }
+
+  function handleDragStart(e: React.DragEvent, evento: AgendaSemanal) {
+    const key = cellKey(evento.dia, evento.hora);
+    setDraggingKey(key);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", key);
+  }
+
+  function handleDragOver(e: React.DragEvent, dia: string, hora: string) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverKey(cellKey(dia, hora));
+  }
+
+  function handleDragLeave(e: React.DragEvent) {
+    // Only clear if leaving the cell entirely (not entering a child)
+    if (!(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) {
+      setDragOverKey(null);
+    }
+  }
+
+  function handleDrop(e: React.DragEvent, toDia: string, toHora: string) {
+    e.preventDefault();
+    setDragOverKey(null);
+    setDraggingKey(null);
+
+    const key = e.dataTransfer.getData("text/plain");
+    const [fromDia, fromHora] = key.split("::");
+
+    if (fromDia === toDia && fromHora === toHora) return;
+
+    const evento = getEvento(fromDia, fromHora);
+    if (!evento) return;
+
+    // Don't allow dropping on an occupied cell
+    if (getEvento(toDia, toHora)) return;
+
+    setPendingMove({ evento, toDia, toHora });
+  }
+
+  function handleDragEnd() {
+    setDraggingKey(null);
+    setDragOverKey(null);
+  }
+
+  function confirmMove() {
+    if (!pendingMove) return;
+    const { evento, toDia, toHora } = pendingMove;
+    setEventos(prev =>
+      prev.map(e =>
+        e.dia === evento.dia && e.hora === evento.hora
+          ? { ...e, dia: toDia, hora: toHora }
+          : e
+      )
+    );
+    setPendingMove(null);
+  }
+
+  const diaLabel: Record<string, string> = {
+    Seg: "Segunda", Ter: "Terça", Qua: "Quarta", Qui: "Quinta", Sex: "Sexta",
+  };
 
   return (
     <div className="agenda-page">
@@ -77,10 +154,24 @@ export default function Agenda({ eventos }: AgendaProps) {
             <div key={`h-${hora}`} className="agenda-time">{hora}</div>
             {DIAS.map(dia => {
               const ev = getEvento(dia.label, hora);
+              const key = cellKey(dia.label, hora);
+              const isOver = dragOverKey === key;
+              const isDraggingThis = draggingKey === key;
               return (
-                <div key={`${dia.label}-${hora}`} className="agenda-cell">
+                <div
+                  key={key}
+                  className={`agenda-cell ${isOver && !ev ? "drag-over" : ""}`}
+                  onDragOver={e => handleDragOver(e, dia.label, hora)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={e => handleDrop(e, dia.label, hora)}
+                >
                   {ev && (
-                    <div className={`agenda-event event-${ev.cor}`}>
+                    <div
+                      className={`agenda-event event-${ev.cor} ${isDraggingThis ? "is-dragging" : ""}`}
+                      draggable
+                      onDragStart={e => handleDragStart(e, ev)}
+                      onDragEnd={handleDragEnd}
+                    >
                       <div className="event-name">{ev.paciente}</div>
                       <div className="event-tipo">{ev.tipo}</div>
                     </div>
@@ -91,6 +182,33 @@ export default function Agenda({ eventos }: AgendaProps) {
           </>
         ))}
       </div>
+
+      {pendingMove && createPortal(
+        <div className="modal-overlay" onClick={() => setPendingMove(null)}>
+          <div className="modal-dialog" onClick={e => e.stopPropagation()}>
+            <div className="modal-warning-icon">
+              <AlertTriangle size={24} />
+            </div>
+            <h3 className="modal-title">Confirmar reagendamento</h3>
+            <p className="modal-body">
+              Você está movendo <strong>{pendingMove.evento.paciente}</strong> para{" "}
+              <strong>{diaLabel[pendingMove.toDia] ?? pendingMove.toDia}, {pendingMove.toHora}</strong>.
+            </p>
+            <p className="modal-notice">
+              Lembre-se de alinhar essa alteração com o paciente antes de confirmar.
+            </p>
+            <div className="modal-actions">
+              <button className="modal-btn-cancel" onClick={() => setPendingMove(null)}>
+                Cancelar
+              </button>
+              <button className="modal-btn-confirm" onClick={confirmMove}>
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }
