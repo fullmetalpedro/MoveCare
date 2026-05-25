@@ -18,14 +18,6 @@ import type { MockData } from "./types";
 
 const data = mockData as MockData;
 
-function PlaceholderPage({ title }: { title: string }) {
-  return (
-    <div style={{ padding: 40, color: "#6b8f7b", fontSize: 18, textAlign: "center" }}>
-      {title} — em breve
-    </div>
-  );
-}
-
 export default function App() {
   return (
     <Routes>
