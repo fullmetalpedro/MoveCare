@@ -113,6 +113,27 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  position: relative;
+}
+
+.ctx-slider {
+  position: absolute;
+  border-radius: 8px;
+  background: rgba(0, 122, 255, 0.1);
+  box-shadow: 0 7px 12px -4px rgba(0, 122, 255, 0.35);
+  transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.3s ease,
+    opacity 0.2s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* "Nova avaliação" gets the same highlight, in white. */
+.ctx-slider.nova {
+  background: var(--card-bg);
 }
 
 .ctx-label {
@@ -162,34 +183,26 @@
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
-  transition: all 0.15s;
+  transition: color 0.2s, font-weight 0.15s;
+  position: relative;
+  z-index: 1;
 }
 
 .ctx-link:hover {
-  background: rgba(0, 0, 0, 0.03);
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .ctx-link.active {
-  background: rgba(0, 122, 255, 0.1);
+  background: transparent;
   color: var(--accent);
   font-weight: 600;
 }
 
 .ctx-link-nova {
   margin-top: 6px;
-  border-top: 1px solid var(--border-light);
-  padding-top: 14px;
   color: var(--accent);
   font-weight: 600;
-}
-
-.ctx-link-nova:hover {
-  background: rgba(0, 122, 255, 0.06);
-}
-
-.ctx-link-nova.active {
-  background: var(--accent);
-  color: #fff;
 }
 
 .detail-main {
@@ -257,6 +270,11 @@
     margin-bottom: 16px;
     -webkit-overflow-scrolling: touch;
     border-bottom: none;
+  }
+
+  /* Mobile uses solid pills with their own active style — no sliding indicator. */
+  .ctx-slider {
+    display: none;
   }
 
   .ctx-label,

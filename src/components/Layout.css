@@ -20,7 +20,16 @@
   margin-left: 220px;
   padding: 28px 36px;
   min-height: 100vh;
+  /* Prevent child elements (e.g. FullCalendar on mount) from briefly
+     overflowing the viewport and flashing the scrollbar. */
+  overflow-x: hidden;
   transition: margin-left 0.2s ease;
+}
+
+/* Page-enter animation lives on an inner wrapper of natural height, contained
+   within main-content's 100vh, so the translateY(6px) never pushes the document
+   past the viewport and momentarily reveals a scrollbar. */
+.page-fade {
   animation: pageFadeIn 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 

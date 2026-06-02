@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Users, TrendingUp, DollarSign, HeartPulse, Bell, ChevronRight } from "lucide-react";
-import type { Stats, AgendaItem } from "../types";
+import { Link, useNavigate } from "react-router-dom";
+import { Users, HeartPulse, Bell, ChevronRight } from "lucide-react";
+import NotificationsDrawer from "../components/NotificationsDrawer";
+import type { Stats, AgendaItem, Paciente } from "../types";
 import "./Dashboard.css";
 
 interface DashboardProps {
   stats: Stats;
   agendaHoje: AgendaItem[];
   doctorName: string;
+  pacientes: Paciente[];
 }
 
 function StatusDot({ status }: { status: string }) {
@@ -61,9 +63,12 @@ function DashboardSkeleton() {
   );
 }
 
-export default function Dashboard({ stats, agendaHoje, doctorName }: DashboardProps) {
+export default function Dashboard({ stats, agendaHoje, doctorName, pacientes }: DashboardProps) {
   const [loading, setLoading] = useState(true);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const navigate = useNavigate();
   const firstName = doctorName.split(" ").slice(1).join(" ");
+  const idByNome = new Map(pacientes.map((p) => [p.nome, p.id]));
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
@@ -73,49 +78,45 @@ export default function Dashboard({ stats, agendaHoje, doctorName }: DashboardPr
   if (loading) return <DashboardSkeleton />;
 
   return (
-    <div className="dashboard">
+    <div className="dashboard content-appear">
       <div className="dashboard-header">
         <div>
           <h1>Bom dia, {firstName}</h1>
           <p className="header-subtitle">Terça-feira, 29 de Abril · {stats.pacientesHoje} pacientes hoje</p>
         </div>
-        <button className="notification-btn"><Bell size={18} /></button>
+        <button className="notification-btn" onClick={() => setNotifOpen(true)} aria-label="Notificações"><Bell size={18} /></button>
       </div>
 
+      <NotificationsDrawer open={notifOpen} onClose={() => setNotifOpen(false)} />
+
       <div className="stats-grid">
-        <div className="stat-card">
+        <Link to="/agenda?view=dia" className="stat-card clickable">
           <div className="stat-card-header">
             <span className="stat-label">Pacientes Hoje</span>
             <span className="stat-icon stat-icon-green"><Users size={18} /></span>
           </div>
           <div className="stat-value">{stats.pacientesHoje}</div>
           <div className="stat-detail">{stats.pacientesHojeDetalhe}</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Adesão Geral</span>
-            <span className="stat-icon stat-icon-green"><TrendingUp size={18} /></span>
-          </div>
-          <div className="stat-value">{stats.adesaoGeral}%</div>
-          <div className={`stat-detail ${stats.adesaoVariacao < 0 ? "negative" : "positive"}`}>
-            {stats.adesaoVariacao < 0 ? "↓" : "↑"} {Math.abs(stats.adesaoVariacao)}% vs semana anterior
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">Receita do Mês</span>
-            <span className="stat-icon stat-icon-green"><DollarSign size={18} /></span>
-          </div>
-          <div className="stat-value">{stats.receitaMes}</div>
-          <div className="stat-detail">{stats.receitaDetalhe}</div>
-        </div>
-        <div className="stat-card">
+        </Link>
+        <Link to="/pacientes?filter=Ativos" className="stat-card clickable">
           <div className="stat-card-header">
             <span className="stat-label">Pacientes Ativos</span>
             <span className="stat-icon stat-icon-green"><HeartPulse size={18} /></span>
           </div>
           <div className="stat-value">{stats.pacientesAtivos}</div>
           <div className="stat-detail positive">{stats.pacientesEmAvaliacao} em avaliação</div>
+        </Link>
+        <div className="stat-card stat-card-centered">
+          <span className="stat-label">Adesão Geral</span>
+          <div className="stat-value stat-value-lg">{stats.adesaoGeral}%</div>
+          <div className={`stat-detail ${stats.adesaoVariacao < 0 ? "negative" : "positive"}`}>
+            {stats.adesaoVariacao < 0 ? "↓" : "↑"} {Math.abs(stats.adesaoVariacao)}% vs semana anterior
+          </div>
+        </div>
+        <div className="stat-card stat-card-centered">
+          <span className="stat-label">Receita do Mês</span>
+          <div className="stat-value stat-value-lg">{stats.receitaMes}</div>
+          <div className="stat-detail">{stats.receitaDetalhe}</div>
         </div>
       </div>
 
@@ -125,21 +126,28 @@ export default function Dashboard({ stats, agendaHoje, doctorName }: DashboardPr
           <Link to="/agenda" className="card-link">Ver completa <ChevronRight size={14} /></Link>
         </div>
         <div className="agenda-list">
-          {agendaHoje.map((item, i) => (
-            <div key={i} className={`agenda-row ${item.status === "livre" ? "livre" : ""}`}>
-              <span className="agenda-hora">{item.hora}</span>
-              <StatusDot status={item.status} />
-              {item.paciente ? (
-                <>
-                  <span className="agenda-paciente">{item.paciente}</span>
-                  <span className="agenda-tipo">{item.tipo}</span>
-                </>
-              ) : (
-                <span className="agenda-livre">— {item.tipo} —</span>
-              )}
-              {item.paciente && <span className="agenda-arrow"><ChevronRight size={16} /></span>}
-            </div>
-          ))}
+          {agendaHoje.map((item, i) => {
+            const pid = item.paciente ? idByNome.get(item.paciente) : undefined;
+            return (
+              <div
+                key={i}
+                className={`agenda-row ${item.status === "livre" ? "livre" : ""} ${pid ? "clickable" : ""}`}
+                onClick={pid ? () => navigate(`/pacientes/${pid}`) : undefined}
+              >
+                <span className="agenda-hora">{item.hora}</span>
+                <StatusDot status={item.status} />
+                {item.paciente ? (
+                  <>
+                    <span className="agenda-paciente">{item.paciente}</span>
+                    <span className="agenda-tipo">{item.tipo}</span>
+                  </>
+                ) : (
+                  <span className="agenda-livre">— {item.tipo} —</span>
+                )}
+                {item.paciente && <span className="agenda-arrow"><ChevronRight size={16} /></span>}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

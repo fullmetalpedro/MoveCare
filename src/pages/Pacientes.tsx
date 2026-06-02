@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Search, Plus, ChevronRight } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import type { Paciente } from "../types";
@@ -30,8 +30,14 @@ function StatusBadge({ status }: { status: string }) {
   return <span className={`status-badge ${cls}`}>{status}</span>;
 }
 
+const FILTERS: FilterType[] = ["Todos", "Ativos", "Avaliação", "Alta"];
+
 export default function Pacientes({ pacientes }: PacientesProps) {
-  const [filter, setFilter] = useState<FilterType>("Todos");
+  const [searchParams] = useSearchParams();
+  const paramFilter = searchParams.get("filter") as FilterType | null;
+  const initialFilter: FilterType =
+    paramFilter && FILTERS.includes(paramFilter) ? paramFilter : "Todos";
+  const [filter, setFilter] = useState<FilterType>(initialFilter);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -77,7 +83,7 @@ export default function Pacientes({ pacientes }: PacientesProps) {
         </div>
         <div className="slide-tabs" ref={tabsRef}>
           <div className="slide-indicator" style={{ left: slider.left, width: slider.width }} />
-          {(["Todos", "Ativos", "Avaliação", "Alta"] as FilterType[]).map(f => (
+          {FILTERS.map(f => (
             <button
               key={f}
               className={`filter-tab ${filter === f ? "active" : ""}`}

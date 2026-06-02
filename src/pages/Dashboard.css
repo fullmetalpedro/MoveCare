@@ -63,6 +63,21 @@
   box-shadow: var(--shadow-md);
 }
 
+.stat-card.clickable {
+  display: block;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.stat-card.clickable:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.stat-card.clickable:active {
+  transform: translateY(0);
+}
+
 .stat-card-header {
   display: flex;
   justify-content: space-between;
@@ -98,6 +113,29 @@
   line-height: 1.1;
   margin-bottom: 6px;
   letter-spacing: -0.03em;
+}
+
+/* Centered metric cards (no icon) — larger, emphasized value */
+.stat-card-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.stat-card-centered .stat-label {
+  margin-bottom: 2px;
+}
+
+.stat-card-centered .stat-detail {
+  margin-top: 0;
+}
+
+.stat-value-lg {
+  font-size: 44px;
+  margin-bottom: 0;
 }
 
 .stat-detail {
@@ -167,6 +205,24 @@
 
 .agenda-row.livre {
   opacity: 0.45;
+}
+
+.agenda-row.clickable {
+  cursor: pointer;
+  margin: 0 -12px;
+  padding: 12px;
+  border-radius: 10px;
+  transition: box-shadow 0.2s, transform 0.15s, background 0.15s;
+}
+
+.agenda-row.clickable:hover {
+  background: var(--card-bg);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.agenda-row.clickable:active {
+  transform: translateY(0);
 }
 
 .agenda-hora {

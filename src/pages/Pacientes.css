@@ -64,7 +64,6 @@
   border-radius: var(--radius);
   border: none;
   box-shadow: var(--shadow-sm);
-  overflow: hidden;
 }
 
 .table-header {
@@ -72,6 +71,8 @@
   grid-template-columns: 2fr 0.6fr 0.8fr 0.7fr 1.2fr 0.7fr 0.4fr;
   padding: 14px 24px;
   background: var(--card-bg-alt);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
   border-bottom: 1px solid var(--border);
   font-size: 11px;
   font-weight: 600;
@@ -87,11 +88,20 @@
   border-bottom: 1px solid var(--border-light);
   align-items: center;
   cursor: pointer;
-  transition: background 0.1s;
+  position: relative;
+  transition: box-shadow 0.2s ease, transform 0.15s ease, background 0.15s ease;
 }
 
 .table-row:hover {
-  background: var(--card-bg-alt);
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  z-index: 1;
+}
+
+.table-row:active {
+  transform: translateY(0);
 }
 
 .table-row:last-child {

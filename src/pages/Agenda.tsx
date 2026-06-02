@@ -1,6 +1,18 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { AlertTriangle } from "lucide-react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import ptBrLocale from "@fullcalendar/core/locales/pt-br";
+import type {
+  EventInput,
+  EventContentArg,
+  EventDropArg,
+  DatesSetArg,
+} from "@fullcalendar/core";
 import PageHeader from "../components/PageHeader";
 import type { AgendaSemanal } from "../types";
 import "./Agenda.css";
@@ -9,32 +21,78 @@ interface AgendaProps {
   eventos: AgendaSemanal[];
 }
 
-const HORAS = ["07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"];
-const DIAS = [
-  { label: "Seg", num: 28 },
-  { label: "Ter", num: 29, hoje: true },
-  { label: "Qua", num: 30 },
-  { label: "Qui", num: 1 },
-  { label: "Sex", num: 2 },
-];
-
-const VIEWS = ["Dia", "Semana", "Mês"] as const;
-
-type PendingMove = {
-  evento: AgendaSemanal;
-  toDia: string;
-  toHora: string;
+/**
+ * The mock data is anchored to a reference week (Abril 2026, semana 18).
+ * We map the weekday labels to real ISO dates so FullCalendar can render
+ * proper Date objects. Seg=28/04 ... Sex=02/05/2026.
+ */
+const REFERENCE_WEEK: Record<string, string> = {
+  Seg: "2026-04-28",
+  Ter: "2026-04-29",
+  Qua: "2026-04-30",
+  Qui: "2026-05-01",
+  Sex: "2026-05-02",
 };
 
-export default function Agenda({ eventos: initialEventos }: AgendaProps) {
-  const [eventos, setEventos] = useState<AgendaSemanal[]>(initialEventos);
-  const [view, setView] = useState<string>("Semana");
-  const viewRef = useRef<HTMLDivElement>(null);
-  const [vSlider, setVSlider] = useState({ left: 0, width: 0 });
-  const [draggingKey, setDraggingKey] = useState<string | null>(null);
-  const [dragOverKey, setDragOverKey] = useState<string | null>(null);
+const INITIAL_DATE = "2026-04-29";
+
+const VIEWS = [
+  { label: "Dia", value: "timeGridDay" },
+  { label: "Semana", value: "timeGridWeek" },
+  { label: "Mês", value: "dayGridMonth" },
+] as const;
+
+type ViewValue = (typeof VIEWS)[number]["value"];
+
+// Maps the ?view= query param (used by dashboard shortcuts) to a calendar view.
+const VIEW_PARAM_MAP: Record<string, ViewValue> = {
+  dia: "timeGridDay",
+  semana: "timeGridWeek",
+  mes: "dayGridMonth",
+};
+
+function mapEventos(eventos: AgendaSemanal[]): EventInput[] {
+  return eventos.flatMap((e) => {
+    const date = REFERENCE_WEEK[e.dia];
+    if (!date) return [];
+    const start = `${date}T${e.hora}:00`;
+    const [h, m] = e.hora.split(":").map(Number);
+    const endH = String(h + 1).padStart(2, "0");
+    const end = `${date}T${endH}:${String(m).padStart(2, "0")}:00`;
+    return [
+      {
+        id: e.id,
+        title: e.paciente,
+        start,
+        end,
+        classNames: [`fc-event-${e.cor}`],
+        extendedProps: { paciente: e.paciente, tipo: e.tipo, cor: e.cor },
+      },
+    ];
+  });
+}
+
+type PendingMove = {
+  info: EventDropArg;
+  paciente: string;
+  quando: string;
+};
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+export default function Agenda({ eventos }: AgendaProps) {
+  const calendarRef = useRef<FullCalendar>(null);
+  const [searchParams] = useSearchParams();
+  const initialView = VIEW_PARAM_MAP[searchParams.get("view") ?? ""] ?? "timeGridWeek";
+  const [view, setView] = useState<ViewValue>(initialView);
+  const [periodo, setPeriodo] = useState("");
   const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
   const [closingModal, setClosingModal] = useState(false);
+  const [viewAnim, setViewAnim] = useState(true);
+  const viewRef = useRef<HTMLDivElement>(null);
+  const [vSlider, setVSlider] = useState({ left: 0, width: 0 });
+
+  const events = useMemo(() => mapEventos(eventos), [eventos]);
 
   const updateViewSlider = useCallback(() => {
     if (!viewRef.current) return;
@@ -52,169 +110,184 @@ export default function Agenda({ eventos: initialEventos }: AgendaProps) {
     return () => window.removeEventListener("resize", updateViewSlider);
   }, [updateViewSlider]);
 
-  function getEvento(dia: string, hora: string) {
-    return eventos.find(e => e.dia === dia && e.hora === hora);
+  function api() {
+    return calendarRef.current?.getApi();
   }
 
-  function cellKey(dia: string, hora: string) {
-    return `${dia}::${hora}`;
+  function changeView(v: ViewValue) {
+    if (v === view) return;
+    // Hide first (base opacity 0), swap the view while hidden, then replay the
+    // global pageFadeIn animation — avoids the new view flashing at full opacity.
+    setViewAnim(false);
+    requestAnimationFrame(() => {
+      api()?.changeView(v);
+      setView(v);
+      requestAnimationFrame(() => setViewAnim(true));
+    });
   }
 
-  function handleDragStart(e: React.DragEvent, evento: AgendaSemanal) {
-    const key = cellKey(evento.dia, evento.hora);
-    setDraggingKey(key);
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", key);
-  }
+  const handleDatesSet = useCallback((arg: DatesSetArg) => {
+    // Short, fixed-format label so the nav buttons never shift position
+    // when switching between day/week/month views.
+    const label = new Intl.DateTimeFormat("pt-BR", {
+      month: "long",
+      year: "numeric",
+    }).format(arg.view.currentStart);
+    setPeriodo(capitalize(label));
+  }, []);
 
-  function handleDragOver(e: React.DragEvent, dia: string, hora: string) {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-    setDragOverKey(cellKey(dia, hora));
-  }
-
-  function handleDragLeave(e: React.DragEvent) {
-    // Only clear if leaving the cell entirely (not entering a child)
-    if (!(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) {
-      setDragOverKey(null);
-    }
-  }
-
-  function handleDrop(e: React.DragEvent, toDia: string, toHora: string) {
-    e.preventDefault();
-    setDragOverKey(null);
-    setDraggingKey(null);
-
-    const key = e.dataTransfer.getData("text/plain");
-    const [fromDia, fromHora] = key.split("::");
-
-    if (fromDia === toDia && fromHora === toHora) return;
-
-    const evento = getEvento(fromDia, fromHora);
-    if (!evento) return;
-
-    // Don't allow dropping on an occupied cell
-    if (getEvento(toDia, toHora)) return;
-
-    setPendingMove({ evento, toDia, toHora });
-  }
-
-  function handleDragEnd() {
-    setDraggingKey(null);
-    setDragOverKey(null);
+  function handleEventDrop(info: EventDropArg) {
+    const start = info.event.start;
+    if (!start) return;
+    const dia = capitalize(
+      new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(start)
+    );
+    const hora = new Intl.DateTimeFormat("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(start);
+    setPendingMove({
+      info,
+      paciente: info.event.extendedProps.paciente,
+      quando: `${dia}, ${hora}`,
+    });
   }
 
   function closeModal() {
     setClosingModal(true);
-    setTimeout(() => { setPendingMove(null); setClosingModal(false); }, 180);
+    setTimeout(() => {
+      setPendingMove(null);
+      setClosingModal(false);
+    }, 180);
   }
 
-  function confirmMove() {
-    if (!pendingMove) return;
-    const { evento, toDia, toHora } = pendingMove;
-    setEventos(prev =>
-      prev.map(e =>
-        e.dia === evento.dia && e.hora === evento.hora
-          ? { ...e, dia: toDia, hora: toHora }
-          : e
-      )
-    );
+  function cancelMove() {
+    pendingMove?.info.revert();
     closeModal();
   }
 
-  const diaLabel: Record<string, string> = {
-    Seg: "Segunda", Ter: "Terça", Qua: "Quarta", Qui: "Quinta", Sex: "Sexta",
-  };
+  function confirmMove() {
+    // The drag already mutated FullCalendar's internal state; nothing more to do.
+    closeModal();
+  }
+
+  function renderEvent(arg: EventContentArg) {
+    const { paciente, tipo } = arg.event.extendedProps as {
+      paciente: string;
+      tipo: string;
+    };
+    const isMonth = arg.view.type === "dayGridMonth";
+    return (
+      <div className="fc-ev-content">
+        {isMonth && <span className="fc-ev-dot" />}
+        <span className="fc-ev-name">{paciente}</span>
+        {!isMonth && <span className="fc-ev-tipo">{tipo}</span>}
+        {isMonth && <span className="fc-ev-time">{arg.timeText}</span>}
+      </div>
+    );
+  }
 
   return (
     <div className="agenda-page">
       <PageHeader title="Agenda" backTo="/">
         <div className="agenda-nav">
-          <button className="btn-nav">‹</button>
-          <button className="btn-hoje">Hoje</button>
-          <button className="btn-nav">›</button>
-          <span className="agenda-periodo">Abril 2026 · Semana 18</span>
+          <button className="btn-hoje" onClick={() => api()?.today()}>
+            Hoje
+          </button>
+          <div className="nav-arrows" role="group" aria-label="Navegar período">
+            <button className="btn-nav" onClick={() => api()?.prev()} aria-label="Período anterior">
+              ‹
+            </button>
+            <button className="btn-nav" onClick={() => api()?.next()} aria-label="Próximo período">
+              ›
+            </button>
+          </div>
+          <span className="agenda-periodo">{periodo}</span>
         </div>
         <div className="view-toggle slide-tabs" ref={viewRef}>
           <div className="slide-indicator" style={{ left: vSlider.left, width: vSlider.width }} />
-          {VIEWS.map(v => (
-            <button key={v} className={`view-btn ${view === v ? "active" : ""}`} onClick={() => setView(v)}>{v}</button>
+          {VIEWS.map((v) => (
+            <button
+              key={v.value}
+              className={`view-btn ${view === v.value ? "active" : ""}`}
+              onClick={() => changeView(v.value)}
+            >
+              {v.label}
+            </button>
           ))}
         </div>
         <button className="btn-agendar">+ Agendar</button>
       </PageHeader>
 
-      <div className="agenda-grid">
-        <div className="agenda-corner" />
-        {DIAS.map(dia => (
-          <div key={dia.label} className={`agenda-day-header ${dia.hoje ? "hoje" : ""}`}>
-            <span className="day-label">{dia.label}</span>
-            <span className={`day-num ${dia.hoje ? "hoje-circle" : ""}`}>
-              {dia.num < 10 ? `0${dia.num}` : dia.num}
-            </span>
-          </div>
-        ))}
-
-        {HORAS.map(hora => (
-          <>
-            <div key={`h-${hora}`} className="agenda-time">{hora}</div>
-            {DIAS.map(dia => {
-              const ev = getEvento(dia.label, hora);
-              const key = cellKey(dia.label, hora);
-              const isOver = dragOverKey === key;
-              const isDraggingThis = draggingKey === key;
-              return (
-                <div
-                  key={key}
-                  className={`agenda-cell ${isOver && !ev ? "drag-over" : ""}`}
-                  onDragOver={e => handleDragOver(e, dia.label, hora)}
-                  onDragLeave={handleDragLeave}
-                  onDrop={e => handleDrop(e, dia.label, hora)}
-                >
-                  {ev && (
-                    <div
-                      className={`agenda-event event-${ev.cor} ${isDraggingThis ? "is-dragging" : ""}`}
-                      draggable
-                      onDragStart={e => handleDragStart(e, ev)}
-                      onDragEnd={handleDragEnd}
-                    >
-                      <div className="event-name">{ev.paciente}</div>
-                      <div className="event-tipo">{ev.tipo}</div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </>
-        ))}
+      <div className={`agenda-calendar${viewAnim ? " view-fadein" : ""}`}>
+        <FullCalendar
+          ref={calendarRef}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView={initialView}
+          initialDate={INITIAL_DATE}
+          locale={ptBrLocale}
+          headerToolbar={false}
+          events={events}
+          eventContent={renderEvent}
+          datesSet={handleDatesSet}
+          eventDrop={handleEventDrop}
+          editable
+          eventDurationEditable={false}
+          droppable={false}
+          weekends={false}
+          allDaySlot={false}
+          slotMinTime="07:00:00"
+          slotMaxTime="18:00:00"
+          slotDuration="01:00:00"
+          slotLabelFormat={{ hour: "2-digit", minute: "2-digit", hour12: false }}
+          eventTimeFormat={{ hour: "2-digit", minute: "2-digit", hour12: false }}
+          dayHeaderFormat={{ weekday: "short", day: "2-digit" }}
+          views={{
+            dayGridMonth: {
+              // Month view only needs weekday names in the header,
+              // the day number already appears in each cell.
+              dayHeaderFormat: { weekday: "short" },
+            },
+          }}
+          nowIndicator
+          expandRows
+          height="100%"
+          dayMaxEvents={3}
+          firstDay={1}
+        />
       </div>
 
-      {pendingMove && createPortal(
-        <div className={`modal-overlay${closingModal ? " closing" : ""}`} onClick={closeModal}>
-          <div className="modal-dialog" onClick={e => e.stopPropagation()}>
-            <div className="modal-warning-icon">
-              <AlertTriangle size={24} />
+      {pendingMove &&
+        createPortal(
+          <div
+            className={`modal-overlay${closingModal ? " closing" : ""}`}
+            onClick={cancelMove}
+          >
+            <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-warning-icon">
+                <AlertTriangle size={24} />
+              </div>
+              <h3 className="modal-title">Confirmar reagendamento</h3>
+              <p className="modal-body">
+                Você está movendo <strong>{pendingMove.paciente}</strong> para{" "}
+                <strong>{pendingMove.quando}</strong>.
+              </p>
+              <p className="modal-notice">
+                Lembre-se de alinhar essa alteração com o paciente antes de
+                confirmar.
+              </p>
+              <div className="modal-actions">
+                <button className="modal-btn-cancel" onClick={cancelMove}>
+                  Cancelar
+                </button>
+                <button className="modal-btn-confirm" onClick={confirmMove}>
+                  Confirmar
+                </button>
+              </div>
             </div>
-            <h3 className="modal-title">Confirmar reagendamento</h3>
-            <p className="modal-body">
-              Você está movendo <strong>{pendingMove.evento.paciente}</strong> para{" "}
-              <strong>{diaLabel[pendingMove.toDia] ?? pendingMove.toDia}, {pendingMove.toHora}</strong>.
-            </p>
-            <p className="modal-notice">
-              Lembre-se de alinhar essa alteração com o paciente antes de confirmar.
-            </p>
-            <div className="modal-actions">
-              <button className="modal-btn-cancel" onClick={closeModal}>
-                Cancelar
-              </button>
-              <button className="modal-btn-confirm" onClick={confirmMove}>
-                Confirmar
-              </button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
