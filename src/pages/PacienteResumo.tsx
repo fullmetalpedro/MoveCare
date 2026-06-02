@@ -1,10 +1,11 @@
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { Plus, Eye, CheckCircle2, XCircle } from "lucide-react";
 import type { Paciente } from "../types";
 import "./PacienteResumo.css";
 
 export default function PacienteResumo() {
   const paciente = useOutletContext<Paciente>();
+  const navigate = useNavigate();
 
   const diasFeitos = paciente.adesaoSemanal.filter(d => d.feito).length;
   const totalDias = paciente.adesaoSemanal.length;
@@ -27,7 +28,7 @@ export default function PacienteResumo() {
           <p className="evolucao-meta">Nenhuma evolução registrada</p>
         )}
         <div className="evolucao-actions">
-          <button className="btn-primary-sm"><Plus size={14} /> Nova Evolução</button>
+          <button className="btn-primary-sm" onClick={() => navigate(`/pacientes/${paciente.id}/evolucao`)}><Plus size={14} /> Nova Evolução</button>
           <button className="btn-outline-sm"><Eye size={14} /> Histórico</button>
         </div>
       </div>

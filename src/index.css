@@ -56,6 +56,30 @@ button {
   font-family: inherit;
 }
 
+/* Global button hover: same lift + shadow as the cards.
+   Tab-style toggles (.filter-tab / .view-btn) are excluded — they sit over a
+   sliding indicator and must stay flat. */
+button:not(.filter-tab):not(.view-btn) {
+  transition: box-shadow 0.2s ease, transform 0.15s ease, opacity 0.15s ease,
+    background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+button:not(.filter-tab):not(.view-btn):hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+button:not(.filter-tab):not(.view-btn):active {
+  transform: translateY(0);
+}
+
+/* "Cancelar" buttons on form screens get a red accent on hover. */
+button.btn-cancelar:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(224, 79, 95, 0.06);
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -144,6 +168,11 @@ button {
 
 .fade-list > * {
   animation: fadeInUp 0.35s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+/* Small fade-in for content that replaces a skeleton on first load. */
+.content-appear {
+  animation: fadeInUp 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
 .fade-list > *:nth-child(1) { animation-delay: 0s; }

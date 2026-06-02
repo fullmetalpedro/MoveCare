@@ -8,38 +8,69 @@
   gap: 8px;
 }
 
-.btn-nav {
+/* Prev/next grouped as a single segmented control so they read as
+   "navigate period", clearly distinct from the "Hoje" shortcut. */
+.nav-arrows {
+  display: inline-flex;
   background: var(--card-bg);
-  border: none;
   border-radius: 8px;
-  width: 32px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.btn-nav {
+  background: transparent;
+  border: none;
+  width: 34px;
   height: 32px;
-  font-size: 16px;
+  font-size: 17px;
+  line-height: 1;
   cursor: pointer;
   color: var(--text-primary);
-  box-shadow: var(--shadow-sm);
-  transition: all 0.15s;
+  transition: background 0.15s;
+}
+
+.btn-nav:first-child {
+  border-right: 1px solid var(--border);
 }
 
 .btn-nav:hover {
-  box-shadow: var(--shadow-md);
+  background: var(--border-light);
+}
+
+.btn-nav:active {
+  background: var(--border);
 }
 
 .btn-hoje {
-  background: var(--text-primary);
-  color: #fff;
+  background: var(--card-bg);
+  color: var(--text-primary);
   border: none;
   border-radius: 8px;
-  padding: 6px 16px;
+  padding: 6px 18px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.btn-hoje:hover {
+  background: var(--border-light);
+  box-shadow: var(--shadow-md);
 }
 
 .agenda-periodo {
   font-size: 14px;
   color: var(--text-secondary);
   margin-left: 8px;
+  text-transform: capitalize;
+  width: 130px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 
 .view-toggle {
@@ -57,7 +88,7 @@
   color: var(--text-secondary);
   font-weight: 500;
   border-radius: 8px;
-  transition: color 0.2s;
+  transition: color 0.2s, background 0.2s;
   white-space: nowrap;
 }
 
@@ -84,144 +115,219 @@
   opacity: 0.85;
 }
 
-.agenda-grid {
-  display: grid;
-  grid-template-columns: 60px repeat(5, 1fr);
+/* ─── FullCalendar container ─── */
+.agenda-calendar.view-fadein {
+  animation: pageFadeIn 0.55s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.agenda-calendar {
+  /* Base hidden: when the .view-fadein class is briefly removed during a view
+     swap the calendar stays invisible instead of flashing at full opacity. */
+  opacity: 0;
   background: var(--card-bg);
   border-radius: var(--radius);
-  border: none;
   box-shadow: var(--shadow-sm);
+  padding: 8px;
   overflow: hidden;
+  /* Constrain the calendar to the remaining viewport height so FullCalendar
+     never briefly overflows during mount and triggers a scrollbar flash.
+     PageHeader is ~90px + 24px margin-bottom. main-content padding: 28px top. */
+  height: calc(100dvh - 90px - 24px - 28px - 16px);
 }
 
-.agenda-corner {
-  background: var(--card-bg-alt);
-  border-bottom: 1px solid var(--border);
-  border-right: 1px solid var(--border);
+/* Theme FullCalendar to match the design system */
+.agenda-calendar {
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: var(--card-bg);
+  --fc-neutral-bg-color: var(--card-bg-alt);
+  --fc-today-bg-color: rgba(0, 122, 255, 0.05);
+  --fc-now-indicator-color: var(--danger);
+  --fc-event-border-color: transparent;
 }
 
-.agenda-day-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  border-right: 1px solid var(--border);
-  background: var(--card-bg-alt);
-}
-
-.agenda-day-header:last-child {
-  border-right: none;
-}
-
-.day-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 500;
-  text-transform: uppercase;
-}
-
-.day-num {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-top: 2px;
-  letter-spacing: -0.02em;
-}
-
-.hoje-circle {
-  background: var(--accent);
-  color: #fff;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.agenda-time {
-  font-size: 12px;
-  color: var(--text-muted);
-  padding: 8px 8px 8px 12px;
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border-light);
-  display: flex;
-  align-items: flex-start;
-  padding-top: 12px;
-  font-variant-numeric: tabular-nums;
-}
-
-.agenda-cell {
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border-light);
-  padding: 4px;
-  min-height: 52px;
-}
-
-.agenda-cell:nth-child(6n+1) {
-  border-right: none;
-}
-
-.agenda-event {
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  cursor: grab;
-  transition: opacity 0.15s, box-shadow 0.15s;
-  user-select: none;
-}
-
-.agenda-event:hover {
-  opacity: 0.85;
-}
-
-.agenda-event:active {
-  cursor: grabbing;
-}
-
-.agenda-event.is-dragging {
-  opacity: 0.35;
-}
-
-.agenda-cell.drag-over {
-  background: rgba(0, 122, 255, 0.07);
-  outline: 2px dashed rgba(0, 122, 255, 0.35);
-  outline-offset: -2px;
-  border-radius: 4px;
-}
-
-.event-green {
-  background: rgba(0, 122, 255, 0.08);
-  border-left: 3px solid var(--accent);
-}
-
-.event-yellow {
-  background: rgba(232, 151, 58, 0.08);
-  border-left: 3px solid var(--warning);
-}
-
-.event-blue {
-  background: rgba(52, 199, 89, 0.08);
-  border-left: 3px solid var(--success);
-}
-
-.event-name {
-  font-weight: 600;
-  color: var(--text-primary);
+.agenda-calendar .fc {
+  font-family: inherit;
   font-size: 13px;
 }
 
-.event-tipo {
-  color: var(--text-secondary);
-  font-size: 11px;
+.agenda-calendar .fc .fc-scrollgrid {
+  border-color: var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
-/* Modal */
+.agenda-calendar .fc .fc-scrollgrid,
+.agenda-calendar .fc .fc-scrollgrid-section > * {
+  border-right-width: 0;
+}
+
+/* Column / day headers */
+.agenda-calendar .fc .fc-col-header-cell {
+  background: var(--card-bg-alt);
+  padding: 10px 0;
+}
+
+.agenda-calendar .fc .fc-col-header-cell-cushion {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 6px;
+  letter-spacing: 0;
+}
+
+.agenda-calendar .fc .fc-day-today .fc-col-header-cell-cushion {
+  color: var(--accent);
+}
+
+/* Time axis labels */
+.agenda-calendar .fc .fc-timegrid-slot-label-cushion,
+.agenda-calendar .fc .fc-timegrid-axis-cushion {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.agenda-calendar .fc .fc-timegrid-slot {
+  height: 52px;
+}
+
+.agenda-calendar .fc .fc-timegrid-slot-minor {
+  border-top-style: none;
+}
+
+/* Month grid */
+.agenda-calendar .fc .fc-daygrid-day-number {
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 8px;
+}
+
+.agenda-calendar .fc .fc-daygrid-day.fc-day-today {
+  background: var(--fc-today-bg-color);
+}
+
+.agenda-calendar .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.agenda-calendar .fc .fc-popover {
+  border: none;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+}
+
+.agenda-calendar .fc .fc-popover-header {
+  background: var(--card-bg-alt);
+  color: var(--text-primary);
+}
+
+/* ─── Events ─── */
+.agenda-calendar .fc .fc-event {
+  border: none;
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  padding: 0;
+  cursor: grab;
+  box-shadow: none;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.agenda-calendar .fc .fc-event:hover {
+  opacity: 0.9;
+  box-shadow: var(--shadow-sm);
+}
+
+.agenda-calendar .fc .fc-event.fc-event-dragging {
+  opacity: 0.45;
+}
+
+.agenda-calendar .fc .fc-event-main {
+  padding: 0;
+  color: inherit;
+}
+
+.fc-ev-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding: 5px 8px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fc-ev-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 12.5px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fc-ev-tipo {
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.fc-ev-time {
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Month view: compact one-line pill */
+.agenda-calendar .fc-daygrid-event .fc-ev-content {
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 6px;
+}
+
+.agenda-calendar .fc-daygrid-event .fc-ev-time {
+  margin-left: auto;
+}
+
+.fc-ev-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+}
+
+/* Color variants — preserved from the previous design */
+.fc-event-green {
+  background: rgba(0, 122, 255, 0.08);
+  border-left-color: var(--accent);
+  color: var(--accent);
+}
+
+.fc-event-yellow {
+  background: rgba(232, 151, 58, 0.08);
+  border-left-color: var(--warning);
+  color: var(--warning);
+}
+
+.fc-event-blue {
+  background: rgba(52, 199, 89, 0.08);
+  border-left-color: var(--success);
+  color: var(--success);
+}
+
+/* In month view the whole pill is tinted; keep the dot colored */
+.agenda-calendar .fc-daygrid-event.fc-event-green,
+.agenda-calendar .fc-daygrid-event.fc-event-yellow,
+.agenda-calendar .fc-daygrid-event.fc-event-blue {
+  border-left-width: 0;
+}
+
+/* ─── Modal ─── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -349,13 +455,6 @@
   opacity: 0.85;
 }
 
-@media (max-width: 1024px) {
-  .agenda-grid {
-    overflow-x: auto;
-    min-width: 0;
-  }
-}
-
 @media (max-width: 768px) {
   .page-header-actions {
     flex-wrap: wrap;
@@ -370,24 +469,7 @@
     display: none;
   }
 
-  .agenda-grid {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .agenda-event {
-    padding: 4px 6px;
-  }
-
-  .event-name {
-    font-size: 11px;
-  }
-
-  .event-tipo {
-    font-size: 10px;
-  }
-
-  .day-num {
-    font-size: 18px;
+  .agenda-calendar .fc {
+    font-size: 12px;
   }
 }

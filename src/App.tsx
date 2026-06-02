@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import SplashScreen from "./components/SplashScreen";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Agenda from "./pages/Agenda";
@@ -20,6 +21,8 @@ const data = mockData as MockData;
 
 export default function App() {
   return (
+    <>
+    <SplashScreen />
     <Routes>
       <Route element={<Layout doctor={data.doctor} alertCount={data.alertas.length} />}>
         <Route
@@ -29,6 +32,7 @@ export default function App() {
               stats={data.stats}
               agendaHoje={data.agendaHoje}
               doctorName={data.doctor.name}
+              pacientes={data.pacientes}
             />
           }
         />
@@ -47,5 +51,6 @@ export default function App() {
         <Route path="documentos" element={<Documentos />} />
       </Route>
     </Routes>
+    </>
   );
 }

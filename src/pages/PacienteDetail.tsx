@@ -1,5 +1,6 @@
+import { useRef, useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, NavLink, Outlet, useLocation } from "react-router-dom";
-import { MessageSquare, FileText, ChevronLeft, TrendingUp, CalendarDays, Heart, Clock, ClipboardList, Stethoscope, BarChart3, FolderOpen, ClipboardPlus } from "lucide-react";
+import { ChevronLeft, TrendingUp, CalendarDays, Heart, Clock, ClipboardList, Stethoscope, BarChart3, FolderOpen, ClipboardPlus } from "lucide-react";
 import type { Paciente } from "../types";
 import "./PacienteDetail.css";
 
@@ -11,6 +12,36 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const navRef = useRef<HTMLElement>(null);
+  const [slider, setSlider] = useState({ top: 0, left: 0, width: 0, height: 0, visible: false, nova: false });
+
+  const updateSlider = useCallback(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const active = nav.querySelector(".ctx-link.active") as HTMLElement | null;
+    if (!active) {
+      setSlider(s => ({ ...s, visible: false }));
+      return;
+    }
+    const navRect = nav.getBoundingClientRect();
+    const rect = active.getBoundingClientRect();
+    setSlider({
+      top: rect.top - navRect.top,
+      left: rect.left - navRect.left,
+      width: rect.width,
+      height: rect.height,
+      visible: true,
+      // "Nova avaliação" uses a white highlight instead of the blue tint.
+      nova: active.classList.contains("ctx-link-nova"),
+    });
+  }, []);
+
+  useEffect(() => { updateSlider(); }, [location.pathname, updateSlider]);
+  useEffect(() => {
+    window.addEventListener("resize", updateSlider);
+    return () => window.removeEventListener("resize", updateSlider);
+  }, [updateSlider]);
+
   const paciente = pacientes.find(p => p.id === id);
 
   if (!paciente) {
@@ -41,10 +72,6 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
               <span className="session-badge">Sessão #{paciente.sessoes} de {paciente.totalSessoes}</span>
             </div>
           </div>
-        </div>
-        <div className="detail-actions">
-          <button className="btn-outline"><MessageSquare size={14} /> Mensagem</button>
-          <button className="btn-outline"><FileText size={14} /> Documentos</button>
         </div>
       </div>
 
@@ -88,7 +115,17 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
       </div>
 
       <div className="detail-body">
-        <nav className="detail-sidebar-nav">
+        <nav className="detail-sidebar-nav" ref={navRef}>
+          <span
+            className={`ctx-slider${slider.nova ? " nova" : ""}`}
+            style={{
+              top: slider.top,
+              left: slider.left,
+              width: slider.width,
+              height: slider.height,
+              opacity: slider.visible ? 1 : 0,
+            }}
+          />
           <NavLink to={`/pacientes/${id}`} end className={({ isActive }) => `ctx-link ${isActive ? "active" : ""}`}>
             <ClipboardList size={16} /> Resumo
           </NavLink>

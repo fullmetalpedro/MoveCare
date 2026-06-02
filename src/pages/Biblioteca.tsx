@@ -151,8 +151,8 @@ export default function Biblioteca() {
         </div>
       </div>
 
-      {loading ? <BibliotecaSkeleton /> : null}
-      <div className="biblioteca-grid fade-list" key={filtro} style={loading ? { display: "none" } : {}}>
+      {loading ? <BibliotecaSkeleton /> : (
+      <div className="biblioteca-grid fade-list" key={filtro}>
         {filtered.map(ex => {
           const color = CATEGORIA_COLORS[ex.categoria] ?? "#86868B";
           const icon = CATEGORIA_ICONS[ex.categoria] ?? <Dumbbell size={28} />;
@@ -186,6 +186,7 @@ export default function Biblioteca() {
           <span>Clique para adicionar um novo exercício à biblioteca</span>
         </div>
       </div>
+      )}
     </div>
   );
 }

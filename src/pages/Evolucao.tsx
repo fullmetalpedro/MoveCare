@@ -6,6 +6,7 @@ import {
   ChevronDown, ChevronUp, MessageCircle, Copy, Check, X, ClipboardCheck,
 } from "lucide-react";
 import type { Paciente, TUGResult, DinamometriaResult, RegistroSessao, AvaliacaoTeste, TesteResult } from "../types";
+import { scrollToFirstError } from "../utils/scrollToError";
 import "./Evolucao.css";
 
 const TEST_LABELS: Record<string, string> = {
@@ -264,7 +265,10 @@ export default function Evolucao() {
   }
 
   function handleSalvar() {
-    if (!validate()) return;
+    if (!validate()) {
+      scrollToFirstError();
+      return;
+    }
     const novoRegistro: RegistroSessao = {
       id: `rs-${Date.now()}`,
       data: form.data.trim(),

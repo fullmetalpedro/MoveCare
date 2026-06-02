@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dumbbell, StretchHorizontal, Activity, Footprints, HeartPulse, Wind, Video, FileText } from "lucide-react";
 import PageHeader from "../components/PageHeader";
+import { scrollToFirstError } from "../utils/scrollToError";
 import "./CadastroExercicio.css";
 
 interface FormData {
@@ -65,6 +66,7 @@ export default function CadastroExercicio() {
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
+      scrollToFirstError();
       return;
     }
     navigate("/biblioteca");

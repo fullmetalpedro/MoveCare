@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Phone, Mail, Activity, Calendar } from "lucide-react";
 import PageHeader from "../components/PageHeader";
+import { scrollToFirstError } from "../utils/scrollToError";
 import "./CadastroPaciente.css";
 
 interface FormData {
@@ -73,6 +74,7 @@ export default function CadastroPaciente() {
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
+      scrollToFirstError();
       return;
     }
     navigate("/pacientes");
