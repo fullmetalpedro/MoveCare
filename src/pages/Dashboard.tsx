@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Users, TrendingUp, DollarSign, HeartPulse, Bell, ChevronRight } from "lucide-react";
 import type { Stats, AgendaItem } from "../types";
 import "./Dashboard.css";
@@ -121,7 +122,7 @@ export default function Dashboard({ stats, agendaHoje, doctorName }: DashboardPr
       <div className="card agenda-card">
         <div className="card-header">
           <h2>Agenda de Hoje</h2>
-          <a href="/agenda" className="card-link">Ver completa <ChevronRight size={14} /></a>
+          <Link to="/agenda" className="card-link">Ver completa <ChevronRight size={14} /></Link>
         </div>
         <div className="agenda-list">
           {agendaHoje.map((item, i) => (
