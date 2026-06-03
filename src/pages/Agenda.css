@@ -521,6 +521,12 @@
   border-bottom: 1px solid var(--border);
 }
 
+/* Section 2 sits directly above the modal footer (which has its own border-top);
+   drop its border to avoid a doubled divider. */
+.mag-secao:last-of-type {
+  border-bottom: none;
+}
+
 .mag-secao-header {
   width: 100%;
   display: flex;
@@ -532,22 +538,29 @@
   cursor: pointer;
 }
 
+/* Only the chevron reacts on hover — the whole header is still clickable. */
 .mag-chevron {
   color: var(--text-muted);
   flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.mag-secao-header:hover .mag-chevron {
+  color: var(--text-primary);
 }
 
 .mag-secao-body-wrap {
   max-height: 0;
-  opacity: 0;
   overflow: hidden;
-  transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.2s ease;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.mag-secao.aberta .mag-secao-body-wrap {
-  max-height: 360px;
-  opacity: 1;
+.mag-secao:first-of-type.aberta .mag-secao-body-wrap {
+  max-height: 290px;
+}
+
+.mag-secao:last-of-type.aberta .mag-secao-body-wrap {
+  max-height: 240px;
 }
 
 .mag-secao-body {
@@ -695,13 +708,6 @@
 .mag-patient-meta {
   font-size: 12px;
   color: var(--text-muted);
-}
-
-.mag-patient-check {
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 700;
-  flex-shrink: 0;
 }
 
 .mag-dias {

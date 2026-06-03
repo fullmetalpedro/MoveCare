@@ -133,9 +133,6 @@ export default function AgendamentoModal({ pacientes, eventos, onClose, onConfir
                         <span className="mag-patient-nome">{p.nome}</span>
                         <span className="mag-patient-meta">{p.condicao} · {p.idade} anos</span>
                       </div>
-                      {pacienteSelecionado?.id === p.id && (
-                        <div className="mag-patient-check">✓</div>
-                      )}
                     </button>
                   ))
                 )}
