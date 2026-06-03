@@ -36,7 +36,7 @@ export default function App() {
             />
           }
         />
-        <Route path="agenda" element={<Agenda eventos={data.agendaSemanal} />} />
+        <Route path="agenda" element={<Agenda eventos={data.agendaSemanal} pacientes={data.pacientes} />} />
         <Route path="pacientes" element={<Pacientes pacientes={data.pacientes} />} />
         <Route path="pacientes/:id" element={<PacienteDetail pacientes={data.pacientes} />}>
           <Route index element={<PacienteResumo />} />

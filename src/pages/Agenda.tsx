@@ -6,6 +6,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import type { DateClickArg } from "@fullcalendar/interaction";
 import ptBrLocale from "@fullcalendar/core/locales/pt-br";
 import type {
   EventInput,
@@ -14,11 +15,13 @@ import type {
   DatesSetArg,
 } from "@fullcalendar/core";
 import PageHeader from "../components/PageHeader";
-import type { AgendaSemanal } from "../types";
+import AgendamentoModal from "../components/AgendamentoModal";
+import type { AgendaSemanal, Paciente } from "../types";
 import "./Agenda.css";
 
 interface AgendaProps {
   eventos: AgendaSemanal[];
+  pacientes: Paciente[];
 }
 
 /**
@@ -80,7 +83,24 @@ type PendingMove = {
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-export default function Agenda({ eventos }: AgendaProps) {
+// Maps weekday label to the calendar day-number in the reference week
+const REFERENCE_WEEK_NUMS: Record<string, number> = {
+  Seg: 28, Ter: 29, Qua: 30, Qui: 1, Sex: 2,
+};
+
+// JS Date.getDay() (0=Sun..6=Sat) → weekday label used across the app.
+const DOW_TO_LABEL: Record<number, string> = {
+  1: "Seg", 2: "Ter", 3: "Qua", 4: "Qui", 5: "Sex",
+};
+
+// Abbreviate full name to "Nome S." format matching mock data style
+function abreviarNome(nome: string): string {
+  const parts = nome.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+}
+
+export default function Agenda({ eventos, pacientes }: AgendaProps) {
   const calendarRef = useRef<FullCalendar>(null);
   const [searchParams] = useSearchParams();
   const initialView = VIEW_PARAM_MAP[searchParams.get("view") ?? ""] ?? "timeGridWeek";
@@ -88,11 +108,49 @@ export default function Agenda({ eventos }: AgendaProps) {
   const [periodo, setPeriodo] = useState("");
   const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
   const [closingModal, setClosingModal] = useState(false);
+  const [showAgendar, setShowAgendar] = useState(false);
+  const [agendarInit, setAgendarInit] = useState<{ dia: string; hora: string | null } | null>(null);
+  const [localEventos, setLocalEventos] = useState<AgendaSemanal[]>([]);
   const [viewAnim, setViewAnim] = useState(true);
   const viewRef = useRef<HTMLDivElement>(null);
   const [vSlider, setVSlider] = useState({ left: 0, width: 0 });
 
-  const events = useMemo(() => mapEventos(eventos), [eventos]);
+  const todosEventos = useMemo(() => [...eventos, ...localEventos], [eventos, localEventos]);
+  const events = useMemo(() => mapEventos(todosEventos), [todosEventos]);
+
+  function handleAgendamentoConfirm(pacienteId: string, dia: string, hora: string) {
+    const paciente = pacientes.find((p) => p.id === pacienteId);
+    if (!paciente) return;
+    const novoEvento: AgendaSemanal = {
+      id: `local-${pacienteId}-${dia}-${hora}`,
+      dia,
+      diaNum: REFERENCE_WEEK_NUMS[dia] ?? 0,
+      hora,
+      paciente: abreviarNome(paciente.nome),
+      tipo: "Sessão",
+      cor: "green",
+    };
+    setLocalEventos((prev) => [...prev, novoEvento]);
+  }
+
+  function abrirAgendamento(init: { dia: string; hora: string | null } | null) {
+    setAgendarInit(init);
+    setShowAgendar(true);
+  }
+
+  // Clicking an empty slot opens the modal pre-filled with that day/time.
+  function handleDateClick(arg: DateClickArg) {
+    const dia = DOW_TO_LABEL[arg.date.getDay()];
+    if (!dia) return; // ignore weekends / unsupported days
+    if (arg.allDay) {
+      // Month view: only the day is known — let the user pick the time.
+      abrirAgendamento({ dia, hora: null });
+      return;
+    }
+    const hora = `${String(arg.date.getHours()).padStart(2, "0")}:00`;
+    const ocupado = todosEventos.some((e) => e.dia === dia && e.hora === hora);
+    abrirAgendamento({ dia, hora: ocupado ? null : hora });
+  }
 
   const updateViewSlider = useCallback(() => {
     if (!viewRef.current) return;
@@ -216,7 +274,7 @@ export default function Agenda({ eventos }: AgendaProps) {
             </button>
           ))}
         </div>
-        <button className="btn-agendar">+ Agendar</button>
+        <button className="btn-agendar" onClick={() => abrirAgendamento(null)}>+ Agendar</button>
       </PageHeader>
 
       <div className={`agenda-calendar${viewAnim ? " view-fadein" : ""}`}>
@@ -231,6 +289,7 @@ export default function Agenda({ eventos }: AgendaProps) {
           eventContent={renderEvent}
           datesSet={handleDatesSet}
           eventDrop={handleEventDrop}
+          dateClick={handleDateClick}
           editable
           eventDurationEditable={false}
           droppable={false}
@@ -256,6 +315,17 @@ export default function Agenda({ eventos }: AgendaProps) {
           firstDay={1}
         />
       </div>
+
+      {showAgendar && (
+        <AgendamentoModal
+          pacientes={pacientes}
+          eventos={todosEventos}
+          diaInicial={agendarInit?.dia}
+          horaInicial={agendarInit?.hora ?? null}
+          onClose={() => setShowAgendar(false)}
+          onConfirm={handleAgendamentoConfirm}
+        />
+      )}
 
       {pendingMove &&
         createPortal(
