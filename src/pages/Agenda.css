@@ -523,7 +523,7 @@
 
 /* Section 2 sits directly above the modal footer (which has its own border-top);
    drop its border to avoid a doubled divider. */
-.mag-secao:last-of-type {
+.mag-secao-data {
   border-bottom: none;
 }
 
@@ -555,11 +555,11 @@
   transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.mag-secao:first-of-type.aberta .mag-secao-body-wrap {
+.mag-secao-paciente.aberta .mag-secao-body-wrap {
   max-height: 290px;
 }
 
-.mag-secao:last-of-type.aberta .mag-secao-body-wrap {
+.mag-secao-data.aberta .mag-secao-body-wrap {
   max-height: 240px;
 }
 

@@ -86,7 +86,7 @@ export default function AgendamentoModal({ pacientes, eventos, onClose, onConfir
         </div>
 
         {/* Seção 1 — Paciente */}
-        <div className={`mag-secao${secaoAberta === 1 ? " aberta" : ""}`}>
+        <div className={`mag-secao mag-secao-paciente${secaoAberta === 1 ? " aberta" : ""}`}>
           <button
             className="mag-secao-header"
             onClick={() => toggleSecao(1)}
@@ -142,7 +142,7 @@ export default function AgendamentoModal({ pacientes, eventos, onClose, onConfir
         </div>
 
         {/* Seção 2 — Data e horário */}
-        <div className={`mag-secao${secaoAberta === 2 ? " aberta" : ""}`}>
+        <div className={`mag-secao mag-secao-data${secaoAberta === 2 ? " aberta" : ""}`}>
           <button
             className="mag-secao-header"
             onClick={() => toggleSecao(2)}
