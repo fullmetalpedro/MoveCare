@@ -516,16 +516,56 @@
   color: var(--text-primary);
 }
 
-.mag-section {
-  padding: 20px 24px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow: hidden;
+/* Accordion sections */
+.mag-secao {
+  border-bottom: 1px solid var(--border);
 }
 
-.mag-section:last-of-type {
-  padding-bottom: 20px;
+.mag-secao-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.mag-secao-header:hover {
+  background: var(--border-light);
+}
+
+.mag-chevron {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.mag-secao-header:hover .mag-chevron {
+  color: var(--text-secondary);
+}
+
+.mag-secao-body {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 24px 20px;
+}
+
+.mag-secao.aberta .mag-secao-body {
+  display: flex;
+}
+
+.mag-resumo {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  background: rgba(0, 122, 255, 0.08);
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-left: 4px;
 }
 
 .mag-label {
@@ -734,7 +774,7 @@
   text-decoration: line-through;
 }
 
-.modal-agendar .modal-actions {
+.mag-actions {
   padding: 16px 24px 24px;
   border-top: 1px solid var(--border);
   margin-top: 4px;
