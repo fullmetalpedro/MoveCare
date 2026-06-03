@@ -184,7 +184,11 @@ export default function AgendamentoModal({ pacientes, eventos, onClose, onConfir
                     <button
                       key={h}
                       className={`mag-hora-btn${ocupado ? " ocupado" : ""}${ativo ? " selected" : ""}`}
-                      onClick={() => !ocupado && setHoraSelecionada(h)}
+                      onClick={() => {
+                        if (ocupado) return;
+                        setHoraSelecionada(h);
+                        setSecaoAberta(null);
+                      }}
                       disabled={ocupado}
                       title={ocupado ? "Horário ocupado" : `Agendar às ${h}`}
                     >
