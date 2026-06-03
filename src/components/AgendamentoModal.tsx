@@ -16,16 +16,33 @@ type Secao = 1 | 2;
 interface Props {
   pacientes: Paciente[];
   eventos: AgendaSemanal[];
+  diaInicial?: string;
+  horaInicial?: string | null;
   onClose: () => void;
   onConfirm: (pacienteId: string, dia: Dia, hora: string) => void;
 }
 
-export default function AgendamentoModal({ pacientes, eventos, onClose, onConfirm }: Props) {
-  const [secaoAberta, setSecaoAberta] = useState<Secao | null>(1);
+export default function AgendamentoModal({
+  pacientes,
+  eventos,
+  diaInicial,
+  horaInicial,
+  onClose,
+  onConfirm,
+}: Props) {
+  const diaValido =
+    diaInicial && (DIAS as readonly string[]).includes(diaInicial)
+      ? (diaInicial as Dia)
+      : "Seg";
+  // Pre-filled time → only the patient is left, open section 1. Pre-filled day
+  // only (month view / occupied slot) → open section 2 to pick the time.
+  const secaoInicial: Secao = horaInicial ? 1 : diaInicial ? 2 : 1;
+
+  const [secaoAberta, setSecaoAberta] = useState<Secao | null>(secaoInicial);
   const [busca, setBusca] = useState("");
   const [pacienteSelecionado, setPacienteSelecionado] = useState<Paciente | null>(null);
-  const [diaSelecionado, setDiaSelecionado] = useState<Dia>("Seg");
-  const [horaSelecionada, setHoraSelecionada] = useState<string | null>(null);
+  const [diaSelecionado, setDiaSelecionado] = useState<Dia>(diaValido);
+  const [horaSelecionada, setHoraSelecionada] = useState<string | null>(horaInicial ?? null);
   const [closing, setClosing] = useState(false);
 
   const pacientesAtivos = useMemo(
