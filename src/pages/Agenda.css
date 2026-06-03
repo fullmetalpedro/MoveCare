@@ -530,28 +530,17 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: background 0.12s;
-}
-
-.mag-secao-header:hover {
-  background: var(--border-light);
 }
 
 .mag-chevron {
   color: var(--text-muted);
   flex-shrink: 0;
-  transition: color 0.15s;
-}
-
-.mag-secao-header:hover .mag-chevron {
-  color: var(--text-secondary);
 }
 
 .mag-secao-body-wrap {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
 }
 
 .mag-secao.aberta .mag-secao-body-wrap {
@@ -560,6 +549,7 @@
 
 .mag-secao-body {
   min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 12px;
