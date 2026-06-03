@@ -538,18 +538,19 @@
 }
 
 .mag-secao-body-wrap {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease;
 }
 
 .mag-secao.aberta .mag-secao-body-wrap {
-  grid-template-rows: 1fr;
+  max-height: 360px;
+  opacity: 1;
 }
 
 .mag-secao-body {
-  min-height: 0;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 12px;
