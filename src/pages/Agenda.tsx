@@ -14,11 +14,13 @@ import type {
   DatesSetArg,
 } from "@fullcalendar/core";
 import PageHeader from "../components/PageHeader";
-import type { AgendaSemanal } from "../types";
+import AgendamentoModal from "../components/AgendamentoModal";
+import type { AgendaSemanal, Paciente } from "../types";
 import "./Agenda.css";
 
 interface AgendaProps {
   eventos: AgendaSemanal[];
+  pacientes: Paciente[];
 }
 
 /**
@@ -80,7 +82,19 @@ type PendingMove = {
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-export default function Agenda({ eventos }: AgendaProps) {
+// Maps weekday label to the calendar day-number in the reference week
+const REFERENCE_WEEK_NUMS: Record<string, number> = {
+  Seg: 28, Ter: 29, Qua: 30, Qui: 1, Sex: 2,
+};
+
+// Abbreviate full name to "Nome S." format matching mock data style
+function abreviarNome(nome: string): string {
+  const parts = nome.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+}
+
+export default function Agenda({ eventos, pacientes }: AgendaProps) {
   const calendarRef = useRef<FullCalendar>(null);
   const [searchParams] = useSearchParams();
   const initialView = VIEW_PARAM_MAP[searchParams.get("view") ?? ""] ?? "timeGridWeek";
@@ -88,11 +102,29 @@ export default function Agenda({ eventos }: AgendaProps) {
   const [periodo, setPeriodo] = useState("");
   const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
   const [closingModal, setClosingModal] = useState(false);
+  const [showAgendar, setShowAgendar] = useState(false);
+  const [localEventos, setLocalEventos] = useState<AgendaSemanal[]>([]);
   const [viewAnim, setViewAnim] = useState(true);
   const viewRef = useRef<HTMLDivElement>(null);
   const [vSlider, setVSlider] = useState({ left: 0, width: 0 });
 
-  const events = useMemo(() => mapEventos(eventos), [eventos]);
+  const todosEventos = useMemo(() => [...eventos, ...localEventos], [eventos, localEventos]);
+  const events = useMemo(() => mapEventos(todosEventos), [todosEventos]);
+
+  function handleAgendamentoConfirm(pacienteId: string, dia: string, hora: string) {
+    const paciente = pacientes.find((p) => p.id === pacienteId);
+    if (!paciente) return;
+    const novoEvento: AgendaSemanal = {
+      id: `local-${pacienteId}-${dia}-${hora}`,
+      dia,
+      diaNum: REFERENCE_WEEK_NUMS[dia] ?? 0,
+      hora,
+      paciente: abreviarNome(paciente.nome),
+      tipo: "Sessão",
+      cor: "green",
+    };
+    setLocalEventos((prev) => [...prev, novoEvento]);
+  }
 
   const updateViewSlider = useCallback(() => {
     if (!viewRef.current) return;
@@ -216,7 +248,7 @@ export default function Agenda({ eventos }: AgendaProps) {
             </button>
           ))}
         </div>
-        <button className="btn-agendar">+ Agendar</button>
+        <button className="btn-agendar" onClick={() => setShowAgendar(true)}>+ Agendar</button>
       </PageHeader>
 
       <div className={`agenda-calendar${viewAnim ? " view-fadein" : ""}`}>
@@ -256,6 +288,15 @@ export default function Agenda({ eventos }: AgendaProps) {
           firstDay={1}
         />
       </div>
+
+      {showAgendar && (
+        <AgendamentoModal
+          pacientes={pacientes}
+          eventos={todosEventos}
+          onClose={() => setShowAgendar(false)}
+          onConfirm={handleAgendamentoConfirm}
+        />
+      )}
 
       {pendingMove &&
         createPortal(
