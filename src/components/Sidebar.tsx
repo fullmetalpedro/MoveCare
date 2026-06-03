@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useState } from "react";
+import { useRef, useEffect, useLayoutEffect, useCallback, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Heart, LayoutDashboard, Calendar, Users, BookOpen, FileText, Settings, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import type { Doctor } from "../types";
@@ -28,7 +28,9 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
     }
   }, [ready]);
 
-  useEffect(() => { updateSlider(); }, [location.pathname, collapsed, updateSlider]);
+  // Layout effect (not effect) so the slider is repositioned before the browser
+  // paints — otherwise the active item highlights a frame before the slide starts.
+  useLayoutEffect(() => { updateSlider(); }, [location.pathname, collapsed, updateSlider]);
   useEffect(() => {
     window.addEventListener("resize", updateSlider);
     return () => window.removeEventListener("resize", updateSlider);
