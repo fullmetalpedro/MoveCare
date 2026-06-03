@@ -435,8 +435,9 @@
 }
 
 .modal-btn-cancel:hover {
-  background: var(--border-light);
-  color: var(--text-primary);
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(224, 79, 95, 0.06);
 }
 
 .modal-btn-confirm {
