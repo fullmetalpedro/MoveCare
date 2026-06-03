@@ -21,7 +21,7 @@ interface Props {
 }
 
 export default function AgendamentoModal({ pacientes, eventos, onClose, onConfirm }: Props) {
-  const [secaoAberta, setSecaoAberta] = useState<Secao>(1);
+  const [secaoAberta, setSecaoAberta] = useState<Secao | null>(1);
   const [busca, setBusca] = useState("");
   const [pacienteSelecionado, setPacienteSelecionado] = useState<Paciente | null>(null);
   const [diaSelecionado, setDiaSelecionado] = useState<Dia>("Seg");
@@ -44,10 +44,10 @@ export default function AgendamentoModal({ pacientes, eventos, onClose, onConfir
     [eventos, diaSelecionado]
   );
 
+  // Accordion: clicking an open section closes it; clicking a closed one opens
+  // it and closes the other. Both can be closed, but never both open.
   function toggleSecao(s: Secao) {
-    setSecaoAberta((prev) => (prev === s ? s : s));
-    // accordion: clicking a closed section opens it (and closes the other)
-    setSecaoAberta(s);
+    setSecaoAberta((prev) => (prev === s ? null : s));
   }
 
   function handleClose() {
@@ -125,7 +125,7 @@ export default function AgendamentoModal({ pacientes, eventos, onClose, onConfir
                       className={`mag-patient-item${pacienteSelecionado?.id === p.id ? " selected" : ""}`}
                       onClick={() => {
                         setPacienteSelecionado(p);
-                        toggleSecao(2);
+                        setSecaoAberta(2);
                       }}
                     >
                       <div className="mag-patient-avatar">{p.initials}</div>
