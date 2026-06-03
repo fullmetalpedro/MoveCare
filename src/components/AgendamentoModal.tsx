@@ -104,40 +104,42 @@ export default function AgendamentoModal({ pacientes, eventos, onClose, onConfir
               : <ChevronRight size={16} className="mag-chevron" />
             }
           </button>
-          <div className="mag-secao-body">
-            <div className="mag-search-wrap">
-              <Search size={14} className="mag-search-icon" />
-              <input
-                className="mag-search"
-                placeholder="Buscar paciente..."
-                value={busca}
-                onChange={(e) => setBusca(e.target.value)}
-              />
-            </div>
-            <div className="mag-patient-list">
-              {pacientesFiltrados.length === 0 ? (
-                <p className="mag-empty">Nenhum paciente ativo encontrado.</p>
-              ) : (
-                pacientesFiltrados.map((p) => (
-                  <button
-                    key={p.id}
-                    className={`mag-patient-item${pacienteSelecionado?.id === p.id ? " selected" : ""}`}
-                    onClick={() => {
-                      setPacienteSelecionado(p);
-                      toggleSecao(2);
-                    }}
-                  >
-                    <div className="mag-patient-avatar">{p.initials}</div>
-                    <div className="mag-patient-info">
-                      <span className="mag-patient-nome">{p.nome}</span>
-                      <span className="mag-patient-meta">{p.condicao} · {p.idade} anos</span>
-                    </div>
-                    {pacienteSelecionado?.id === p.id && (
-                      <div className="mag-patient-check">✓</div>
-                    )}
-                  </button>
-                ))
-              )}
+          <div className="mag-secao-body-wrap">
+            <div className="mag-secao-body">
+              <div className="mag-search-wrap">
+                <Search size={14} className="mag-search-icon" />
+                <input
+                  className="mag-search"
+                  placeholder="Buscar paciente..."
+                  value={busca}
+                  onChange={(e) => setBusca(e.target.value)}
+                />
+              </div>
+              <div className="mag-patient-list">
+                {pacientesFiltrados.length === 0 ? (
+                  <p className="mag-empty">Nenhum paciente ativo encontrado.</p>
+                ) : (
+                  pacientesFiltrados.map((p) => (
+                    <button
+                      key={p.id}
+                      className={`mag-patient-item${pacienteSelecionado?.id === p.id ? " selected" : ""}`}
+                      onClick={() => {
+                        setPacienteSelecionado(p);
+                        toggleSecao(2);
+                      }}
+                    >
+                      <div className="mag-patient-avatar">{p.initials}</div>
+                      <div className="mag-patient-info">
+                        <span className="mag-patient-nome">{p.nome}</span>
+                        <span className="mag-patient-meta">{p.condicao} · {p.idade} anos</span>
+                      </div>
+                      {pacienteSelecionado?.id === p.id && (
+                        <div className="mag-patient-check">✓</div>
+                      )}
+                    </button>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -161,37 +163,39 @@ export default function AgendamentoModal({ pacientes, eventos, onClose, onConfir
               : <ChevronRight size={16} className="mag-chevron" />
             }
           </button>
-          <div className="mag-secao-body">
-            <div className="mag-dias">
-              {DIAS.map((d) => (
-                <button
-                  key={d}
-                  className={`mag-dia-btn${diaSelecionado === d ? " active" : ""}`}
-                  onClick={() => {
-                    setDiaSelecionado(d);
-                    setHoraSelecionada(null);
-                  }}
-                >
-                  {d}
-                </button>
-              ))}
-            </div>
-            <div className="mag-horarios">
-              {HORARIOS.map((h) => {
-                const ocupado = horariosOcupados.has(h);
-                const ativo = horaSelecionada === h;
-                return (
+          <div className="mag-secao-body-wrap">
+            <div className="mag-secao-body">
+              <div className="mag-dias">
+                {DIAS.map((d) => (
                   <button
-                    key={h}
-                    className={`mag-hora-btn${ocupado ? " ocupado" : ""}${ativo ? " selected" : ""}`}
-                    onClick={() => !ocupado && setHoraSelecionada(h)}
-                    disabled={ocupado}
-                    title={ocupado ? "Horário ocupado" : `Agendar às ${h}`}
+                    key={d}
+                    className={`mag-dia-btn${diaSelecionado === d ? " active" : ""}`}
+                    onClick={() => {
+                      setDiaSelecionado(d);
+                      setHoraSelecionada(null);
+                    }}
                   >
-                    {h}
+                    {d}
                   </button>
-                );
-              })}
+                ))}
+              </div>
+              <div className="mag-horarios">
+                {HORARIOS.map((h) => {
+                  const ocupado = horariosOcupados.has(h);
+                  const ativo = horaSelecionada === h;
+                  return (
+                    <button
+                      key={h}
+                      className={`mag-hora-btn${ocupado ? " ocupado" : ""}${ativo ? " selected" : ""}`}
+                      onClick={() => !ocupado && setHoraSelecionada(h)}
+                      disabled={ocupado}
+                      title={ocupado ? "Horário ocupado" : `Agendar às ${h}`}
+                    >
+                      {h}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
