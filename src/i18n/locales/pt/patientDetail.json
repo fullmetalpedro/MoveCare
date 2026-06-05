@@ -17,5 +17,14 @@
   "previsaoAlta": "Previsão alta: {{date}}",
   "dorInicio": "Início: {{value}}/10",
   "semSessaoAgendada": "Sem sessão agendada",
-  "session": "Sessão #{{n}} de {{total}}"
+  "session": "Sessão #{{n}} de {{total}}",
+  "statusLabels": {
+    "Ativo": "Ativo",
+    "Avaliação": "Avaliação",
+    "Alta": "Alta"
+  },
+  "sexLabels": {
+    "Masculino": "Masculino",
+    "Feminino": "Feminino"
+  }
 }

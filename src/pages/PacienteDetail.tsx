@@ -93,10 +93,10 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
           <div>
             <h1 className="detail-name">{paciente.nome}</h1>
             <p className="detail-meta">
-              {paciente.idade} {t("common.years")} · {paciente.sexo} · {paciente.condicao}
+              {paciente.idade} {t("common.years")} · {t(`patientDetail.sexLabels.${paciente.sexo}`, paciente.sexo)} · {paciente.condicao}
             </p>
             <div className="detail-badges">
-              <Badge tone={STATUS_TONE[paciente.status] ?? "neutral"}>{paciente.status}</Badge>
+              <Badge tone={STATUS_TONE[paciente.status] ?? "neutral"}>{t(`patientDetail.statusLabels.${paciente.status}`, paciente.status)}</Badge>
               <span className="session-badge">{t("patientDetail.session", { n: paciente.sessoes, total: paciente.totalSessoes })}</span>
             </div>
           </div>

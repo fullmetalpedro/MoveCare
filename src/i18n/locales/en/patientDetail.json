@@ -17,5 +17,14 @@
   "previsaoAlta": "Est. discharge: {{date}}",
   "dorInicio": "Start: {{value}}/10",
   "semSessaoAgendada": "No session scheduled",
-  "session": "Session #{{n}} of {{total}}"
+  "session": "Session #{{n}} of {{total}}",
+  "statusLabels": {
+    "Ativo": "Active",
+    "Avaliação": "Assessment",
+    "Alta": "Discharged"
+  },
+  "sexLabels": {
+    "Masculino": "Male",
+    "Feminino": "Female"
+  }
 }
