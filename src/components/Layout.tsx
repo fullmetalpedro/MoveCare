@@ -15,9 +15,14 @@ export default function Layout({ doctor, alertCount }: LayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
+  // Close the mobile sidebar on navigation. Adjusting state during render
+  // (guarded by a path change) is React's recommended alternative to calling
+  // setState synchronously inside an effect.
+  const [prevPath, setPrevPath] = useState(location.pathname);
+  if (location.pathname !== prevPath) {
+    setPrevPath(location.pathname);
     setMobileOpen(false);
-  }, [location.pathname]);
+  }
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");

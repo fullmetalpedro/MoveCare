@@ -22,6 +22,8 @@ const Documentos = lazy(() => import("./pages/Documentos"));
 const Biblioteca = lazy(() => import("./pages/Biblioteca"));
 const CadastroPaciente = lazy(() => import("./pages/CadastroPaciente"));
 const CadastroExercicio = lazy(() => import("./pages/CadastroExercicio"));
+// Design-system showcase (not linked in the sidebar; visit /styleguide directly).
+const Styleguide = lazy(() => import("./pages/Styleguide"));
 
 const data = mockData as MockData;
 
@@ -65,6 +67,7 @@ export default function App() {
             <Route path="pacientes/novo" element={<CadastroPaciente />} />
             <Route path="documentos" element={<Documentos />} />
           </Route>
+          <Route path="/styleguide" element={<Styleguide />} />
         </Routes>
       </Suspense>
     </>

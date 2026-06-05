@@ -1,0 +1,68 @@
+/* Layout helper for a wrapping row of chips. */
+.ds-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.ds-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+.ds-chip--sm { padding: 4px 12px; font-size: var(--text-sm); }
+.ds-chip--md { padding: 9px 14px; font-size: var(--text-md); }
+
+.ds-chip:not(:disabled):hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.ds-chip.is-selected {
+  font-weight: var(--weight-semibold);
+}
+
+/* Selected tones */
+.ds-chip--accent.is-selected {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.ds-chip--success.is-selected {
+  background: var(--success-soft);
+  border-color: var(--success);
+  color: var(--success);
+}
+.ds-chip--warning.is-selected {
+  background: var(--warning-soft);
+  border-color: var(--warning);
+  color: var(--warning);
+}
+.ds-chip--danger.is-selected {
+  background: var(--danger-soft);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.ds-chip--neutral.is-selected {
+  background: var(--border-light);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+/* Hover hint toward the tone color before selection (accent default) */
+.ds-chip--accent:not(:disabled):not(.is-selected):hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

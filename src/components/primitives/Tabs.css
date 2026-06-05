@@ -1,0 +1,68 @@
+.ds-tabs {
+  display: flex;
+  position: relative;
+}
+.ds-tabs--full {
+  width: 100%;
+}
+.ds-tabs--full .ds-tab {
+  flex: 1;
+}
+
+.ds-tab {
+  position: relative;
+  z-index: var(--z-docked);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: color var(--duration-slow) var(--ease-standard);
+}
+.ds-tab:hover {
+  color: var(--text-primary);
+}
+.ds-tab.is-active {
+  color: var(--text-primary);
+  font-weight: var(--weight-semibold);
+}
+
+/* ─── Slide variant (pill on a track) ─── */
+.ds-tabs--slide {
+  background: var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 3px;
+}
+.ds-tabs--slide .ds-tab {
+  padding: var(--space-1-5) var(--space-4);
+  border-radius: var(--radius-sm);
+}
+.ds-tabs__indicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: left var(--duration-slower) var(--ease-standard),
+    width var(--duration-slower) var(--ease-standard);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ─── Flat variant (underline) ─── */
+.ds-tabs--flat {
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--border-light);
+}
+.ds-tabs--flat .ds-tab {
+  padding: var(--space-3) var(--space-1);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.ds-tabs--flat .ds-tab.is-active {
+  border-bottom-color: var(--accent);
+}

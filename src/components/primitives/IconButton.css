@@ -1,0 +1,55 @@
+.ds-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  flex-shrink: 0;
+  transition: background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.ds-iconbtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ─── Sizes ─── */
+.ds-iconbtn--sm { width: 32px; height: 32px; }
+.ds-iconbtn--md { width: 36px; height: 36px; }
+.ds-iconbtn--lg { width: 40px; height: 40px; }
+
+/* ─── Shapes ─── */
+.ds-iconbtn--square { border-radius: var(--radius-sm); }
+.ds-iconbtn--circle { border-radius: 50%; }
+
+/* ─── Variants ─── */
+.ds-iconbtn--subtle {
+  background: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+}
+.ds-iconbtn--subtle:not(:disabled):hover {
+  box-shadow: var(--shadow-md);
+}
+
+.ds-iconbtn--outline {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+}
+.ds-iconbtn--outline:not(:disabled):hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ds-iconbtn--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+.ds-iconbtn--ghost:not(:disabled):hover {
+  background: var(--border-light);
+  color: var(--text-primary);
+}

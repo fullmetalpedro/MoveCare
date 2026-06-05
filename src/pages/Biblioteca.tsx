@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Play, Plus, Search, Dumbbell, StretchHorizontal, Activity, Footprints, HeartPulse, Wind } from "lucide-react";
+import { Play, Plus, Dumbbell, StretchHorizontal, Activity, Footprints, HeartPulse, Wind } from "lucide-react";
 import PageHeader from "../components/PageHeader";
+import { Button, SearchInput, Tabs, Badge } from "../components/primitives";
 import "./Biblioteca.css";
 
 interface Exercicio {
@@ -57,8 +58,7 @@ function NivelBadge({ nivel }: { nivel: string }) {
     Intermediário: "#007AFF",
     Avançado: "#AF52DE",
   };
-  const c = colors[nivel] ?? "#86868B";
-  return <span className="nivel-badge" style={{ background: `${c}15`, color: c }}>{nivel}</span>;
+  return <Badge color={colors[nivel] ?? "#86868B"}>{nivel}</Badge>;
 }
 
 function BibliotecaSkeleton() {
@@ -85,32 +85,11 @@ export default function Biblioteca() {
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("Todos");
   const [search, setSearch] = useState("");
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const [slider, setSlider] = useState({ left: 0, width: 0 });
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(t);
   }, []);
-
-  const updateSlider = useCallback(() => {
-    if (!tabsRef.current) return;
-    const active = tabsRef.current.querySelector(".filter-tab.active") as HTMLElement | null;
-    if (active) {
-      const parentRect = tabsRef.current.getBoundingClientRect();
-      const rect = active.getBoundingClientRect();
-      setSlider({ left: rect.left - parentRect.left, width: rect.width });
-    }
-  }, []);
-
-  useEffect(() => {
-    updateSlider();
-  }, [filtro, updateSlider]);
-
-  useEffect(() => {
-    window.addEventListener("resize", updateSlider);
-    return () => window.removeEventListener("resize", updateSlider);
-  }, [updateSlider]);
 
   const filtered = MOCK_EXERCICIOS.filter(ex => {
     if (filtro !== "Todos" && ex.categoria !== filtro) return false;
@@ -121,34 +100,23 @@ export default function Biblioteca() {
   return (
     <div className="biblioteca-page">
       <PageHeader title="Biblioteca de Exercícios" backTo="/">
-        <button className="btn-novo-exercicio" onClick={() => navigate("/biblioteca/novo")}><Plus size={16} /> Novo Exercício</button>
+        <Button variant="primary" iconLeft={<Plus size={16} />} onClick={() => navigate("/biblioteca/novo")}>
+          Novo Exercício
+        </Button>
       </PageHeader>
 
       <div className="biblioteca-filters">
-        <div className="bib-search-box">
-          <span className="search-icon"><Search size={14} /></span>
-          <input
-            type="text"
-            placeholder="Buscar exercício..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="slide-tabs" ref={tabsRef}>
-          <div
-            className="slide-indicator"
-            style={{ left: slider.left, width: slider.width }}
-          />
-          {CATEGORIAS.map(cat => (
-            <button
-              key={cat}
-              className={`filter-tab ${filtro === cat ? "active" : ""}`}
-              onClick={() => setFiltro(cat)}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+        <SearchInput
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Buscar exercício..."
+          width={220}
+        />
+        <Tabs
+          value={filtro}
+          onChange={setFiltro}
+          items={CATEGORIAS.map(cat => ({ value: cat, label: cat }))}
+        />
       </div>
 
       {loading ? <BibliotecaSkeleton /> : (

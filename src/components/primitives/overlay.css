@@ -1,0 +1,114 @@
+/* Shared backdrop + dialog/panel shells for Modal and Drawer. */
+
+.ds-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background: var(--overlay);
+  backdrop-filter: blur(4px);
+  display: flex;
+  animation: ds-overlay-in var(--duration-base) var(--ease-standard);
+}
+.ds-overlay--center {
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+}
+.ds-overlay--right { justify-content: flex-end; }
+.ds-overlay--left { justify-content: flex-start; }
+
+@keyframes ds-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ─── Modal dialog ─── */
+.ds-modal {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-modal);
+  width: 100%;
+  max-height: 90dvh;
+  display: flex;
+  flex-direction: column;
+  outline: none;
+  animation: ds-modal-in var(--duration-slow) var(--ease-elastic);
+}
+.ds-modal--sm { max-width: 380px; }
+.ds-modal--md { max-width: 460px; }
+.ds-modal--lg { max-width: 600px; }
+
+@keyframes ds-modal-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ds-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--border-light);
+}
+.ds-modal__title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+.ds-modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--card-bg-alt);
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--duration-base) var(--ease-standard);
+}
+.ds-modal__close:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+.ds-modal__body {
+  padding: var(--space-6);
+  overflow-y: auto;
+}
+.ds-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2-5);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border-light);
+}
+
+/* ─── Drawer panel ─── */
+.ds-drawer {
+  background: var(--card-bg);
+  height: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-modal);
+  outline: none;
+}
+.ds-drawer--right { animation: ds-drawer-in-right var(--duration-slower) var(--ease-drawer); }
+.ds-drawer--left { animation: ds-drawer-in-left var(--duration-slower) var(--ease-drawer); }
+
+@keyframes ds-drawer-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes ds-drawer-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.ds-drawer__body {
+  padding: var(--space-5) var(--space-6);
+  overflow-y: auto;
+  flex: 1;
+}

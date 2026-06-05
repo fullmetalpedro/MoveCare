@@ -1,0 +1,25 @@
+.ds-card {
+  background: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-card--radius-md { border-radius: var(--radius); }
+.ds-card--radius-lg { border-radius: var(--radius-lg); }
+
+.ds-card--pad-none { padding: 0; }
+.ds-card--pad-sm { padding: var(--space-4); }
+.ds-card--pad-md { padding: var(--space-5); }
+.ds-card--pad-lg { padding: var(--space-6) var(--space-7); }
+
+.ds-card--interactive {
+  cursor: pointer;
+  transition: box-shadow var(--duration-slow) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
+}
+.ds-card--interactive:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.ds-card--interactive:active {
+  transform: translateY(0);
+}
