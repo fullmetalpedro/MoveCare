@@ -797,11 +797,12 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
-  /* The header actions (Hoje / prev-next / view toggle / Agendar) overflowed
-     the viewport on phones, clipping the "Agendar" button. Let the action row
-     span the full width and wrap, and give "Agendar" its own full-width row so
-     it is never cut off. */
+/* The header actions (Hoje / prev-next / view toggle / Agendar) overflowed the
+   viewport on tablets/phones, clipping the "Agendar" button. From the tablet
+   range down (incl. iPad Air portrait, 820px) let the action row span the full
+   width and wrap, and give "Agendar" its own full-width row so it is never cut
+   off. */
+@media (max-width: 1024px) {
   .agenda-page .page-header-actions {
     width: 100%;
     flex-wrap: wrap;
@@ -827,6 +828,16 @@
     display: none;
   }
 
+  /* The header wraps taller and the top padding grows in compact mode, so the
+     desktop height calc overshoots. Use a viewport-relative height that always
+     fits and lets FullCalendar scroll internally. */
+  .agenda-calendar {
+    height: 72dvh;
+    min-height: 460px;
+  }
+}
+
+@media (max-width: 768px) {
   .agenda-calendar .fc {
     font-size: 12px;
   }

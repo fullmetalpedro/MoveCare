@@ -96,16 +96,15 @@
   .biblioteca-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-}
 
-@media (max-width: 768px) {
+  /* Stack the search above the tabs and let the category tab strip scroll
+     horizontally instead of overflowing — the row was clipped past
+     "Mobilidade" on tablets (e.g. iPad Air portrait, 820px). */
   .biblioteca-filters {
     flex-direction: column;
     align-items: stretch;
     gap: var(--space-2-5);
   }
-  /* The category filter tabs were clipped past "Mobilidade" on narrow screens.
-     Let the tab strip scroll horizontally instead of overflowing the viewport. */
   .biblioteca-filters .ds-tabs {
     max-width: 100%;
     overflow-x: auto;
@@ -119,6 +118,9 @@
   .biblioteca-filters .ds-tab {
     flex-shrink: 0;
   }
+}
+
+@media (max-width: 768px) {
   .biblioteca-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-3);

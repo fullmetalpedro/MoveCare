@@ -61,20 +61,17 @@
   display: none;
 }
 
+/* Compact mode covers tablets (incl. iPad Air portrait, 820px) as well as
+   phones: the fixed sidebar becomes a hamburger slide-over so the content uses
+   the full viewport width instead of being squeezed beside a 220px rail. */
 @media (max-width: 1024px) {
-  .main-content {
-    padding: 24px 24px;
-  }
-}
-
-@media (max-width: 768px) {
   .mobile-menu-btn {
     display: flex;
   }
 
   .main-content {
     margin-left: 0;
-    padding: 68px 16px 24px;
+    padding: 68px 24px 24px;
   }
 
   .sidebar-collapsed .main-content {
@@ -88,5 +85,11 @@
     background: rgba(0, 0, 0, 0.3);
     z-index: 199;
     backdrop-filter: blur(2px);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 68px 16px 24px;
   }
 }

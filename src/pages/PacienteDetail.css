@@ -213,13 +213,10 @@
   min-height: 300px;
 }
 
+/* Compact layout from the tablet range down (incl. iPad Air portrait, 820px):
+   the section nav becomes a horizontally scrollable pill strip instead of a
+   fixed side column, so the tabs are never cut off. */
 @media (max-width: 1024px) {
-  .detail-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
   .detail-top-card {
     flex-direction: column;
     align-items: flex-start;

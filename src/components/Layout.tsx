@@ -48,7 +48,7 @@ export default function Layout({ doctor, alertCount }: LayoutProps) {
   }
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)");
+    const mq = window.matchMedia("(max-width: 1024px)");
     const handler = () => { if (!mq.matches) setMobileOpen(false); };
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
