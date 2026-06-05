@@ -1,0 +1,23 @@
+{
+  "title": "Agenda",
+  "schedule": "+ Agendar",
+  "navigatePeriod": "Navegar período",
+  "previousPeriod": "Período anterior",
+  "nextPeriod": "Próximo período",
+  "viewDay": "Dia",
+  "viewWeek": "Semana",
+  "viewMonth": "Mês",
+  "confirmReschedule": "Confirmar reagendamento",
+  "rescheduleBody": "Você está movendo <strong>{{patient}}</strong> para <strong>{{when}}</strong>.",
+  "rescheduleNotice": "Lembre-se de alinhar essa alteração com o paciente antes de confirmar.",
+  "rescheduleBodyText": "Você está movendo {{patient}} para {{when}}.",
+  "newAppointment": "Novo Agendamento",
+  "closeModal": "Fechar",
+  "stepPatient": "Paciente",
+  "stepDateTime": "Data e horário",
+  "searchPatient": "Buscar paciente...",
+  "noPatientFound": "Nenhum paciente ativo encontrado.",
+  "slotOccupied": "Horário ocupado",
+  "slotScheduleAt": "Agendar às {{time}}",
+  "confirmAppointment": "Confirmar agendamento"
+}

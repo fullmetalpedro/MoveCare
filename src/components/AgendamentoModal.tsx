@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { X, CalendarPlus, Search, ChevronRight, ChevronDown } from "lucide-react";
 import type { Paciente, AgendaSemanal } from "../types";
 
@@ -76,6 +77,7 @@ export default function AgendamentoModal({
   const [diaSelecionado, setDiaSelecionado] = useState<Dia>(diaValido);
   const [horaSelecionada, setHoraSelecionada] = useState<string | null>(horaInicial ?? null);
   const [closing, setClosing] = useState(false);
+  const { t } = useTranslation();
 
   const pacientesAtivos = useMemo(
     () => pacientes.filter((p) => p.status === "Ativo"),
@@ -125,12 +127,12 @@ export default function AgendamentoModal({
         <div className="mag-header">
           <div className="mag-title-row">
             <div className="mag-icon">
-              <CalendarPlus size={20} />
+              <CalendarPlus size={20} aria-hidden="true" />
             </div>
-            <h3 className="modal-title">Novo Agendamento</h3>
+            <h3 className="modal-title">{t("agenda.newAppointment")}</h3>
           </div>
-          <button className="mag-close" onClick={handleClose} aria-label="Fechar">
-            <X size={18} />
+          <button className="mag-close" onClick={handleClose} aria-label={t("common.close")}>
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
@@ -143,30 +145,34 @@ export default function AgendamentoModal({
           >
             <div className="mag-label">
               <span className="mag-step">1</span>
-              Paciente
+              {t("agenda.stepPatient")}
               {pacienteSelecionado && secaoAberta !== 1 && (
                 <span className="mag-resumo">{pacienteSelecionado.nome}</span>
               )}
             </div>
             {secaoAberta === 1
-              ? <ChevronDown size={16} className="mag-chevron" />
-              : <ChevronRight size={16} className="mag-chevron" />
+              ? <ChevronDown size={16} className="mag-chevron" aria-hidden="true" />
+              : <ChevronRight size={16} className="mag-chevron" aria-hidden="true" />
             }
           </button>
           <div className="mag-secao-body-wrap">
             <div className="mag-secao-body">
               <div className="mag-search-wrap">
-                <Search size={14} className="mag-search-icon" />
+                <Search size={14} className="mag-search-icon" aria-hidden="true" />
+                <label htmlFor="mag-search-input" className="sr-only">
+                  {t("agenda.stepPatient")}
+                </label>
                 <input
+                  id="mag-search-input"
                   className="mag-search"
-                  placeholder="Buscar paciente..."
+                  placeholder={t("agenda.searchPatient")}
                   value={busca}
                   onChange={(e) => setBusca(e.target.value)}
                 />
               </div>
               <div className="mag-patient-list">
                 {pacientesFiltrados.length === 0 ? (
-                  <p className="mag-empty">Nenhum paciente ativo encontrado.</p>
+                  <p className="mag-empty">{t("agenda.noPatientFound")}</p>
                 ) : (
                   pacientesFiltrados.map((p) => (
                     <button
@@ -177,10 +183,10 @@ export default function AgendamentoModal({
                         setSecaoAberta(2);
                       }}
                     >
-                      <div className="mag-patient-avatar">{p.initials}</div>
+                      <div className="mag-patient-avatar" aria-hidden="true">{p.initials}</div>
                       <div className="mag-patient-info">
                         <span className="mag-patient-nome">{p.nome}</span>
-                        <span className="mag-patient-meta">{p.condicao} · {p.idade} anos</span>
+                        <span className="mag-patient-meta">{p.condicao} · {p.idade} {t("common.years")}</span>
                       </div>
                     </button>
                   ))
@@ -199,14 +205,14 @@ export default function AgendamentoModal({
           >
             <div className="mag-label">
               <span className="mag-step">2</span>
-              Data e horário
+              {t("agenda.stepDateTime")}
               {horaSelecionada && secaoAberta !== 2 && (
                 <span className="mag-resumo">{diaSelecionado}, {horaSelecionada}</span>
               )}
             </div>
             {secaoAberta === 2
-              ? <ChevronDown size={16} className="mag-chevron" />
-              : <ChevronRight size={16} className="mag-chevron" />
+              ? <ChevronDown size={16} className="mag-chevron" aria-hidden="true" />
+              : <ChevronRight size={16} className="mag-chevron" aria-hidden="true" />
             }
           </button>
           <div className="mag-secao-body-wrap">
@@ -239,7 +245,7 @@ export default function AgendamentoModal({
                         setSecaoAberta(null);
                       }}
                       disabled={ocupado}
-                      title={ocupado ? "Horário ocupado" : `Agendar às ${h}`}
+                      title={ocupado ? t("agenda.slotOccupied") : t("agenda.slotScheduleAt", { time: h })}
                     >
                       {h}
                     </button>
@@ -253,14 +259,14 @@ export default function AgendamentoModal({
         {/* Actions */}
         <div className="modal-actions mag-actions">
           <button className="modal-btn-cancel" onClick={handleClose}>
-            Cancelar
+            {t("common.cancel")}
           </button>
           <button
             className="modal-btn-confirm"
             onClick={handleConfirm}
             disabled={!canConfirm}
           >
-            Confirmar agendamento
+            {t("agenda.confirmAppointment")}
           </button>
         </div>
       </div>

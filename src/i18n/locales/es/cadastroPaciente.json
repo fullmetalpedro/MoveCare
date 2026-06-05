@@ -1,0 +1,43 @@
+{
+  "pageTitle": "Nuevo Paciente",
+  "pageSubtitle": "Complete los datos para registrar un nuevo paciente",
+  "sections": {
+    "dadosPessoais": "Datos Personales",
+    "contato": "Contacto",
+    "informacoesClinias": "Información Clínica",
+    "primeiraSessao": "Primera Sesión"
+  },
+  "fields": {
+    "nomeCompleto": "Nombre completo",
+    "nomePlaceholder": "Ej.: Ana Souza",
+    "idade": "Edad",
+    "idadePlaceholder": "Ej.: 35",
+    "sexo": "Sexo",
+    "condicao": "Condición / Diagnóstico",
+    "condicaoPlaceholder": "Ej.: Lumbalgia crónica, Tendinitis rotuliana...",
+    "telefone": "Teléfono",
+    "telefonePlaceholder": "(11) 99999-9999",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "paciente@correo.com",
+    "statusInicial": "Estado inicial",
+    "totalSessoes": "Total de sesiones previstas",
+    "totalSessoesPlaceholder": "Ej.: 20",
+    "dorEVA": "Dolor inicial (EVA)",
+    "previsaoAlta": "Alta prevista",
+    "data": "Fecha",
+    "horario": "Horario",
+    "observacoes": "Observaciones iniciales",
+    "observacoesPlaceholder": "Información adicional sobre el paciente, historial, restricciones..."
+  },
+  "sexoLabels": {
+    "Masculino": "Masculino",
+    "Feminino": "Femenino",
+    "Outro": "Otro"
+  },
+  "statusLabels": {
+    "Ativo": "Activo",
+    "Avaliação": "Evaluación",
+    "Alta": "Alta"
+  },
+  "savePatient": "Guardar Paciente"
+}

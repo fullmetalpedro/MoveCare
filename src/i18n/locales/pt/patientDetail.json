@@ -1,0 +1,21 @@
+{
+  "sectionsNav": "Navegação de seções",
+  "tabs": {
+    "resumo": "Resumo",
+    "plano": "Plano de Trat.",
+    "evolucao": "Evolução",
+    "documentos": "Documentos",
+    "novaAvaliacao": "Nova avaliação"
+  },
+  "stats": {
+    "adesao": "Adesão",
+    "sessoes": "Sessões",
+    "dorEva": "Dor (EVA)",
+    "proximaSessao": "Próxima Sessão"
+  },
+  "vsLastMonth": "{{arrow}} {{pct}}% vs mês anterior",
+  "previsaoAlta": "Previsão alta: {{date}}",
+  "dorInicio": "Início: {{value}}/10",
+  "semSessaoAgendada": "Sem sessão agendada",
+  "session": "Sessão #{{n}} de {{total}}"
+}

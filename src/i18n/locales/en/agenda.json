@@ -1,0 +1,23 @@
+{
+  "title": "Schedule",
+  "schedule": "+ Schedule",
+  "navigatePeriod": "Navigate period",
+  "previousPeriod": "Previous period",
+  "nextPeriod": "Next period",
+  "viewDay": "Day",
+  "viewWeek": "Week",
+  "viewMonth": "Month",
+  "confirmReschedule": "Confirm rescheduling",
+  "rescheduleBody": "You are moving <strong>{{patient}}</strong> to <strong>{{when}}</strong>.",
+  "rescheduleNotice": "Remember to align this change with the patient before confirming.",
+  "rescheduleBodyText": "You are moving {{patient}} to {{when}}.",
+  "newAppointment": "New Appointment",
+  "closeModal": "Close",
+  "stepPatient": "Patient",
+  "stepDateTime": "Date and time",
+  "searchPatient": "Search patient...",
+  "noPatientFound": "No active patient found.",
+  "slotOccupied": "Time slot occupied",
+  "slotScheduleAt": "Schedule at {{time}}",
+  "confirmAppointment": "Confirm appointment"
+}

@@ -1,0 +1,228 @@
+{
+  "pageTitle": "Nueva Evaluación",
+  "saveTests": "Guardar {{count}} prueba",
+  "saveTests_plural": "Guardar {{count}} pruebas",
+  "concluded": "Completado",
+  "timerStart": "Iniciar",
+  "timerStop": "Parar",
+  "timerReset": "Reiniciar cronómetro",
+  "timerExpired": "¡Tiempo agotado!",
+  "decrement": "Decrementar",
+  "increment": "Incrementar",
+  "confirmTest": "Confirmar {{name}}",
+  "confirmReps": "Confirmar — {{count}} rep",
+  "confirmReps_plural": "Confirmar — {{count}} reps",
+  "closeModal": "Cerrar",
+  "totalLabel": "Total:",
+  "belowNormalMoca": " · Por debajo de lo normal (< 26)",
+  "belowNormalMmse": " · Sugestivo de deterioro (< 24)",
+  "speedCalc": "Velocidad calculada:",
+  "tests": {
+    "mrc": {
+      "label": "Escala MRC",
+      "desc": "Fuerza muscular 0–5 por grupo",
+      "hint": "Seleccione la puntuación (0 = sin contracción, 5 = normal)"
+    },
+    "dinamometria": {
+      "label": "Dinamometría de Prensión",
+      "desc": "Fuerza de prensión en kgf (D e I)",
+      "leftHand": "Mano izquierda (kgf)",
+      "rightHand": "Mano derecha (kgf)",
+      "leftPlaceholder": "ej: 22.5",
+      "rightPlaceholder": "ej: 24.0"
+    },
+    "sit_to_stand": {
+      "label": "Sentarse-Levantarse 30s",
+      "desc": "Repeticiones en 30 segundos",
+      "hint": "Inicie el cronómetro de 30 s y cuente las repeticiones completas mientras corre el tiempo.",
+      "countdownLabel": "Cronómetro 30 s",
+      "repsLabel": "Repeticiones completas"
+    },
+    "tug": {
+      "label": "TUG",
+      "desc": "Timed Up and Go — 3 metros",
+      "hint": "El paciente se levanta, camina 3 m, gira y se sienta. Inicie el cronómetro al moverse.",
+      "timeLabel": "Tiempo"
+    },
+    "10mwt": {
+      "label": "10MWT",
+      "desc": "Velocidad de marcha — 10 metros",
+      "hint": "Velocidad de marcha cómoda en pista de 10 m.",
+      "timeLabel": "Tiempo",
+      "distLabel": "Distancia (m)"
+    },
+    "dgi": {
+      "label": "DGI",
+      "desc": "Dynamic Gait Index — 8 ítems (0–3)",
+      "hint": "0 = alteración grave · 1 = moderada · 2 = leve · 3 = normal"
+    },
+    "tdr": {
+      "label": "Test del Reloj",
+      "desc": "Subida o foto del dibujo del reloj",
+      "hint": "Suba una foto del dibujo del reloj del paciente.",
+      "imgAlt": "Dibujo del reloj",
+      "changeImage": "Cambiar imagen",
+      "uploadZone": "Haga clic para seleccionar o tomar una foto"
+    },
+    "mmse": {
+      "label": "MMSE",
+      "desc": "Mini-Examen del Estado Mental (0–30)",
+      "modalTitle": "MMSE",
+      "modalSubtitle": "Mini-Examen del Estado Mental · 0–30 puntos"
+    },
+    "moca": {
+      "label": "MoCA",
+      "desc": "Montreal Cognitive Assessment (0–30)",
+      "modalTitle": "MoCA",
+      "modalSubtitle": "Montreal Cognitive Assessment · 0–30 puntos (normal ≥ 26)",
+      "preamble": "Antes de comenzar: lea estas 5 palabras al paciente y pídales que las memoricen — Rostro, Seda, Iglesia, Clavel, Rojo. La evocación se evaluará al final."
+    }
+  },
+  "mrcGroups": {
+    "Abdutores do ombro D": "Abductores del hombro D",
+    "Abdutores do ombro E": "Abductores del hombro I",
+    "Flexores do cotovelo D": "Flexores del codo D",
+    "Flexores do cotovelo E": "Flexores del codo I",
+    "Extensores do punho D": "Extensores de la muñeca D",
+    "Extensores do punho E": "Extensores de la muñeca I",
+    "Flexores do quadril D": "Flexores de la cadera D",
+    "Flexores do quadril E": "Flexores de la cadera I",
+    "Extensores do joelho D": "Extensores de la rodilla D",
+    "Extensores do joelho E": "Extensores de la rodilla I",
+    "Dorsiflexores D": "Dorsiflexores D",
+    "Dorsiflexores E": "Dorsiflexores I"
+  },
+  "dgiItems": {
+    "Marcha em superfície plana": "Marcha en superficie plana",
+    "Mudança de velocidade": "Cambio de velocidad",
+    "Rotação horizontal da cabeça": "Rotación horizontal de la cabeza",
+    "Rotação vertical da cabeça": "Rotación vertical de la cabeza",
+    "Marcha e pivô (180°)": "Marcha y pivote (180°)",
+    "Degrau": "Escalón",
+    "Obstáculos": "Obstáculos",
+    "Escadas": "Escaleras"
+  },
+  "mmse": {
+    "sections": {
+      "Orientação Temporal": {
+        "title": "Orientación Temporal",
+        "hint": "Pregunte: \"¿En qué año estamos? ¿Estación? ¿Mes? ¿Día del mes? ¿Día de la semana?\""
+      },
+      "Orientação Espacial": {
+        "title": "Orientación Espacial",
+        "hint": "Pregunte: \"¿En qué país, estado, ciudad, lugar y piso estamos?\""
+      },
+      "Registro": {
+        "title": "Registro",
+        "hint": "Diga pausadamente: \"Coche, Jarrón, Ladrillo\". Pida que repita inmediatamente."
+      },
+      "Atenção e Cálculo": {
+        "title": "Atención y Cálculo",
+        "hint": "\"Reste 7 de 100 y siga restando.\" Secuencia: 93 → 86 → 79 → 72 → 65. Alternativa: deletree MUNDO al revés (O-D-N-U-M)."
+      },
+      "Evocação": {
+        "title": "Evocación",
+        "hint": "\"¿Recuerda las tres palabras que le pedí que repitiera? ¿Cuáles eran?\" (Coche, Jarrón, Ladrillo)"
+      },
+      "Linguagem e Práxis": {
+        "title": "Lenguaje y Praxis",
+        "hint": "Evalúe cada ítem individualmente según las instrucciones."
+      }
+    },
+    "items": {
+      "t_ano":    "Año actual",
+      "t_est":    "Estación del año",
+      "t_mes":    "Mes actual",
+      "t_dia_m":  "Día del mes",
+      "t_dia_s":  "Día de la semana",
+      "e_pais":   "País",
+      "e_estado": "Estado",
+      "e_cidade": "Ciudad",
+      "e_local":  "Lugar / edificio",
+      "e_andar":  "Piso / sala",
+      "r_carro":  "Coche",
+      "r_vaso":   "Jarrón",
+      "r_tijolo": "Ladrillo",
+      "c_93":  "93  (o O)",
+      "c_86":  "86  (o D)",
+      "c_79":  "79  (o N)",
+      "c_72":  "72  (o U)",
+      "c_65":  "65  (o M)",
+      "ev_carro":  "Coche",
+      "ev_vaso":   "Jarrón",
+      "ev_tijolo": "Ladrillo",
+      "l_nom_can":  "Denominación — Bolígrafo",
+      "l_nom_rel":  "Denominación — Reloj de pulsera",
+      "l_rep":      "Repetición — \"Ni aquí, ni allí, ni allá\"",
+      "l_cmd1":     "Orden — Tome el papel con la mano derecha",
+      "l_cmd2":     "Orden — Dóblelo por la mitad",
+      "l_cmd3":     "Orden — Póngalo en el suelo",
+      "l_leitura":  "Lectura — Cerrar los ojos al ver \"CIERRE LOS OJOS\"",
+      "l_escrita":  "Escritura — Frase completa con sentido",
+      "l_copia":    "Copia — Dos pentágonos cruzados"
+    }
+  },
+  "moca": {
+    "sections": {
+      "Visoespacial / Executiva": {
+        "title": "Visuoespacial / Ejecutiva",
+        "hint": "Trazo alternante (1→A→2→B→3→C…), copia del cubo, reloj con agujas a las 11:10."
+      },
+      "Nomeação": {
+        "title": "Nominación",
+        "hint": "Muestre imágenes de animales poco comunes: león, rinoceronte, camello/dromedario."
+      },
+      "Atenção": {
+        "title": "Atención",
+        "hint": "Dígitos directos (5 números), inversos (3 números), vigilancia (golpecito en letra A) y cálculo sustractivo."
+      },
+      "Linguagem": {
+        "title": "Lenguaje",
+        "hint": "Repetir dos frases largas exactamente. Decir el máximo de palabras con letra F en 1 min (≥11 = 1 pt)."
+      },
+      "Abstração": {
+        "title": "Abstracción",
+        "hint": "Pregunte qué tienen en común: \"naranja y plátano\" → frutas; \"tren y bicicleta\" → transporte."
+      },
+      "Evocação Tardia": {
+        "title": "Evocación Diferida",
+        "hint": "Palabras leídas al inicio: Rostro, Seda, Iglesia, Clavel, Rojo. Preguntar al final del test."
+      },
+      "Orientação": {
+        "title": "Orientación",
+        "hint": "1 punto por respuesta correcta."
+      }
+    },
+    "items": {
+      "ve_trilha":    "Trazo alternante",
+      "ve_cubo":      "Copia del cubo 3D",
+      "ve_rel_cont":  "Reloj — contorno circular",
+      "ve_rel_nums":  "Reloj — números correctos",
+      "ve_rel_pont":  "Reloj — agujas a las 11:10",
+      "n_leao":   "León",
+      "n_rino":   "Rinoceronte",
+      "n_camelo": "Camello / Dromedario",
+      "a_dig_d":  "Dígitos directos (ej: 2 1 8 5 4)",
+      "a_dig_i":  "Dígitos inversos (repetir al revés)",
+      "a_vigil":  "Vigilancia — golpecito al oír letra A",
+      "a_calc":   "Cálculo — resta de 7 (0 errores=3 pts, 1=2, 2-3=1, 4-5=0)",
+      "l_frase1": "Frase 1 — \"El gato siempre se escondía bajo el sofá cuando los perros estaban en la sala\"",
+      "l_frase2": "Frase 2 — segunda frase compleja estandarizada",
+      "l_fluenc": "Fluidez verbal — ≥11 palabras con letra F en 1 min",
+      "ab1": "Naranja y plátano (Frutas)",
+      "ab2": "Tren y bicicleta (Medios de transporte)",
+      "ev_rosto":    "Rostro",
+      "ev_seda":     "Seda",
+      "ev_igreja":   "Iglesia",
+      "ev_cravo":    "Clavel",
+      "ev_vermelho": "Rojo",
+      "or_dia_m":  "Día del mes",
+      "or_mes":    "Mes",
+      "or_ano":    "Año",
+      "or_dia_s":  "Día de la semana",
+      "or_local":  "Lugar / institución",
+      "or_cidade": "Ciudad"
+    }
+  },
+  "saveAlert": "¡Evaluación guardada! (funcionalidad de persistencia no implementada)"
+}

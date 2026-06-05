@@ -1,0 +1,12 @@
+{
+  "drawer": {
+    "title": "Notifications",
+    "ariaLabel": "Notifications",
+    "emptyTitle": "All caught up!",
+    "emptyText": "You have no notifications right now. New alerts will appear here."
+  },
+  "splash": {
+    "brand": "MoveCare",
+    "tagline": "PHYSIOTHERAPY"
+  }
+}

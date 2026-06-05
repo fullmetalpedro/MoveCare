@@ -83,8 +83,10 @@
   transition: all 0.15s;
 }
 
-.btn-outline:hover {
-  box-shadow: var(--shadow-md);
+@media (hover: hover) {
+  .btn-outline:hover {
+    box-shadow: var(--shadow-md);
+  }
 }
 
 .detail-stats {
@@ -188,9 +190,11 @@
   z-index: 1;
 }
 
-.ctx-link:hover {
-  color: var(--text-primary);
-  font-weight: 600;
+@media (hover: hover) {
+  .ctx-link:hover {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
 }
 
 .ctx-link.active {
@@ -265,11 +269,17 @@
   .detail-sidebar-nav {
     flex-direction: row;
     overflow-x: auto;
+    overflow-y: hidden;
     gap: 6px;
     padding-bottom: 12px;
     margin-bottom: 16px;
     -webkit-overflow-scrolling: touch;
     border-bottom: none;
+    scrollbar-width: none;
+  }
+
+  .detail-sidebar-nav::-webkit-scrollbar {
+    display: none;
   }
 
   /* Mobile uses solid pills with their own active style — no sliding indicator. */
@@ -284,6 +294,9 @@
 
   .ctx-link {
     white-space: nowrap;
+    /* Keep each pill at its natural width so the strip scrolls instead of the
+       labels being squeezed/clipped ("cut in half") on small screens. */
+    flex-shrink: 0;
     padding: 8px 14px;
     border-radius: 20px;
     font-size: 13px;

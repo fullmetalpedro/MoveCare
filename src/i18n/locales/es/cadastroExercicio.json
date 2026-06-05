@@ -1,0 +1,42 @@
+{
+  "title": "Nuevo Ejercicio",
+  "subtitle": "Añade un nuevo ejercicio a la biblioteca",
+  "previewLabel": "Vista previa",
+  "previewNamePlaceholder": "Nombre del ejercicio",
+  "saveExercise": "Guardar Ejercicio",
+  "sections": {
+    "basicInfo": "Información Básica",
+    "video": "Vídeo demostrativo",
+    "descriptionInstructions": "Descripción e Instrucciones"
+  },
+  "fields": {
+    "name": "Nombre del ejercicio",
+    "namePlaceholder": "Ej.: Sentadilla Libre, Plancha Isométrica...",
+    "category": "Categoría",
+    "level": "Nivel de dificultad",
+    "series": "Series / Duración",
+    "seriesPlaceholder": "Ej.: 3x12 rep, 3x30s, 5 min...",
+    "videoUrl": "URL del vídeo",
+    "description": "Descripción del ejercicio",
+    "descriptionPlaceholder": "Describe brevemente el objetivo y los beneficios del ejercicio...",
+    "instructions": "Instrucciones de ejecución",
+    "instructionsPlaceholder": "Guía paso a paso de cómo realizar el ejercicio correctamente..."
+  },
+  "toggle": {
+    "label": "Tiene vídeo demostrativo",
+    "description": "Indica el enlace del vídeo para que el paciente lo vea"
+  },
+  "categories": {
+    "Fortalecimento": "Fortalecimiento",
+    "Estabilização": "Estabilización",
+    "Flexibilidade": "Flexibilidad",
+    "Mobilidade": "Movilidad",
+    "Funcional": "Funcional",
+    "Relaxamento": "Relajación"
+  },
+  "levels": {
+    "Iniciante": "Principiante",
+    "Intermediário": "Intermedio",
+    "Avançado": "Avanzado"
+  }
+}

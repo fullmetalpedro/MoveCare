@@ -1,0 +1,5 @@
+{
+  "title": "Documents & Templates",
+  "patientDocs": "Documents for {{name}}",
+  "addZone": "Click or drag to add a document"
+}

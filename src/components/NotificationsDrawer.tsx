@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { X, BellOff } from "lucide-react";
 import "./NotificationsDrawer.css";
 
@@ -26,6 +27,7 @@ interface NotificationsDrawerProps {
  * <NotificationsDrawer open={open} onClose={() => setOpen(false)} />
  */
 export default function NotificationsDrawer({ open, onClose }: NotificationsDrawerProps) {
+  const { t } = useTranslation();
   const [closing, setClosing] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -53,23 +55,22 @@ export default function NotificationsDrawer({ open, onClose }: NotificationsDraw
         className={`drawer-panel${closing ? " closing" : ""}`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
-        aria-label="Notificações"
+        aria-modal="true"
+        aria-label={t("notifications.drawer.ariaLabel")}
       >
         <div className="drawer-header">
-          <h2 className="drawer-title">Notificações</h2>
-          <button className="drawer-close" onClick={handleClose} aria-label="Fechar">
-            <X size={18} />
+          <h2 className="drawer-title">{t("notifications.drawer.title")}</h2>
+          <button className="drawer-close" onClick={handleClose} aria-label={t("common.close")}>
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
         <div className="drawer-empty">
           <div className="drawer-empty-icon">
-            <BellOff size={28} />
+            <BellOff size={28} aria-hidden="true" />
           </div>
-          <h3 className="drawer-empty-title">Tudo em dia!</h3>
-          <p className="drawer-empty-text">
-            Você não tem notificações no momento. Novos alertas aparecerão aqui.
-          </p>
+          <h3 className="drawer-empty-title">{t("notifications.drawer.emptyTitle")}</h3>
+          <p className="drawer-empty-text">{t("notifications.drawer.emptyText")}</p>
         </div>
       </aside>
     </div>,

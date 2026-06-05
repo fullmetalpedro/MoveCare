@@ -49,36 +49,19 @@
   background: var(--accent);
   color: #fff;
 }
-.ds-btn--primary:not(:disabled):hover {
-  opacity: 0.9;
-}
-
 .ds-btn--danger {
   background: var(--danger);
   color: #fff;
 }
-.ds-btn--danger:not(:disabled):hover {
-  opacity: 0.9;
-}
-
 .ds-btn--secondary {
   background: var(--card-bg);
   border-color: var(--border);
   color: var(--text-secondary);
 }
-.ds-btn--secondary:not(:disabled):hover {
-  border-color: var(--text-muted);
-  color: var(--text-primary);
-}
-
 .ds-btn--ghost {
   background: transparent;
   color: var(--accent);
 }
-.ds-btn--ghost:not(:disabled):hover {
-  background: var(--accent-soft);
-}
-
 .ds-btn:not(:disabled):active {
   transform: scale(0.98);
 }
@@ -93,10 +76,6 @@
     opacity var(--duration-base) var(--ease-standard),
     box-shadow var(--duration-base) var(--ease-standard),
     transform 0.15s var(--ease-standard);
-}
-.ds-btn--lift:not(:disabled):hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
 }
 .ds-btn--lift:not(:disabled):active {
   transform: translateY(0);
@@ -118,5 +97,30 @@
 @keyframes ds-btn-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (hover: hover) {
+  .ds-btn--primary:not(:disabled):hover {
+    opacity: 0.9;
+  }
+
+  .ds-btn--danger:not(:disabled):hover {
+    opacity: 0.9;
+  }
+
+  .ds-btn--secondary:not(:disabled):hover {
+    border-color: var(--text-muted);
+    color: var(--text-primary);
+  }
+
+  .ds-btn--ghost:not(:disabled):hover {
+    background: var(--accent-soft);
+  }
+
+  /* Opt-in card-style hover (shadow + raise) for the lift modifier. */
+  .ds-btn--lift:not(:disabled):hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
   }
 }

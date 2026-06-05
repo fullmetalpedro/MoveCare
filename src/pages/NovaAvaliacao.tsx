@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useOutletContext, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   ChevronDown, ChevronUp, Play, Square, CheckCircle2,
   Timer, Dumbbell, Activity, FootprintsIcon, RotateCcw,
@@ -19,6 +20,7 @@ import "./NovaAvaliacao.css";
  * @returns A time display and start/stop/reset button group.
  */
 function TimerWidget({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { t } = useTranslation();
   const [running, setRunning] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const ref = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -49,10 +51,10 @@ function TimerWidget({ value, onChange }: { value: string; onChange: (v: string)
       <div className="timer-display">{running ? elapsed.toFixed(1) : (value || "0.0")}s</div>
       <div className="timer-btns">
         {!running
-          ? <button className="timer-btn timer-start" type="button" onClick={start}><Play size={13} /> Iniciar</button>
-          : <button className="timer-btn timer-stop"  type="button" onClick={stop}><Square size={13} /> Parar</button>
+          ? <button className="timer-btn timer-start" type="button" onClick={start}><Play size={13} aria-hidden="true" /> {t("avaliacao.timerStart")}</button>
+          : <button className="timer-btn timer-stop"  type="button" onClick={stop}><Square size={13} aria-hidden="true" /> {t("avaliacao.timerStop")}</button>
         }
-        <button className="timer-btn timer-reset" type="button" onClick={reset}><RotateCcw size={13} /></button>
+        <button className="timer-btn timer-reset" type="button" onClick={reset} aria-label={t("avaliacao.timerReset")}><RotateCcw size={13} aria-hidden="true" /></button>
       </div>
     </div>
   );
@@ -67,6 +69,7 @@ function TimerWidget({ value, onChange }: { value: string; onChange: (v: string)
  * @returns A countdown display and start/reset button group; turns red when ≤ 5 s remain.
  */
 function CountdownWidget({ totalSeconds }: { totalSeconds: number }) {
+  const { t } = useTranslation();
   const [remaining, setRemaining] = useState(totalSeconds);
   const [running, setRunning] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -107,16 +110,16 @@ function CountdownWidget({ totalSeconds }: { totalSeconds: number }) {
       <div className="timer-btns">
         {!running && !finished && (
           <button className="timer-btn timer-start" type="button" onClick={start}>
-            <Play size={13} /> Iniciar
+            <Play size={13} aria-hidden="true" /> {t("avaliacao.timerStart")}
           </button>
         )}
         {running && (
           <button className="timer-btn timer-stop" type="button" onClick={reset}>
-            <Square size={13} /> Parar
+            <Square size={13} aria-hidden="true" /> {t("avaliacao.timerStop")}
           </button>
         )}
-        {finished && <span className="timer-done-label">Tempo esgotado!</span>}
-        <button className="timer-btn timer-reset" type="button" onClick={reset}><RotateCcw size={13} /></button>
+        {finished && <span className="timer-done-label">{t("avaliacao.timerExpired")}</span>}
+        <button className="timer-btn timer-reset" type="button" onClick={reset} aria-label={t("avaliacao.timerReset")}><RotateCcw size={13} aria-hidden="true" /></button>
       </div>
     </div>
   );
@@ -131,6 +134,7 @@ function CountdownWidget({ totalSeconds }: { totalSeconds: number }) {
  * @returns A row with decrement, count display, and increment buttons.
  */
 function RepCounter({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  const { t } = useTranslation();
   return (
     <div className="rep-counter">
       <button
@@ -138,12 +142,18 @@ function RepCounter({ value, onChange }: { value: number; onChange: (v: number) 
         className="rep-btn"
         onClick={() => onChange(Math.max(0, value - 1))}
         disabled={value === 0}
+        aria-label={t("avaliacao.decrement")}
       >
-        <Minus size={16} />
+        <Minus size={16} aria-hidden="true" />
       </button>
       <span className="rep-value">{value}</span>
-      <button type="button" className="rep-btn rep-btn-add" onClick={() => onChange(value + 1)}>
-        <Plus size={16} />
+      <button
+        type="button"
+        className="rep-btn rep-btn-add"
+        onClick={() => onChange(value + 1)}
+        aria-label={t("avaliacao.increment")}
+      >
+        <Plus size={16} aria-hidden="true" />
       </button>
     </div>
   );
@@ -390,6 +400,7 @@ function TestModal({
   onClose: () => void;
   onConfirm: () => void;
 }) {
+  const { t } = useTranslation();
   const [closing, setClosing] = useState(false);
   const total = Object.values(values).reduce((a, b) => a + b, 0);
 
@@ -412,6 +423,14 @@ function TestModal({
 
   const isBelowNormal = testId === "moca" ? total < 26 : total < 24;
 
+  // Resolve translated section title/hint and item label; fall back to data value if key missing.
+  const sectionTitle = (s: TestSection) =>
+    t(`avaliacao.${testId}.sections.${s.title}.title`, { defaultValue: s.title });
+  const sectionHint = (s: TestSection) =>
+    t(`avaliacao.${testId}.sections.${s.title}.hint`, { defaultValue: s.hint });
+  const itemLabel = (item: ScoreItem) =>
+    t(`avaliacao.${testId}.items.${item.id}`, { defaultValue: item.label });
+
   return createPortal(
     <div className={`test-modal-overlay${closing ? " closing" : ""}`} onClick={handleClose}>
       <div className="test-modal" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
@@ -420,8 +439,8 @@ function TestModal({
             <div className="test-modal-title">{title}</div>
             <div className="test-modal-sub">{subtitle}</div>
           </div>
-          <button className="test-modal-close" type="button" onClick={handleClose} aria-label="Fechar">
-            <X size={18} />
+          <button className="test-modal-close" type="button" onClick={handleClose} aria-label={t("avaliacao.closeModal")}>
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
@@ -433,14 +452,14 @@ function TestModal({
             return (
               <div key={section.title} className="modal-section">
                 <div className="modal-section-header">
-                  <span className="modal-section-title">{section.title}</span>
+                  <span className="modal-section-title">{sectionTitle(section)}</span>
                   <span className="modal-section-pts">{sectionTotal} / {sectionMax}</span>
                 </div>
-                {section.hint && <p className="modal-section-hint">{section.hint}</p>}
+                {section.hint && <p className="modal-section-hint">{sectionHint(section)}</p>}
                 {section.items.map(item => (
                   <ScoreRow
                     key={item.id}
-                    label={item.label}
+                    label={itemLabel(item)}
                     max={item.max}
                     value={values[item.id] ?? 0}
                     onChange={v => onChange(item.id, v)}
@@ -453,15 +472,15 @@ function TestModal({
 
         <div className="test-modal-footer">
           <div className="test-modal-total">
-            Total: <strong>{total} / {maxTotal}</strong>
+            {t("avaliacao.totalLabel")} <strong>{total} / {maxTotal}</strong>
             {isBelowNormal && (
               <span className="modal-below-normal">
-                {testId === "moca" ? " · Abaixo do normal (< 26)" : " · Sugestivo de comprometimento (< 24)"}
+                {testId === "moca" ? t("avaliacao.belowNormalMoca") : t("avaliacao.belowNormalMmse")}
               </span>
             )}
           </div>
           <button className="btn-confirmar" type="button" onClick={onConfirm}>
-            Confirmar {title}
+            {t("avaliacao.confirmTest", { name: title })}
           </button>
         </div>
       </div>
@@ -472,15 +491,15 @@ function TestModal({
 
 // ─── Test definitions ─────────────────────────────────────────────────────────
 const TESTS = [
-  { id: "mrc",          label: "Escala MRC",              desc: "Força muscular 0–5 por grupo",         icon: Activity,       color: "#E04F5F" },
-  { id: "dinamometria", label: "Dinamometria de Preensão", desc: "Força de preensão em kgf (D e E)",      icon: Dumbbell,       color: "#34C759" },
-  { id: "sit_to_stand", label: "Sentar-Levantar 30s",      desc: "Repetições em 30 segundos",            icon: Footprints,     color: "#E8973A" },
-  { id: "tug",          label: "TUG",                      desc: "Timed Up and Go — 3 metros",           icon: Timer,          color: "#007AFF" },
-  { id: "10mwt",        label: "10MWT",                    desc: "Velocidade de marcha — 10 metros",     icon: FootprintsIcon, color: "#AF52DE" },
-  { id: "dgi",          label: "DGI",                      desc: "Dynamic Gait Index — 8 itens (0–3)",   icon: Activity,       color: "#5AC8FA" },
-  { id: "tdr",          label: "Teste do Relógio",         desc: "Upload ou foto do desenho do relógio", icon: Camera,         color: "#E8973A" },
-  { id: "mmse",         label: "MMSE",                     desc: "Mini-Exame do Estado Mental (0–30)",   icon: Brain,          color: "#007AFF" },
-  { id: "moca",         label: "MoCA",                     desc: "Montreal Cognitive Assessment (0–30)", icon: ClipboardList,  color: "#AF52DE" },
+  { id: "mrc",          icon: Activity,       color: "#E04F5F" },
+  { id: "dinamometria", icon: Dumbbell,       color: "#34C759" },
+  { id: "sit_to_stand", icon: Footprints,     color: "#E8973A" },
+  { id: "tug",          icon: Timer,          color: "#007AFF" },
+  { id: "10mwt",        icon: FootprintsIcon, color: "#AF52DE" },
+  { id: "dgi",          icon: Activity,       color: "#5AC8FA" },
+  { id: "tdr",          icon: Camera,         color: "#E8973A" },
+  { id: "mmse",         icon: Brain,          color: "#007AFF" },
+  { id: "moca",         icon: ClipboardList,  color: "#AF52DE" },
 ];
 
 // ─── Main component ────────────────────────────────────────────────────────────
@@ -499,6 +518,7 @@ const TESTS = [
  * // Rendered at /pacientes/:id/avaliacao/nova
  */
 export default function NovaAvaliacao() {
+  const { t } = useTranslation();
   const paciente = useOutletContext<Paciente>();
   const navigate  = useNavigate();
 
@@ -551,7 +571,7 @@ export default function NovaAvaliacao() {
   }, [tdrPreview]);
 
   const handleSave = () => {
-    alert("Avaliação salva! (funcionalidade de persistência não implementada)");
+    alert(t("avaliacao.saveAlert"));
     navigate(`/pacientes/${paciente.id}/evolucao`);
   };
 
@@ -559,12 +579,12 @@ export default function NovaAvaliacao() {
     <div className="nova-av-page">
       <div className="nova-av-header">
         <div>
-          <h1>Nova Avaliação</h1>
+          <h1>{t("avaliacao.pageTitle")}</h1>
           <p className="nova-av-sub">{paciente.nome} · {paciente.condicao}</p>
         </div>
         {done.size > 0 && (
           <button className="btn-salvar-av" type="button" onClick={handleSave}>
-            Salvar {done.size} teste{done.size !== 1 ? "s" : ""}
+            {t("avaliacao.saveTests", { count: done.size })}
           </button>
         )}
       </div>
@@ -574,19 +594,21 @@ export default function NovaAvaliacao() {
           const Icon  = test.icon;
           const isOpen = expanded === test.id || openModal === test.id;
           const isDone = done.has(test.id);
+          const testLabel = t(`avaliacao.tests.${test.id}.label`);
+          const testDesc  = t(`avaliacao.tests.${test.id}.desc`);
 
           return (
             <div key={test.id} className={`nav-test-card ${isOpen ? "open" : ""} ${isDone ? "is-done" : ""}`}>
               <button className="nav-test-header" type="button" onClick={() => toggle(test.id)}>
                 <div className="nav-test-icon" style={{ background: `${test.color}18`, color: test.color }}>
-                  {isDone ? <CheckCircle2 size={18} /> : <Icon size={18} />}
+                  {isDone ? <CheckCircle2 size={18} aria-hidden="true" /> : <Icon size={18} aria-hidden="true" />}
                 </div>
                 <div className="nav-test-info">
-                  <div className="nav-test-label">{test.label}</div>
-                  <div className="nav-test-desc">{test.desc}</div>
+                  <div className="nav-test-label">{testLabel}</div>
+                  <div className="nav-test-desc">{testDesc}</div>
                 </div>
-                {isDone && <span className="nav-test-done-tag">Concluído</span>}
-                <span className="nav-test-chevron">
+                {isDone && <span className="nav-test-done-tag">{t("avaliacao.concluded")}</span>}
+                <span className="nav-test-chevron" aria-hidden="true">
                   {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </span>
               </button>
@@ -597,11 +619,19 @@ export default function NovaAvaliacao() {
 
                   {test.id === "mrc" && (
                     <div className="form-mrc">
-                      <p className="form-hint">Selecione a pontuação (0 = sem contração, 5 = normal)</p>
+                      <p className="form-hint">{t("avaliacao.tests.mrc.hint")}</p>
                       {MRC_GROUPS.map(g => (
-                        <ScoreRow key={g} label={g} max={5} value={mrcVals[g]} onChange={v => setMrcVals(p => ({ ...p, [g]: v }))} />
+                        <ScoreRow
+                          key={g}
+                          label={t(`avaliacao.mrcGroups.${g}`, { defaultValue: g })}
+                          max={5}
+                          value={mrcVals[g]}
+                          onChange={v => setMrcVals(p => ({ ...p, [g]: v }))}
+                        />
                       ))}
-                      <button className="btn-confirmar" type="button" onClick={() => markDone(test.id)}>Confirmar MRC</button>
+                      <button className="btn-confirmar" type="button" onClick={() => markDone(test.id)}>
+                        {t("avaliacao.confirmTest", { name: t("avaliacao.tests.mrc.label") })}
+                      </button>
                     </div>
                   )}
 
@@ -609,89 +639,130 @@ export default function NovaAvaliacao() {
                     <div className="form-dina">
                       <div className="dina-row">
                         <div className="form-group">
-                          <label>Mão esquerda (kgf)</label>
-                          <input className="nav-input" type="number" step="0.5" min="0" placeholder="ex: 22.5" value={dinaEsq} onChange={e => setDinaEsq(e.target.value)} />
+                          <label htmlFor="dina-esq">{t("avaliacao.tests.dinamometria.leftHand")}</label>
+                          <input
+                            id="dina-esq"
+                            className="nav-input"
+                            type="number"
+                            step="0.5"
+                            min="0"
+                            placeholder={t("avaliacao.tests.dinamometria.leftPlaceholder")}
+                            value={dinaEsq}
+                            onChange={e => setDinaEsq(e.target.value)}
+                          />
                         </div>
                         <div className="form-group">
-                          <label>Mão direita (kgf)</label>
-                          <input className="nav-input" type="number" step="0.5" min="0" placeholder="ex: 24.0" value={dinaDrt} onChange={e => setDinaDrt(e.target.value)} />
+                          <label htmlFor="dina-drt">{t("avaliacao.tests.dinamometria.rightHand")}</label>
+                          <input
+                            id="dina-drt"
+                            className="nav-input"
+                            type="number"
+                            step="0.5"
+                            min="0"
+                            placeholder={t("avaliacao.tests.dinamometria.rightPlaceholder")}
+                            value={dinaDrt}
+                            onChange={e => setDinaDrt(e.target.value)}
+                          />
                         </div>
                       </div>
-                      <button className="btn-confirmar" type="button" disabled={!dinaEsq || !dinaDrt} onClick={() => markDone(test.id)}>Confirmar Dinamometria</button>
+                      <button className="btn-confirmar" type="button" disabled={!dinaEsq || !dinaDrt} onClick={() => markDone(test.id)}>
+                        {t("avaliacao.confirmTest", { name: t("avaliacao.tests.dinamometria.label") })}
+                      </button>
                     </div>
                   )}
 
                   {test.id === "sit_to_stand" && (
                     <div className="form-sit">
-                      <p className="form-hint">Inicie o cronômetro de 30 s e conte as repetições completas enquanto o tempo corre.</p>
+                      <p className="form-hint">{t("avaliacao.tests.sit_to_stand.hint")}</p>
                       <div className="form-group">
-                        <label>Cronômetro 30 s</label>
+                        <label htmlFor="sit-countdown">{t("avaliacao.tests.sit_to_stand.countdownLabel")}</label>
                         <CountdownWidget totalSeconds={30} />
                       </div>
                       <div className="form-group">
-                        <label>Repetições completas</label>
+                        <label>{t("avaliacao.tests.sit_to_stand.repsLabel")}</label>
                         <RepCounter value={sitReps} onChange={setSitReps} />
                       </div>
                       <button className="btn-confirmar" type="button" onClick={() => markDone(test.id)}>
-                        Confirmar — {sitReps} rep{sitReps !== 1 ? "s" : ""}
+                        {t("avaliacao.confirmReps", { count: sitReps })}
                       </button>
                     </div>
                   )}
 
                   {test.id === "tug" && (
                     <div className="form-tug">
-                      <p className="form-hint">Paciente levanta, caminha 3 m, gira e senta. Inicie o cronômetro no movimento.</p>
+                      <p className="form-hint">{t("avaliacao.tests.tug.hint")}</p>
                       <div className="form-group">
-                        <label>Tempo</label>
+                        <label>{t("avaliacao.tests.tug.timeLabel")}</label>
                         <TimerWidget value={tugTempo} onChange={setTugTempo} />
                       </div>
-                      <button className="btn-confirmar" type="button" disabled={!tugTempo} onClick={() => markDone(test.id)}>Confirmar TUG</button>
+                      <button className="btn-confirmar" type="button" disabled={!tugTempo} onClick={() => markDone(test.id)}>
+                        {t("avaliacao.confirmTest", { name: t("avaliacao.tests.tug.label") })}
+                      </button>
                     </div>
                   )}
 
                   {test.id === "10mwt" && (
                     <div className="form-mwt">
-                      <p className="form-hint">Velocidade de marcha confortável em pista de 10 m.</p>
+                      <p className="form-hint">{t("avaliacao.tests.10mwt.hint")}</p>
                       <div className="form-group">
-                        <label>Tempo</label>
+                        <label>{t("avaliacao.tests.10mwt.timeLabel")}</label>
                         <TimerWidget value={mwtTempo} onChange={setMwtTempo} />
                       </div>
                       <div className="form-group">
-                        <label>Distância (m)</label>
-                        <input className="nav-input" type="number" step="1" value={mwtDist} onChange={e => setMwtDist(e.target.value)} />
+                        <label htmlFor="mwt-dist">{t("avaliacao.tests.10mwt.distLabel")}</label>
+                        <input
+                          id="mwt-dist"
+                          className="nav-input"
+                          type="number"
+                          step="1"
+                          value={mwtDist}
+                          onChange={e => setMwtDist(e.target.value)}
+                        />
                       </div>
                       {mwtSpeed && (
                         <div className="mwt-speed">
-                          Velocidade calculada: <strong>{mwtSpeed} m/s</strong>
+                          {t("avaliacao.speedCalc")} <strong>{mwtSpeed} m/s</strong>
                         </div>
                       )}
-                      <button className="btn-confirmar" type="button" disabled={!mwtTempo} onClick={() => markDone(test.id)}>Confirmar 10MWT</button>
+                      <button className="btn-confirmar" type="button" disabled={!mwtTempo} onClick={() => markDone(test.id)}>
+                        {t("avaliacao.confirmTest", { name: t("avaliacao.tests.10mwt.label") })}
+                      </button>
                     </div>
                   )}
 
                   {test.id === "dgi" && (
                     <div className="form-dgi">
-                      <p className="form-hint">0 = alteração grave · 1 = moderada · 2 = leve · 3 = normal</p>
+                      <p className="form-hint">{t("avaliacao.tests.dgi.hint")}</p>
                       {DGI_ITEMS.map(item => (
-                        <ScoreRow key={item} label={item} max={3} value={dgiVals[item]} onChange={v => setDgiVals(p => ({ ...p, [item]: v }))} />
+                        <ScoreRow
+                          key={item}
+                          label={t(`avaliacao.dgiItems.${item}`, { defaultValue: item })}
+                          max={3}
+                          value={dgiVals[item]}
+                          onChange={v => setDgiVals(p => ({ ...p, [item]: v }))}
+                        />
                       ))}
-                      <div className="dgi-total">Total: <strong>{dgiTotal} / 24</strong></div>
-                      <button className="btn-confirmar" type="button" onClick={() => markDone(test.id)}>Confirmar DGI</button>
+                      <div className="dgi-total">{t("avaliacao.totalLabel")} <strong>{dgiTotal} / 24</strong></div>
+                      <button className="btn-confirmar" type="button" onClick={() => markDone(test.id)}>
+                        {t("avaliacao.confirmTest", { name: t("avaliacao.tests.dgi.label") })}
+                      </button>
                     </div>
                   )}
 
                   {test.id === "tdr" && (
                     <div className="form-tdr">
-                      <p className="form-hint">Faça upload da foto do desenho do relógio do paciente.</p>
+                      <p className="form-hint">{t("avaliacao.tests.tdr.hint")}</p>
                       {tdrPreview ? (
                         <div className="tdr-preview-wrap">
-                          <img src={tdrPreview} alt="Relógio" className="tdr-preview" />
-                          <button className="tdr-change" type="button" onClick={() => { setTdrFile(null); setTdrPreview(null); }}>Trocar imagem</button>
+                          <img src={tdrPreview} alt={t("avaliacao.tests.tdr.imgAlt")} className="tdr-preview" />
+                          <button className="tdr-change" type="button" onClick={() => { setTdrFile(null); setTdrPreview(null); }}>
+                            {t("avaliacao.tests.tdr.changeImage")}
+                          </button>
                         </div>
                       ) : (
                         <label className="tdr-upload-zone">
-                          <Camera size={28} />
-                          <span>Clique para selecionar ou tirar foto</span>
+                          <Camera size={28} aria-hidden="true" />
+                          <span>{t("avaliacao.tests.tdr.uploadZone")}</span>
                           <input
                             type="file"
                             accept="image/*"
@@ -701,7 +772,9 @@ export default function NovaAvaliacao() {
                           />
                         </label>
                       )}
-                      <button className="btn-confirmar" type="button" disabled={!tdrFile} onClick={() => markDone(test.id)}>Confirmar Teste do Relógio</button>
+                      <button className="btn-confirmar" type="button" disabled={!tdrFile} onClick={() => markDone(test.id)}>
+                        {t("avaliacao.confirmTest", { name: t("avaliacao.tests.tdr.label") })}
+                      </button>
                     </div>
                   )}
                 </div>
@@ -715,8 +788,8 @@ export default function NovaAvaliacao() {
       {openModal === "mmse" && (
         <TestModal
           testId="mmse"
-          title="MMSE"
-          subtitle="Mini-Exame do Estado Mental · 0–30 pontos"
+          title={t("avaliacao.tests.mmse.modalTitle")}
+          subtitle={t("avaliacao.tests.mmse.modalSubtitle")}
           sections={MMSE_SECTIONS}
           maxTotal={30}
           values={mmseVals}
@@ -730,12 +803,11 @@ export default function NovaAvaliacao() {
       {openModal === "moca" && (
         <TestModal
           testId="moca"
-          title="MoCA"
-          subtitle="Montreal Cognitive Assessment · 0–30 pontos (normal ≥ 26)"
+          title={t("avaliacao.tests.moca.modalTitle")}
+          subtitle={t("avaliacao.tests.moca.modalSubtitle")}
           preamble={
             <div className="test-modal-preamble-box">
-              <strong>Antes de começar:</strong> leia estas 5 palavras ao paciente e peça para memorizar —{" "}
-              <em>Rosto, Seda, Igreja, Cravo, Vermelho</em>. A evocação será avaliada no final.
+              <strong>{t("avaliacao.tests.moca.preamble")}</strong>
             </div>
           }
           sections={MOCA_SECTIONS}
@@ -749,9 +821,9 @@ export default function NovaAvaliacao() {
 
       {done.size > 0 && (
         <div className="nova-av-footer">
-          <button className="btn-cancelar" type="button" onClick={() => navigate(-1)}>Cancelar</button>
+          <button className="btn-cancelar" type="button" onClick={() => navigate(-1)}>{t("common.cancel")}</button>
           <button className="btn-salvar-av" type="button" onClick={handleSave}>
-            Salvar {done.size} teste{done.size !== 1 ? "s" : ""}
+            {t("avaliacao.saveTests", { count: done.size })}
           </button>
         </div>
       )}

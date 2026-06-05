@@ -1,0 +1,71 @@
+{
+  "pageTitle": "Evolución",
+  "subtitle": {
+    "assessments_one": "evaluación",
+    "assessments_other": "evaluaciones",
+    "sessions_one": "sesión",
+    "sessions_other": "sesiones"
+  },
+  "btnRegisterSession": "Registrar Sesión",
+  "btnNewAssessment": "Nueva Evaluación",
+  "formTitle": "Nueva observación de sesión",
+  "formFields": {
+    "date": "Fecha",
+    "datePlaceholder": "DD/MM/AAAA",
+    "sessionNum": "Nº de Sesión",
+    "sessionNumPlaceholder": "Ej.: 12",
+    "exercisesDone": "Ejercicios realizados",
+    "exercisesDonePlaceholder": "Ej.: 4",
+    "totalExercises": "Total de ejercicios",
+    "totalExercisesFromPlan": "· del plan",
+    "totalExercisesPlaceholder": "Ej.: 7",
+    "observations": "Observaciones del profesional",
+    "observationsPlaceholder": "Describa la evolución, dificultades, ajustes realizados en la sesión..."
+  },
+  "btnSaveSession": "Guardar Sesión",
+  "emptyState": {
+    "title": "Sin registros aún",
+    "description": "Realice la primera evaluación o registre la observación de una sesión para comenzar."
+  },
+  "charts": {
+    "insufficientData": "Datos insuficientes para el gráfico",
+    "tugTitle": "TUG — Timed Up and Go",
+    "tugSub": "Tiempo (s) · menor es mejor",
+    "dinamometriaTitle": "Dinamometría de Prensión",
+    "dinamometriaSub": "Fuerza media (kgf) · mayor es mejor",
+    "leftRight": "Izq {{left}} / Der {{right}} kgf"
+  },
+  "sessions": {
+    "cardTitle": "Registro de Sesiones",
+    "count_one": "{{count}} sesión",
+    "count_other": "{{count}} sesiones",
+    "sessionBadge": "Sesión #{{num}}",
+    "expandLabel": "Expandir sesión {{num}}",
+    "collapseLabel": "Contraer sesión {{num}}"
+  },
+  "assessments": {
+    "cardTitle": "Historial de Evaluaciones",
+    "count_one": "{{count}} evaluación",
+    "count_other": "{{count}} evaluaciones",
+    "expandHint": "detalles",
+    "collapseHint": "cerrar",
+    "clickToViewHint": "Haga clic para ver los resultados",
+    "shareWhatsApp": "Compartir en WhatsApp"
+  },
+  "modal": {
+    "title": "Compartir en WhatsApp",
+    "subtitle": "Copie y pegue en la conversación con el paciente",
+    "closeLabel": "Cerrar modal"
+  },
+  "testRows": {
+    "tempo": "Tiempo",
+    "distancia": "Distancia",
+    "esquerda": "Izquierda",
+    "direita": "Derecha",
+    "repeticoes": "Repeticiones (30s)",
+    "velocidade": "Velocidad",
+    "total": "Total",
+    "observacao": "Observación",
+    "noData": "Sin datos numéricos"
+  }
+}

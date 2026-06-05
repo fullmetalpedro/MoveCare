@@ -42,14 +42,6 @@
   transition: box-shadow 0.2s ease, transform 0.15s ease, background 0.15s ease;
 }
 
-.table-row:hover {
-  background: var(--card-bg);
-  border-radius: 10px;
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-  z-index: 1;
-}
-
 .table-row:active {
   transform: translateY(0);
 }
@@ -177,5 +169,15 @@
 @media (max-width: 480px) {
   .col-adesao {
     display: none;
+  }
+}
+
+@media (hover: hover) {
+  .table-row:hover {
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+    z-index: 1;
   }
 }

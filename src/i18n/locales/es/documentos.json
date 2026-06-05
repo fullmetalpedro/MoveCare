@@ -1,0 +1,5 @@
+{
+  "title": "Documentos y Plantillas",
+  "patientDocs": "Documentos de {{name}}",
+  "addZone": "Haga clic o arrastre para añadir un documento"
+}

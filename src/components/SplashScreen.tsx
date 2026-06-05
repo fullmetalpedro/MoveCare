@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { Heart } from "lucide-react";
 import "./SplashScreen.css";
 
@@ -26,6 +27,7 @@ const FADE_MS = 450;
  * </>
  */
 export default function SplashScreen() {
+  const { t } = useTranslation();
   const [phase, setPhase] = useState<"show" | "hide" | "done">("show");
 
   useEffect(() => {
@@ -67,9 +69,10 @@ export default function SplashScreen() {
           size={84}
           strokeWidth={0}
           fill="url(#splash-heart-gradient)"
+          aria-hidden="true"
         />
-        <div className="splash-title">MoveCare</div>
-        <div className="splash-subtitle">FISIOTERAPIA</div>
+        <div className="splash-title">{t("notifications.splash.brand")}</div>
+        <div className="splash-subtitle">{t("notifications.splash.tagline")}</div>
         <div className="splash-loader">
           <span />
           <span />

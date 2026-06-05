@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { Users, HeartPulse, Bell, ChevronRight } from "lucide-react";
 import NotificationsDrawer from "../components/NotificationsDrawer";
@@ -95,6 +96,7 @@ function DashboardSkeleton() {
 }
 
 export default function Dashboard({ stats, agendaHoje, doctorName, pacientes }: DashboardProps) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [notifOpen, setNotifOpen] = useState(false);
   const navigate = useNavigate();
@@ -112,10 +114,12 @@ export default function Dashboard({ stats, agendaHoje, doctorName, pacientes }: 
     <div className="dashboard content-appear">
       <div className="dashboard-header">
         <div>
-          <h1>Bom dia, {firstName}</h1>
-          <p className="header-subtitle">Terça-feira, 29 de Abril · {stats.pacientesHoje} pacientes hoje</p>
+          <h1>{t("dashboard.greeting", { name: firstName })}</h1>
+          <p className="header-subtitle">{t("dashboard.headerSubtitle", { count: stats.pacientesHoje })}</p>
         </div>
-        <button className="notification-btn" onClick={() => setNotifOpen(true)} aria-label="Notificações"><Bell size={18} /></button>
+        <button className="notification-btn" onClick={() => setNotifOpen(true)} aria-label={t("dashboard.notifications")}>
+          <Bell size={18} aria-hidden="true" />
+        </button>
       </div>
 
       <NotificationsDrawer open={notifOpen} onClose={() => setNotifOpen(false)} />
@@ -123,29 +127,29 @@ export default function Dashboard({ stats, agendaHoje, doctorName, pacientes }: 
       <div className="stats-grid">
         <Link to="/agenda?view=dia" className="stat-card clickable">
           <div className="stat-card-header">
-            <span className="stat-label">Pacientes Hoje</span>
-            <span className="stat-icon stat-icon-green"><Users size={18} /></span>
+            <span className="stat-label">{t("dashboard.stats.pacientesHoje")}</span>
+            <span className="stat-icon stat-icon-green"><Users size={18} aria-hidden="true" /></span>
           </div>
           <div className="stat-value">{stats.pacientesHoje}</div>
           <div className="stat-detail">{stats.pacientesHojeDetalhe}</div>
         </Link>
         <Link to="/pacientes?filter=Ativos" className="stat-card clickable">
           <div className="stat-card-header">
-            <span className="stat-label">Pacientes Ativos</span>
-            <span className="stat-icon stat-icon-green"><HeartPulse size={18} /></span>
+            <span className="stat-label">{t("dashboard.stats.pacientesAtivos")}</span>
+            <span className="stat-icon stat-icon-green"><HeartPulse size={18} aria-hidden="true" /></span>
           </div>
           <div className="stat-value">{stats.pacientesAtivos}</div>
-          <div className="stat-detail positive">{stats.pacientesEmAvaliacao} em avaliação</div>
+          <div className="stat-detail positive">{stats.pacientesEmAvaliacao} {t("dashboard.stats.emAvaliacao")}</div>
         </Link>
         <div className="stat-card stat-card-centered">
-          <span className="stat-label">Adesão Geral</span>
+          <span className="stat-label">{t("dashboard.stats.adesaoGeral")}</span>
           <div className="stat-value stat-value-lg">{stats.adesaoGeral}%</div>
           <div className={`stat-detail ${stats.adesaoVariacao < 0 ? "negative" : "positive"}`}>
-            {stats.adesaoVariacao < 0 ? "↓" : "↑"} {Math.abs(stats.adesaoVariacao)}% vs semana anterior
+            {stats.adesaoVariacao < 0 ? "↓" : "↑"} {Math.abs(stats.adesaoVariacao)}{t("dashboard.stats.vsWeekPrior")}
           </div>
         </div>
         <div className="stat-card stat-card-centered">
-          <span className="stat-label">Receita do Mês</span>
+          <span className="stat-label">{t("dashboard.stats.receitaMes")}</span>
           <div className="stat-value stat-value-lg">{stats.receitaMes}</div>
           <div className="stat-detail">{stats.receitaDetalhe}</div>
         </div>
@@ -153,8 +157,10 @@ export default function Dashboard({ stats, agendaHoje, doctorName, pacientes }: 
 
       <div className="card agenda-card">
         <div className="card-header">
-          <h2>Agenda de Hoje</h2>
-          <Link to="/agenda" className="card-link">Ver completa <ChevronRight size={14} /></Link>
+          <h2>{t("dashboard.agenda.title")}</h2>
+          <Link to="/agenda" className="card-link" aria-label={t("dashboard.agenda.viewFullAriaLabel")}>
+            {t("dashboard.agenda.viewFull")} <ChevronRight size={14} aria-hidden="true" />
+          </Link>
         </div>
         <div className="agenda-list">
           {agendaHoje.map((item, i) => {
@@ -175,7 +181,7 @@ export default function Dashboard({ stats, agendaHoje, doctorName, pacientes }: 
                 ) : (
                   <span className="agenda-livre">— {item.tipo} —</span>
                 )}
-                {item.paciente && <span className="agenda-arrow"><ChevronRight size={16} /></span>}
+                {item.paciente && <span className="agenda-arrow"><ChevronRight size={16} aria-hidden="true" /></span>}
               </div>
             );
           })}

@@ -70,10 +70,6 @@
   flex-shrink: 0;
   transition: background-color var(--duration-base) var(--ease-standard);
 }
-.ds-modal__close:hover {
-  background: var(--border);
-  color: var(--text-primary);
-}
 .ds-modal__body {
   padding: var(--space-6);
   overflow-y: auto;
@@ -111,4 +107,11 @@
   padding: var(--space-5) var(--space-6);
   overflow-y: auto;
   flex: 1;
+}
+
+@media (hover: hover) {
+  .ds-modal__close:hover {
+    background: var(--border);
+    color: var(--text-primary);
+  }
 }

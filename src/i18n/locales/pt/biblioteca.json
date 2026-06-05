@@ -1,0 +1,20 @@
+{
+  "title": "Biblioteca de Exercícios",
+  "newExercise": "Novo Exercício",
+  "searchPlaceholder": "Buscar exercício...",
+  "addZone": "Clique para adicionar um novo exercício à biblioteca",
+  "categories": {
+    "Todos": "Todos",
+    "Fortalecimento": "Fortalecimento",
+    "Estabilização": "Estabilização",
+    "Flexibilidade": "Flexibilidade",
+    "Mobilidade": "Mobilidade",
+    "Funcional": "Funcional",
+    "Relaxamento": "Relaxamento"
+  },
+  "levels": {
+    "Iniciante": "Iniciante",
+    "Intermediário": "Intermediário",
+    "Avançado": "Avançado"
+  }
+}

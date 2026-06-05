@@ -43,10 +43,6 @@
   flex-shrink: 0;
 }
 
-.btn-nova-av:hover {
-  opacity: 0.85;
-}
-
 /* ─── Charts grid ─── */
 .evolucao-charts {
   display: grid;
@@ -287,10 +283,6 @@
   background: #FF9500;
 }
 
-.btn-nova-sessao:hover {
-  opacity: 0.85;
-}
-
 /* ─── Formulário de nova sessão ─── */
 .sessao-form-card {
   display: flex;
@@ -435,10 +427,6 @@
   text-align: left;
   gap: 12px;
   transition: background 0.15s;
-}
-
-.sessao-item-header:hover {
-  background: var(--border-light);
 }
 
 .sessao-meta {
@@ -599,10 +587,6 @@
   align-self: flex-start;
 }
 
-.wa-share-btn:hover {
-  background: rgba(37, 211, 102, 0.07);
-}
-
 /* ─── cadex-label hint ─── */
 .cadex-label-hint {
   color: var(--accent);
@@ -654,5 +638,23 @@
 
   .av-chips-row {
     display: none;
+  }
+}
+
+@media (hover: hover) {
+  .btn-nova-av:hover {
+    opacity: 0.85;
+  }
+
+  .btn-nova-sessao:hover {
+    opacity: 0.85;
+  }
+
+  .sessao-item-header:hover {
+    background: var(--border-light);
+  }
+
+  .wa-share-btn:hover {
+    background: rgba(37, 211, 102, 0.07);
   }
 }

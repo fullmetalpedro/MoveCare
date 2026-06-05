@@ -1,8 +1,10 @@
 import { useRef, useEffect, useLayoutEffect, useCallback, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Heart, LayoutDashboard, Calendar, Users, BookOpen, FileText, Settings, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import type { Doctor } from "../types";
 import Avatar from "./Avatar";
+import LanguageSwitcher from "./LanguageSwitcher";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -37,6 +39,7 @@ interface SidebarProps {
  * />
  */
 export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: SidebarProps) {
+  const { t } = useTranslation();
   const navRef = useRef<HTMLElement>(null);
   const location = useLocation();
   const [slider, setSlider] = useState({ top: 0, height: 0 });
@@ -62,16 +65,16 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
   }, [updateSlider]);
 
   return (
-    <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+    <aside className={`sidebar ${collapsed ? "collapsed" : ""}`} id="primary-sidebar">
       <div className="sidebar-logo">
-        <span className="logo-icon"><Heart size={22} /></span>
+        <span className="logo-icon"><Heart size={22} aria-hidden="true" /></span>
         <div className="logo-text">
           <div className="logo-title">MoveCare</div>
-          <div className="logo-subtitle">FISIOTERAPIA</div>
+          <div className="logo-subtitle">{t("nav.brandSubtitle")}</div>
         </div>
       </div>
 
-      <nav className="sidebar-nav" ref={navRef}>
+      <nav className="sidebar-nav" ref={navRef} aria-label={t("nav.dashboard")}>
         <div
           className="nav-slider"
           style={{
@@ -79,30 +82,35 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
             height: slider.height,
             opacity: ready ? 1 : 0,
           }}
+          aria-hidden="true"
         />
-        <NavLink to="/" end className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Dashboard">
-          <span className="nav-icon"><LayoutDashboard size={18} /></span>
-          <span className="nav-label">Dashboard</span>
-          {alertCount > 0 && <span className="nav-badge">{alertCount}</span>}
-          {alertCount > 0 && <span className="nav-badge-dot" />}
+        <NavLink to="/" end className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title={t("nav.dashboard")}>
+          <span className="nav-icon"><LayoutDashboard size={18} aria-hidden="true" /></span>
+          <span className="nav-label">{t("nav.dashboard")}</span>
+          {alertCount > 0 && <span className="nav-badge" aria-label={t("nav.alertsLabel", { count: alertCount })}>{alertCount}</span>}
+          {alertCount > 0 && <span className="nav-badge-dot" aria-hidden="true" />}
         </NavLink>
-        <NavLink to="/agenda" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Agenda">
-          <span className="nav-icon"><Calendar size={18} /></span>
-          <span className="nav-label">Agenda</span>
+        <NavLink to="/agenda" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title={t("nav.agenda")}>
+          <span className="nav-icon"><Calendar size={18} aria-hidden="true" /></span>
+          <span className="nav-label">{t("nav.agenda")}</span>
         </NavLink>
-        <NavLink to="/pacientes" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Pacientes">
-          <span className="nav-icon"><Users size={18} /></span>
-          <span className="nav-label">Pacientes</span>
+        <NavLink to="/pacientes" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title={t("nav.patients")}>
+          <span className="nav-icon"><Users size={18} aria-hidden="true" /></span>
+          <span className="nav-label">{t("nav.patients")}</span>
         </NavLink>
-        <NavLink to="/biblioteca" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Biblioteca">
-          <span className="nav-icon"><BookOpen size={18} /></span>
-          <span className="nav-label">Biblioteca</span>
+        <NavLink to="/biblioteca" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title={t("nav.library")}>
+          <span className="nav-icon"><BookOpen size={18} aria-hidden="true" /></span>
+          <span className="nav-label">{t("nav.library")}</span>
         </NavLink>
-        <NavLink to="/documentos" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Documentos">
-          <span className="nav-icon"><FileText size={18} /></span>
-          <span className="nav-label">Documentos</span>
+        <NavLink to="/documentos" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title={t("nav.documents")}>
+          <span className="nav-icon"><FileText size={18} aria-hidden="true" /></span>
+          <span className="nav-label">{t("nav.documents")}</span>
         </NavLink>
       </nav>
+
+      <div className="sidebar-lang">
+        <LanguageSwitcher />
+      </div>
 
       <div className="sidebar-footer">
         <Avatar className="doctor-avatar" name={doctor.name} initials={doctor.initials} size={34} />
@@ -110,11 +118,17 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
           <div className="doctor-name">{doctor.name}</div>
           <div className="doctor-role">{doctor.role} · {doctor.crefito}</div>
         </div>
-        <span className="settings-icon"><Settings size={16} /></span>
+        <span className="settings-icon" aria-hidden="true"><Settings size={16} /></span>
       </div>
 
-      <button className="sidebar-toggle" onClick={onToggle} title={collapsed ? "Expandir menu" : "Recolher menu"}>
-        {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+      <button
+        className="sidebar-toggle"
+        onClick={onToggle}
+        title={collapsed ? t("nav.expand") : t("nav.collapse")}
+        aria-label={collapsed ? t("nav.expand") : t("nav.collapse")}
+        aria-expanded={!collapsed}
+      >
+        {collapsed ? <PanelLeftOpen size={18} aria-hidden="true" /> : <PanelLeftClose size={18} aria-hidden="true" />}
       </button>
     </aside>
   );

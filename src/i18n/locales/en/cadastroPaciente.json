@@ -1,0 +1,43 @@
+{
+  "pageTitle": "New Patient",
+  "pageSubtitle": "Fill in the details to register a new patient",
+  "sections": {
+    "dadosPessoais": "Personal Data",
+    "contato": "Contact",
+    "informacoesClinias": "Clinical Information",
+    "primeiraSessao": "First Session"
+  },
+  "fields": {
+    "nomeCompleto": "Full name",
+    "nomePlaceholder": "E.g.: Ana Souza",
+    "idade": "Age",
+    "idadePlaceholder": "E.g.: 35",
+    "sexo": "Sex",
+    "condicao": "Condition / Diagnosis",
+    "condicaoPlaceholder": "E.g.: Chronic low back pain, Patellar tendinitis...",
+    "telefone": "Phone",
+    "telefonePlaceholder": "(11) 99999-9999",
+    "email": "E-mail",
+    "emailPlaceholder": "patient@email.com",
+    "statusInicial": "Initial status",
+    "totalSessoes": "Total planned sessions",
+    "totalSessoesPlaceholder": "E.g.: 20",
+    "dorEVA": "Initial pain (VAS)",
+    "previsaoAlta": "Estimated discharge",
+    "data": "Date",
+    "horario": "Time",
+    "observacoes": "Initial notes",
+    "observacoesPlaceholder": "Additional information about the patient, history, restrictions..."
+  },
+  "sexoLabels": {
+    "Masculino": "Male",
+    "Feminino": "Female",
+    "Outro": "Other"
+  },
+  "statusLabels": {
+    "Ativo": "Active",
+    "Avaliação": "Assessment",
+    "Alta": "Discharged"
+  },
+  "savePatient": "Save Patient"
+}

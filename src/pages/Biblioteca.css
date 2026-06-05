@@ -27,9 +27,11 @@
   cursor: pointer;
 }
 
-.bib-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .bib-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
 }
 
 .bib-thumb {
@@ -101,6 +103,21 @@
     flex-direction: column;
     align-items: stretch;
     gap: var(--space-2-5);
+  }
+  /* The category filter tabs were clipped past "Mobilidade" on narrow screens.
+     Let the tab strip scroll horizontally instead of overflowing the viewport. */
+  .biblioteca-filters .ds-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .biblioteca-filters .ds-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .biblioteca-filters .ds-tab {
+    flex-shrink: 0;
   }
   .biblioteca-grid {
     grid-template-columns: repeat(2, 1fr);

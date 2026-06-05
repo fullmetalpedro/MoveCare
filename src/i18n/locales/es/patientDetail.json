@@ -1,0 +1,21 @@
+{
+  "sectionsNav": "Navegación de secciones",
+  "tabs": {
+    "resumo": "Resumen",
+    "plano": "Plan de Trat.",
+    "evolucao": "Evolución",
+    "documentos": "Documentos",
+    "novaAvaliacao": "Nueva evaluación"
+  },
+  "stats": {
+    "adesao": "Adherencia",
+    "sessoes": "Sesiones",
+    "dorEva": "Dolor (EVA)",
+    "proximaSessao": "Próxima Sesión"
+  },
+  "vsLastMonth": "{{arrow}} {{pct}}% vs mes anterior",
+  "previsaoAlta": "Alta prevista: {{date}}",
+  "dorInicio": "Inicio: {{value}}/10",
+  "semSessaoAgendada": "Sin sesión programada",
+  "session": "Sesión #{{n}} de {{total}}"
+}

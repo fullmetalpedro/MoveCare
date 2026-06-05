@@ -1,0 +1,25 @@
+{
+  "pageTitle": "Pacientes",
+  "newPatient": "Nuevo Paciente",
+  "searchPlaceholder": "Buscar paciente...",
+  "filters": {
+    "Todos": "Todos",
+    "Ativos": "Activos",
+    "Avaliação": "Evaluación",
+    "Alta": "Alta"
+  },
+  "columns": {
+    "patient": "PACIENTE",
+    "age": "EDAD",
+    "status": "ESTADO",
+    "sessions": "SESIONES",
+    "adherence": "ADHERENCIA",
+    "lastVisit": "ÚLTIMA"
+  },
+  "statusLabels": {
+    "Ativo": "Activo",
+    "Avaliação": "Evaluación",
+    "Alta": "Alta"
+  },
+  "rowAriaLabel": "Ver detalles de {{name}}"
+}

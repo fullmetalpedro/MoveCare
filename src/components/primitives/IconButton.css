@@ -31,25 +31,27 @@
   background: var(--card-bg);
   box-shadow: var(--shadow-sm);
 }
-.ds-iconbtn--subtle:not(:disabled):hover {
-  box-shadow: var(--shadow-md);
-}
-
 .ds-iconbtn--outline {
   background: var(--card-bg);
   border: 1.5px solid var(--border);
   color: var(--text-secondary);
 }
-.ds-iconbtn--outline:not(:disabled):hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
 .ds-iconbtn--ghost {
   background: transparent;
   color: var(--text-secondary);
 }
-.ds-iconbtn--ghost:not(:disabled):hover {
-  background: var(--border-light);
-  color: var(--text-primary);
+@media (hover: hover) {
+  .ds-iconbtn--subtle:not(:disabled):hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .ds-iconbtn--outline:not(:disabled):hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .ds-iconbtn--ghost:not(:disabled):hover {
+    background: var(--border-light);
+    color: var(--text-primary);
+  }
 }

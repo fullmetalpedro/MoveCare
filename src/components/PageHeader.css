@@ -29,10 +29,6 @@
   box-shadow: var(--shadow-sm);
 }
 
-.back-btn:hover {
-  box-shadow: var(--shadow-md);
-}
-
 .page-title {
   font-size: 28px;
   font-weight: 700;
@@ -65,5 +61,11 @@
   .page-header-actions {
     flex-wrap: wrap;
     gap: 8px;
+  }
+}
+
+@media (hover: hover) {
+  .back-btn:hover {
+    box-shadow: var(--shadow-md);
   }
 }

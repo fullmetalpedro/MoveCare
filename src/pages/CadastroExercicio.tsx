@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Dumbbell, StretchHorizontal, Activity, Footprints, HeartPulse, Wind, Video, FileText } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { scrollToFirstError } from "../utils/scrollToError";
@@ -60,6 +61,7 @@ const SERIES_SUGESTOES = ["2x10 rep", "3x10 rep", "3x12 rep", "3x15 rep", "4x10 
  */
 export default function CadastroExercicio() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [form, setForm] = useState<FormData>({
     nome: "",
     categoria: "Fortalecimento",
@@ -98,29 +100,29 @@ export default function CadastroExercicio() {
   return (
     <div className="cadex-page">
       <PageHeader
-        title="Novo Exercício"
-        subtitle="Adicione um novo exercício à biblioteca"
+        title={t("cadastroExercicio.title")}
+        subtitle={t("cadastroExercicio.subtitle")}
         backTo="/biblioteca"
       />
 
       <form className="cadex-form" onSubmit={handleSubmit} noValidate>
         {/* ── Live preview (bespoke) ── */}
         <div className="cadex-preview-wrap">
-          <span className="cadex-preview-label">Pré-visualização</span>
+          <span className="cadex-preview-label">{t("cadastroExercicio.previewLabel")}</span>
           <div className="cadex-preview-card">
             <div className="cadex-prev-thumb" style={{ background: `${catInfo.color}12` }}>
-              <span style={{ color: catInfo.color, display: "flex" }}>{catInfo.icon}</span>
+              <span style={{ color: catInfo.color, display: "flex" }} aria-hidden="true">{catInfo.icon}</span>
               {form.temVideo && (
                 <span className="cadex-prev-play" style={{ background: catInfo.color }}>
-                  <Video size={10} color="#fff" />
+                  <Video size={10} color="#fff" aria-hidden="true" />
                 </span>
               )}
             </div>
             <div className="cadex-prev-info">
-              <span className="cadex-prev-nome">{form.nome || "Nome do exercício"}</span>
+              <span className="cadex-prev-nome">{form.nome || t("cadastroExercicio.previewNamePlaceholder")}</span>
               <span className="cadex-prev-meta">
                 <span className="cadex-prev-dot" style={{ background: catInfo.color }} />
-                {form.categoria}
+                {t(`cadastroExercicio.categories.${form.categoria}`)}
                 {form.series ? ` · ${form.series}` : ""}
               </span>
             </div>
@@ -132,24 +134,24 @@ export default function CadastroExercicio() {
                   color: nivelInfo?.color ?? "#86868B",
                 }}
               >
-                {form.nivel}
+                {t(`cadastroExercicio.levels.${form.nivel}`)}
               </span>
             </div>
           </div>
         </div>
 
-        <FormSection title="Informações Básicas" icon={<Dumbbell size={16} />}>
-          <FormField label="Nome do exercício" required colSpan={2} htmlFor="ex-nome" error={errors.nome}>
+        <FormSection title={t("cadastroExercicio.sections.basicInfo")} icon={<Dumbbell size={16} aria-hidden="true" />}>
+          <FormField label={t("cadastroExercicio.fields.name")} required colSpan={2} htmlFor="ex-nome" error={errors.nome}>
             <TextField
               id="ex-nome"
-              placeholder="Ex.: Agachamento Livre, Prancha Isométrica..."
+              placeholder={t("cadastroExercicio.fields.namePlaceholder")}
               value={form.nome}
               error={!!errors.nome}
               onChange={e => set("nome", e.target.value)}
             />
           </FormField>
 
-          <FormField label="Categoria" colSpan={2}>
+          <FormField label={t("cadastroExercicio.fields.category")} colSpan={2}>
             <div className="cadex-cat-grid">
               {CATEGORIAS.map(cat => (
                 <Chip
@@ -158,14 +160,14 @@ export default function CadastroExercicio() {
                   selected={form.categoria === cat.label}
                   onClick={() => set("categoria", cat.label)}
                 >
-                  <span style={{ display: "flex" }}>{cat.icon}</span>
-                  {cat.label}
+                  <span style={{ display: "flex" }} aria-hidden="true">{cat.icon}</span>
+                  {t(`cadastroExercicio.categories.${cat.label}`)}
                 </Chip>
               ))}
             </div>
           </FormField>
 
-          <FormField label="Nível de dificuldade">
+          <FormField label={t("cadastroExercicio.fields.level")}>
             <div className="ds-chip-row">
               {NIVEIS.map(niv => (
                 <Chip
@@ -174,16 +176,16 @@ export default function CadastroExercicio() {
                   selected={form.nivel === niv.label}
                   onClick={() => set("nivel", niv.label)}
                 >
-                  {niv.label}
+                  {t(`cadastroExercicio.levels.${niv.label}`)}
                 </Chip>
               ))}
             </div>
           </FormField>
 
-          <FormField label="Séries / Duração" required htmlFor="ex-series" error={errors.series}>
+          <FormField label={t("cadastroExercicio.fields.series")} required htmlFor="ex-series" error={errors.series}>
             <TextField
               id="ex-series"
-              placeholder="Ex.: 3x12 rep, 3x30s, 5 min..."
+              placeholder={t("cadastroExercicio.fields.seriesPlaceholder")}
               value={form.series}
               error={!!errors.series}
               onChange={e => set("series", e.target.value)}
@@ -202,18 +204,18 @@ export default function CadastroExercicio() {
           </FormField>
         </FormSection>
 
-        <FormSection title="Vídeo demonstrativo" icon={<Video size={16} />} iconColor="#5AC8FA">
+        <FormSection title={t("cadastroExercicio.sections.video")} icon={<Video size={16} aria-hidden="true" />} iconColor="#5AC8FA">
           <FormField colSpan={2}>
             <Toggle
               checked={form.temVideo}
               onChange={v => set("temVideo", v)}
-              label="Possui vídeo demonstrativo"
-              description="Informe o link do vídeo para o paciente assistir"
+              label={t("cadastroExercicio.toggle.label")}
+              description={t("cadastroExercicio.toggle.description")}
             />
           </FormField>
 
           {form.temVideo && (
-            <FormField label="URL do vídeo" colSpan={2} htmlFor="ex-video" error={errors.videoUrl}>
+            <FormField label={t("cadastroExercicio.fields.videoUrl")} colSpan={2} htmlFor="ex-video" error={errors.videoUrl}>
               <TextField
                 id="ex-video"
                 type="url"
@@ -226,21 +228,21 @@ export default function CadastroExercicio() {
           )}
         </FormSection>
 
-        <FormSection title="Descrição e Instruções" icon={<FileText size={16} />} iconColor="#34C759">
-          <FormField label="Descrição do exercício" colSpan={2} htmlFor="ex-desc">
+        <FormSection title={t("cadastroExercicio.sections.descriptionInstructions")} icon={<FileText size={16} aria-hidden="true" />} iconColor="#34C759">
+          <FormField label={t("cadastroExercicio.fields.description")} colSpan={2} htmlFor="ex-desc">
             <Textarea
               id="ex-desc"
-              placeholder="Descreva brevemente o objetivo e benefícios do exercício..."
+              placeholder={t("cadastroExercicio.fields.descriptionPlaceholder")}
               value={form.descricao}
               onChange={e => set("descricao", e.target.value)}
               rows={3}
             />
           </FormField>
 
-          <FormField label="Instruções de execução" colSpan={2} htmlFor="ex-instr">
+          <FormField label={t("cadastroExercicio.fields.instructions")} colSpan={2} htmlFor="ex-instr">
             <Textarea
               id="ex-instr"
-              placeholder="Passo a passo de como executar o exercício corretamente..."
+              placeholder={t("cadastroExercicio.fields.instructionsPlaceholder")}
               value={form.instrucoes}
               onChange={e => set("instrucoes", e.target.value)}
               rows={4}
@@ -250,10 +252,10 @@ export default function CadastroExercicio() {
 
         <div className="cadex-actions">
           <Button variant="secondary" onClick={() => navigate("/biblioteca")}>
-            Cancelar
+            {t("common.cancel")}
           </Button>
           <Button type="submit" variant="primary">
-            Salvar Exercício
+            {t("cadastroExercicio.saveExercise")}
           </Button>
         </div>
       </form>

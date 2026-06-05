@@ -1,0 +1,71 @@
+{
+  "pageTitle": "Progress",
+  "subtitle": {
+    "assessments_one": "assessment",
+    "assessments_other": "assessments",
+    "sessions_one": "session",
+    "sessions_other": "sessions"
+  },
+  "btnRegisterSession": "Log Session",
+  "btnNewAssessment": "New Assessment",
+  "formTitle": "New session note",
+  "formFields": {
+    "date": "Date",
+    "datePlaceholder": "DD/MM/YYYY",
+    "sessionNum": "Session No.",
+    "sessionNumPlaceholder": "E.g.: 12",
+    "exercisesDone": "Exercises completed",
+    "exercisesDonePlaceholder": "E.g.: 4",
+    "totalExercises": "Total exercises",
+    "totalExercisesFromPlan": "· from plan",
+    "totalExercisesPlaceholder": "E.g.: 7",
+    "observations": "Clinician notes",
+    "observationsPlaceholder": "Describe progress, difficulties, adjustments made during the session..."
+  },
+  "btnSaveSession": "Save Session",
+  "emptyState": {
+    "title": "No records yet",
+    "description": "Complete the first assessment or log a session note to get started."
+  },
+  "charts": {
+    "insufficientData": "Insufficient data for chart",
+    "tugTitle": "TUG — Timed Up and Go",
+    "tugSub": "Time (s) · lower is better",
+    "dinamometriaTitle": "Grip Dynamometry",
+    "dinamometriaSub": "Mean force (kgf) · higher is better",
+    "leftRight": "L {{left}} / R {{right}} kgf"
+  },
+  "sessions": {
+    "cardTitle": "Session Log",
+    "count_one": "{{count}} session",
+    "count_other": "{{count}} sessions",
+    "sessionBadge": "Session #{{num}}",
+    "expandLabel": "Expand session {{num}}",
+    "collapseLabel": "Collapse session {{num}}"
+  },
+  "assessments": {
+    "cardTitle": "Assessment History",
+    "count_one": "{{count}} assessment",
+    "count_other": "{{count}} assessments",
+    "expandHint": "details",
+    "collapseHint": "close",
+    "clickToViewHint": "Click to view results",
+    "shareWhatsApp": "Share via WhatsApp"
+  },
+  "modal": {
+    "title": "Share via WhatsApp",
+    "subtitle": "Copy and paste into the patient conversation",
+    "closeLabel": "Close modal"
+  },
+  "testRows": {
+    "tempo": "Time",
+    "distancia": "Distance",
+    "esquerda": "Left",
+    "direita": "Right",
+    "repeticoes": "Repetitions (30s)",
+    "velocidade": "Speed",
+    "total": "Total",
+    "observacao": "Observation",
+    "noData": "No numeric data"
+  }
+}

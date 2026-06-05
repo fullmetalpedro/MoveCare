@@ -1,0 +1,18 @@
+{
+  "greeting": "Bom dia, {{name}}",
+  "headerSubtitle": "Terça-feira, 29 de Abril · {{count}} pacientes hoje",
+  "notifications": "Notificações",
+  "stats": {
+    "pacientesHoje": "Pacientes Hoje",
+    "pacientesAtivos": "Pacientes Ativos",
+    "emAvaliacao": "em avaliação",
+    "adesaoGeral": "Adesão Geral",
+    "vsWeekPrior": "% vs semana anterior",
+    "receitaMes": "Receita do Mês"
+  },
+  "agenda": {
+    "title": "Agenda de Hoje",
+    "viewFull": "Ver completa",
+    "viewFullAriaLabel": "Ver agenda completa"
+  }
+}

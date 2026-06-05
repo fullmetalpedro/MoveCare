@@ -25,11 +25,6 @@
 .ds-chip--sm { padding: 4px 12px; font-size: var(--text-sm); }
 .ds-chip--md { padding: 9px 14px; font-size: var(--text-md); }
 
-.ds-chip:not(:disabled):hover {
-  border-color: var(--text-muted);
-  color: var(--text-primary);
-}
-
 .ds-chip.is-selected {
   font-weight: var(--weight-semibold);
 }
@@ -61,8 +56,15 @@
   color: var(--text-primary);
 }
 
-/* Hover hint toward the tone color before selection (accent default) */
-.ds-chip--accent:not(:disabled):not(.is-selected):hover {
-  border-color: var(--accent);
-  color: var(--accent);
+@media (hover: hover) {
+  .ds-chip:not(:disabled):hover {
+    border-color: var(--text-muted);
+    color: var(--text-primary);
+  }
+
+  /* Hover hint toward the tone color before selection (accent default) */
+  .ds-chip--accent:not(:disabled):not(.is-selected):hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 }

@@ -54,9 +54,6 @@
   cursor: pointer;
   transition: border-color var(--duration-base) var(--ease-standard);
 }
-.ds-toggle-row:not(:disabled):hover {
-  border-color: var(--text-muted);
-}
 .ds-toggle-row:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -74,4 +71,10 @@
 .ds-toggle-row__sub {
   font-size: var(--text-md);
   color: var(--text-muted);
+}
+
+@media (hover: hover) {
+  .ds-toggle-row:not(:disabled):hover {
+    border-color: var(--text-muted);
+  }
 }

@@ -16,10 +16,13 @@
   transition: box-shadow var(--duration-slow) var(--ease-standard),
     transform var(--duration-base) var(--ease-standard);
 }
-.ds-card--interactive:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
 .ds-card--interactive:active {
   transform: translateY(0);
+}
+
+@media (hover: hover) {
+  .ds-card--interactive:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
 }

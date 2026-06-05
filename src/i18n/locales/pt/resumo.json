@@ -1,0 +1,14 @@
+{
+  "evolucao": {
+    "title": "Última Evolução",
+    "empty": "Nenhuma evolução registrada",
+    "new": "Nova Evolução",
+    "history": "Histórico"
+  },
+  "adesao": {
+    "title": "Adesão aos Exercícios (7 dias)",
+    "summary": "{{done}} de {{total}} dias · {{pct}}% esta semana",
+    "done": "Feito",
+    "missed": "Não feito"
+  }
+}

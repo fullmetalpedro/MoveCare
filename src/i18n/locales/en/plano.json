@@ -1,0 +1,21 @@
+{
+  "plano": {
+    "title": "Treatment Plan",
+    "sendWhatsApp": "Send via WhatsApp",
+    "addFromLibrary": "Add from Library",
+    "noExercises": "No exercises added to the plan.",
+    "noPlan": "No treatment plan registered for this patient.",
+    "series": "Sets: {{count}}",
+    "noVideo": "No video",
+    "dragZone": "Drag from Library or click to add",
+    "observations": "Plan Observations",
+    "drag": "Drag exercise",
+    "edit": "Edit exercise",
+    "delete": "Delete exercise",
+    "wa": {
+      "title": "Share on WhatsApp",
+      "subtitle": "Copy the text and paste it in the conversation with the patient",
+      "copyText": "Copy text"
+    }
+  }
+}

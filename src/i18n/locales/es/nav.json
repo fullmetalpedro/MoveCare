@@ -1,0 +1,12 @@
+{
+  "dashboard": "Panel",
+  "agenda": "Agenda",
+  "patients": "Pacientes",
+  "library": "Biblioteca",
+  "documents": "Documentos",
+  "settings": "Configuración",
+  "brandSubtitle": "FISIOTERAPIA",
+  "collapse": "Contraer menú",
+  "expand": "Expandir menú",
+  "alertsLabel": "{{count}} alerta(s) activa(s)"
+}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useOutletContext, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   Timer, Dumbbell, PlusCircle, ClipboardList, CheckCircle2, Circle,
   ChevronDown, ChevronUp, MessageCircle, Copy, Check, X, ClipboardCheck,
@@ -32,6 +33,7 @@ const TEST_LABELS: Record<string, string> = {
  * @returns A portal overlay containing the share modal.
  */
 function WAModal({ text, onClose }: { text: string; onClose: () => void }) {
+  const { t } = useTranslation();
   const [closing, setClosing] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -58,20 +60,28 @@ function WAModal({ text, onClose }: { text: string; onClose: () => void }) {
       <div className="wa-modal">
         <div className="wa-modal-header">
           <div className="wa-modal-title-row">
-            <span className="wa-icon-badge"><MessageCircle size={18} /></span>
+            <span className="wa-icon-badge" aria-hidden="true"><MessageCircle size={18} /></span>
             <div>
-              <div className="wa-modal-title">Compartilhar no WhatsApp</div>
-              <div className="wa-modal-sub">Copie e cole na conversa com o paciente</div>
+              <div className="wa-modal-title">{t("evolucao.modal.title")}</div>
+              <div className="wa-modal-sub">{t("evolucao.modal.subtitle")}</div>
             </div>
           </div>
-          <button className="wa-close-btn" onClick={handleClose}><X size={18} /></button>
+          <button
+            className="wa-close-btn"
+            onClick={handleClose}
+            aria-label={t("common.close")}
+          >
+            <X size={18} aria-hidden="true" />
+          </button>
         </div>
         <div className="wa-modal-body">
           <pre className="wa-text-block">{text}</pre>
         </div>
         <div className="wa-modal-footer">
           <button className={`wa-copy-btn${copied ? " copied" : ""}`} onClick={handleCopy}>
-            {copied ? <><Check size={15} /> Copiado!</> : <><Copy size={15} /> Copiar texto</>}
+            {copied
+              ? <><Check size={15} aria-hidden="true" /> {t("common.copied")}</>
+              : <><Copy size={15} aria-hidden="true" /> {t("common.copy")}</>}
           </button>
         </div>
       </div>
@@ -91,8 +101,9 @@ function WAModal({ text, onClose }: { text: string; onClose: () => void }) {
  * @returns An `<svg>` sparkline, or a "Dados insuficientes" paragraph if fewer than 2 points.
  */
 function Sparkline({ values, color, invert = false }: { values: number[]; color: string; invert?: boolean }) {
+  const { t } = useTranslation();
   const W = 300, H = 72, PAD = 10;
-  if (values.length < 2) return <p className="spark-na">Dados insuficientes para gráfico</p>;
+  if (values.length < 2) return <p className="spark-na">{t("evolucao.charts.insufficientData")}</p>;
   const display = invert ? values.map(v => -v) : values;
   const min = Math.min(...display), max = Math.max(...display), range = max - min || 1;
   const pts: [number, number][] = display.map((v, i) => [
@@ -103,7 +114,7 @@ function Sparkline({ values, color, invert = false }: { values: number[]; color:
   const area = `M${pts[0][0]},${H} ${pts.map(([x, y]) => `L${x},${y}`).join(" ")} L${pts[pts.length - 1][0]},${H} Z`;
   const gradId = `g${color.replace("#", "")}`;
   return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: "visible" }}>
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: "visible" }} aria-hidden="true">
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={color} stopOpacity="0.18" />
@@ -133,7 +144,7 @@ function DeltaBadge({ first, last, invertGood }: { first: number; last: number; 
   const good = invertGood ? diff < 0 : diff > 0;
   const pct = Math.abs(diff / first * 100).toFixed(0);
   return (
-    <span className={`delta-badge ${good ? "delta-good" : "delta-bad"}`}>
+    <span className={`delta-badge ${good ? "delta-good" : "delta-bad"}`} aria-hidden="true">
       {diff < 0 ? "↓" : "↑"} {pct}%
     </span>
   );
@@ -195,6 +206,7 @@ function makeEmptyForm(totalPlano: number, nextSessao: number): NovaRegistroForm
  * // Rendered at /pacientes/:id/evolucao
  */
 export default function Evolucao() {
+  const { t } = useTranslation();
   const paciente = useOutletContext<Paciente>();
   const navigate = useNavigate();
   const avaliacoes = paciente.avaliacoes ?? [];
@@ -267,20 +279,20 @@ export default function Evolucao() {
       {/* header */}
       <div className="evolucao-header">
         <div>
-          <h1>Evolução</h1>
+          <h1>{t("evolucao.pageTitle")}</h1>
           <p className="evolucao-subtitle">
             {paciente.nome}
-            {avaliacoes.length > 0 && ` · ${avaliacoes.length} ${avaliacoes.length !== 1 ? "avaliações" : "avaliação"}`}
-            {registros.length > 0 && ` · ${registros.length} ${registros.length !== 1 ? "sessões" : "sessão"}`}
+            {avaliacoes.length > 0 && ` · ${avaliacoes.length} ${t("evolucao.subtitle.assessments", { count: avaliacoes.length })}`}
+            {registros.length > 0 && ` · ${registros.length} ${t("evolucao.subtitle.sessions", { count: registros.length })}`}
           </p>
         </div>
         {!isEmpty && (
           <div className="evolucao-header-btns">
             <button className="btn-nova-av btn-nova-sessao" onClick={openFormReset}>
-              <ClipboardList size={15} /> Registrar Sessão
+              <ClipboardList size={15} aria-hidden="true" /> {t("evolucao.btnRegisterSession")}
             </button>
             <button className="btn-nova-av" onClick={() => navigate(`/pacientes/${paciente.id}/avaliacao/nova`)}>
-              <PlusCircle size={15} /> Nova Avaliação
+              <PlusCircle size={15} aria-hidden="true" /> {t("evolucao.btnNewAssessment")}
             </button>
           </div>
         )}
@@ -289,54 +301,54 @@ export default function Evolucao() {
       {/* formulário nova sessão */}
       {showForm && (
         <div className="card sessao-form-card">
-          <h2 className="sessao-form-title">Nova observação de sessão</h2>
+          <h2 className="sessao-form-title">{t("evolucao.formTitle")}</h2>
           <div className="sessao-form-grid">
             <div className={`cadex-group${errors.data ? " has-error" : ""}`}>
-              <label className="cadex-label">Data</label>
-              <input className="cadex-input" type="text" placeholder="DD/MM/AAAA"
+              <label className="cadex-label">{t("evolucao.formFields.date")}</label>
+              <input className="cadex-input" type="text" placeholder={t("evolucao.formFields.datePlaceholder")}
                 value={form.data} onChange={e => setField("data", e.target.value)} />
               {errors.data && <span className="cadex-error">{errors.data}</span>}
             </div>
 
             <div className={`cadex-group${errors.sessaoNum ? " has-error" : ""}`}>
-              <label className="cadex-label">Nº da Sessão</label>
-              <input className="cadex-input" type="number" min="1" placeholder="Ex.: 12"
+              <label className="cadex-label">{t("evolucao.formFields.sessionNum")}</label>
+              <input className="cadex-input" type="number" min="1" placeholder={t("evolucao.formFields.sessionNumPlaceholder")}
                 value={form.sessaoNum} onChange={e => setField("sessaoNum", e.target.value)} />
               {errors.sessaoNum && <span className="cadex-error">{errors.sessaoNum}</span>}
             </div>
 
             <div className={`cadex-group${errors.exerciciosFeitos ? " has-error" : ""}`}>
-              <label className="cadex-label">Exercícios feitos</label>
-              <input className="cadex-input" type="number" min="0" placeholder="Ex.: 4"
+              <label className="cadex-label">{t("evolucao.formFields.exercisesDone")}</label>
+              <input className="cadex-input" type="number" min="0" placeholder={t("evolucao.formFields.exercisesDonePlaceholder")}
                 value={form.exerciciosFeitos} onChange={e => setField("exerciciosFeitos", e.target.value)} />
               {errors.exerciciosFeitos && <span className="cadex-error">{errors.exerciciosFeitos}</span>}
             </div>
 
             <div className={`cadex-group${errors.totalExercicios ? " has-error" : ""}`}>
               <label className="cadex-label">
-                Total de exercícios
+                {t("evolucao.formFields.totalExercises")}
                 {totalExerciciosPlano > 0 && (
-                  <span className="cadex-label-hint"> · do plano</span>
+                  <span className="cadex-label-hint"> {t("evolucao.formFields.totalExercisesFromPlan")}</span>
                 )}
               </label>
               <input className="cadex-input" type="number" min="1"
-                placeholder={totalExerciciosPlano > 0 ? String(totalExerciciosPlano) : "Ex.: 7"}
+                placeholder={totalExerciciosPlano > 0 ? String(totalExerciciosPlano) : t("evolucao.formFields.totalExercisesPlaceholder")}
                 value={form.totalExercicios}
                 onChange={e => setField("totalExercicios", e.target.value)} />
               {errors.totalExercicios && <span className="cadex-error">{errors.totalExercicios}</span>}
             </div>
 
             <div className={`cadex-group sessao-obs-group${errors.observacoes ? " has-error" : ""}`}>
-              <label className="cadex-label">Observações do profissional</label>
+              <label className="cadex-label">{t("evolucao.formFields.observations")}</label>
               <textarea className="cadex-input cadex-textarea" rows={4}
-                placeholder="Descreva a evolução, dificuldades, ajustes realizados na sessão..."
+                placeholder={t("evolucao.formFields.observationsPlaceholder")}
                 value={form.observacoes} onChange={e => setField("observacoes", e.target.value)} />
               {errors.observacoes && <span className="cadex-error">{errors.observacoes}</span>}
             </div>
           </div>
           <div className="sessao-form-actions">
-            <button className="btn-cancelar" onClick={() => { setShowForm(false); setErrors({}); }}>Cancelar</button>
-            <button className="btn-salvar" onClick={handleSalvar}>Salvar Sessão</button>
+            <button className="btn-cancelar" onClick={() => { setShowForm(false); setErrors({}); }}>{t("common.cancel")}</button>
+            <button className="btn-salvar" onClick={handleSalvar}>{t("evolucao.btnSaveSession")}</button>
           </div>
         </div>
       )}
@@ -344,15 +356,15 @@ export default function Evolucao() {
       {/* estado vazio */}
       {isEmpty && !showForm && (
         <div className="evolucao-empty">
-          <div className="evolucao-empty-icon"><Dumbbell size={40} /></div>
-          <h2>Sem registros ainda</h2>
-          <p>Realize a primeira avaliação ou registre a observação de uma sessão para começar.</p>
+          <div className="evolucao-empty-icon" aria-hidden="true"><Dumbbell size={40} /></div>
+          <h2>{t("evolucao.emptyState.title")}</h2>
+          <p>{t("evolucao.emptyState.description")}</p>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
             <button className="btn-nova-av" onClick={() => navigate(`/pacientes/${paciente.id}/avaliacao/nova`)}>
-              <PlusCircle size={15} /> Nova Avaliação
+              <PlusCircle size={15} aria-hidden="true" /> {t("evolucao.btnNewAssessment")}
             </button>
             <button className="btn-nova-av btn-nova-sessao" onClick={openFormReset}>
-              <ClipboardList size={15} /> Registrar Sessão
+              <ClipboardList size={15} aria-hidden="true" /> {t("evolucao.btnRegisterSession")}
             </button>
           </div>
         </div>
@@ -364,12 +376,12 @@ export default function Evolucao() {
           {tugData.length > 0 && (
             <div className="ev-chart-card">
               <div className="ev-chart-header">
-                <div className="ev-chart-icon" style={{ background: "rgba(0,122,255,0.1)", color: "#007AFF" }}>
+                <div className="ev-chart-icon" style={{ background: "rgba(0,122,255,0.1)", color: "#007AFF" }} aria-hidden="true">
                   <Timer size={18} />
                 </div>
                 <div className="ev-chart-titles">
-                  <div className="ev-chart-title">TUG — Timed Up and Go</div>
-                  <div className="ev-chart-sub">Tempo (s) · menor é melhor</div>
+                  <div className="ev-chart-title">{t("evolucao.charts.tugTitle")}</div>
+                  <div className="ev-chart-sub">{t("evolucao.charts.tugSub")}</div>
                 </div>
                 {tugData.length >= 2 && <DeltaBadge first={tugData[0].tempo} last={tugData[tugData.length - 1].tempo} invertGood />}
               </div>
@@ -389,12 +401,12 @@ export default function Evolucao() {
           {dinaData.length > 0 && (
             <div className="ev-chart-card">
               <div className="ev-chart-header">
-                <div className="ev-chart-icon" style={{ background: "rgba(52,199,89,0.1)", color: "#34C759" }}>
+                <div className="ev-chart-icon" style={{ background: "rgba(52,199,89,0.1)", color: "#34C759" }} aria-hidden="true">
                   <Dumbbell size={18} />
                 </div>
                 <div className="ev-chart-titles">
-                  <div className="ev-chart-title">Dinamometria de Preensão</div>
-                  <div className="ev-chart-sub">Força média (kgf) · maior é melhor</div>
+                  <div className="ev-chart-title">{t("evolucao.charts.dinamometriaTitle")}</div>
+                  <div className="ev-chart-sub">{t("evolucao.charts.dinamometriaSub")}</div>
                 </div>
                 {dinaData.length >= 2 && (
                   <DeltaBadge
@@ -410,7 +422,7 @@ export default function Evolucao() {
                 {dinaData.map((d, i) => (
                   <div key={i} className="ev-point">
                     <span className="ev-point-date">{d.data}</span>
-                    <span className="ev-point-val">E {d.esquerda} / D {d.direita} kgf</span>
+                    <span className="ev-point-val">{t("evolucao.charts.leftRight", { left: d.esquerda, right: d.direita })}</span>
                   </div>
                 ))}
               </div>
@@ -424,10 +436,10 @@ export default function Evolucao() {
         <div className="card sessoes-card">
           <div className="sessoes-card-header">
             <div className="sessoes-card-title-row">
-              <ClipboardList size={18} className="sessoes-icon" />
-              <h2>Registro de Sessões</h2>
+              <ClipboardList size={18} className="sessoes-icon" aria-hidden="true" />
+              <h2>{t("evolucao.sessions.cardTitle")}</h2>
             </div>
-            <span className="sessoes-count">{registros.length} {registros.length !== 1 ? "sessões" : "sessão"}</span>
+            <span className="sessoes-count">{t("evolucao.sessions.count", { count: registros.length })}</span>
           </div>
           <div className="sessoes-list">
             {registros.map(reg => {
@@ -435,22 +447,29 @@ export default function Evolucao() {
               const isExpanded = expandedSessaoId === reg.id;
               return (
                 <div key={reg.id} className={`sessao-item${isExpanded ? " expanded" : ""}`}>
-                  <button className="sessao-item-header" onClick={() => setExpandedSessaoId(isExpanded ? null : reg.id)}>
+                  <button
+                    className="sessao-item-header"
+                    onClick={() => setExpandedSessaoId(isExpanded ? null : reg.id)}
+                    aria-expanded={isExpanded}
+                    aria-label={isExpanded
+                      ? t("evolucao.sessions.collapseLabel", { num: reg.sessaoNum })
+                      : t("evolucao.sessions.expandLabel", { num: reg.sessaoNum })}
+                  >
                     <div className="sessao-meta">
-                      <span className="sessao-num-badge">Sessão #{reg.sessaoNum}</span>
+                      <span className="sessao-num-badge">{t("evolucao.sessions.sessionBadge", { num: reg.sessaoNum })}</span>
                       <span className="sessao-data">{reg.data}</span>
                     </div>
                     <div className="sessao-right">
                       <div className="sessao-adesao-inline">
                         {pct >= 80
-                          ? <CheckCircle2 size={14} style={{ color: "#34C759" }} />
-                          : <Circle size={14} style={{ color: pct >= 50 ? "#FF9500" : "#FF3B30" }} />
+                          ? <CheckCircle2 size={14} style={{ color: "#34C759" }} aria-hidden="true" />
+                          : <Circle size={14} style={{ color: pct >= 50 ? "#FF9500" : "#FF3B30" }} aria-hidden="true" />
                         }
                         <span style={{ color: pct >= 80 ? "#34C759" : pct >= 50 ? "#FF9500" : "#FF3B30", fontSize: 13, fontWeight: 600 }}>
                           {reg.exerciciosFeitos}/{reg.totalExercicios}
                         </span>
                       </div>
-                      {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                      {isExpanded ? <ChevronUp size={16} aria-hidden="true" /> : <ChevronDown size={16} aria-hidden="true" />}
                     </div>
                   </button>
                   {isExpanded && (
@@ -471,10 +490,10 @@ export default function Evolucao() {
         <div className="card av-historico-card">
           <div className="sessoes-card-header">
             <div className="sessoes-card-title-row">
-              <ClipboardCheck size={18} className="sessoes-icon" />
-              <h2>Histórico de Avaliações</h2>
+              <ClipboardCheck size={18} className="sessoes-icon" aria-hidden="true" />
+              <h2>{t("evolucao.assessments.cardTitle")}</h2>
             </div>
-            <span className="sessoes-count">{avaliacoes.length} {avaliacoes.length !== 1 ? "avaliações" : "avaliação"}</span>
+            <span className="sessoes-count">{t("evolucao.assessments.count", { count: avaliacoes.length })}</span>
           </div>
 
           <div className="sessoes-list">
@@ -485,7 +504,8 @@ export default function Evolucao() {
                   <button
                     className="sessao-item-header av-item-header"
                     onClick={() => setExpandedAvId(isExpanded ? null : av.id)}
-                    title="Clique para ver os resultados"
+                    aria-expanded={isExpanded}
+                    title={t("evolucao.assessments.clickToViewHint")}
                   >
                     <div className="sessao-meta">
                       <span className="sessao-num-badge">{av.data}</span>
@@ -497,8 +517,8 @@ export default function Evolucao() {
                       ))}
                     </div>
                     <div className="sessao-right">
-                      <span className="av-expand-hint">{isExpanded ? "fechar" : "detalhes"}</span>
-                      {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                      <span className="av-expand-hint">{isExpanded ? t("evolucao.assessments.collapseHint") : t("evolucao.assessments.expandHint")}</span>
+                      {isExpanded ? <ChevronUp size={16} aria-hidden="true" /> : <ChevronDown size={16} aria-hidden="true" />}
                     </div>
                   </button>
 
@@ -513,7 +533,7 @@ export default function Evolucao() {
                         className="wa-share-btn"
                         onClick={() => setWaText(buildAvaliacaoWhatsAppText(paciente, av))}
                       >
-                        <MessageCircle size={14} /> Compartilhar no WhatsApp
+                        <MessageCircle size={14} aria-hidden="true" /> {t("evolucao.assessments.shareWhatsApp")}
                       </button>
                     </div>
                   )}
@@ -541,36 +561,37 @@ export default function Evolucao() {
  * @returns A card `<div>` with the test label and a list of result rows.
  */
 function AvaliacaoTesteCard({ teste }: { teste: TesteResult }) {
+  const { t } = useTranslation();
   const label = TEST_LABELS[teste.tipo] ?? teste.tipo;
 
   const rows: [string, string][] = [];
   switch (teste.tipo) {
     case "tug":
-      rows.push(["Tempo", `${teste.tempoSegundos}s`], ["Distância", `${teste.distanciaMetros}m`]);
+      rows.push([t("evolucao.testRows.tempo"), `${teste.tempoSegundos}s`], [t("evolucao.testRows.distancia"), `${teste.distanciaMetros}m`]);
       break;
     case "dinamometria":
-      rows.push(["Esquerda", `${teste.esquerda} kgf`], ["Direita", `${teste.direita} kgf`]);
+      rows.push([t("evolucao.testRows.esquerda"), `${teste.esquerda} kgf`], [t("evolucao.testRows.direita"), `${teste.direita} kgf`]);
       break;
     case "mrc":
       teste.grupos.forEach(g => rows.push([g.nome, `${g.valor}/5`]));
       break;
     case "sit_to_stand":
-      rows.push(["Repetições (30s)", String(teste.repeticoes)]);
+      rows.push([t("evolucao.testRows.repeticoes"), String(teste.repeticoes)]);
       break;
     case "10mwt":
-      rows.push(["Tempo", `${teste.tempoSegundos}s`], ["Velocidade", `${teste.velocidade} m/s`]);
+      rows.push([t("evolucao.testRows.tempo"), `${teste.tempoSegundos}s`], [t("evolucao.testRows.velocidade"), `${teste.velocidade} m/s`]);
       break;
     case "dgi":
-      rows.push(["Total", `${teste.total}/24`]);
+      rows.push([t("evolucao.testRows.total"), `${teste.total}/24`]);
       break;
     case "tdr":
-      if (teste.observacao) rows.push(["Observação", teste.observacao]);
+      if (teste.observacao) rows.push([t("evolucao.testRows.observacao"), teste.observacao]);
       break;
     case "mmse":
-      rows.push(["Total", `${teste.total}/30`]);
+      rows.push([t("evolucao.testRows.total"), `${teste.total}/30`]);
       break;
     case "moca":
-      rows.push(["Total", `${teste.total}/30`]);
+      rows.push([t("evolucao.testRows.total"), `${teste.total}/30`]);
       break;
   }
 
@@ -584,7 +605,7 @@ function AvaliacaoTesteCard({ teste }: { teste: TesteResult }) {
             <span className="av-teste-val">{v}</span>
           </div>
         ))}
-        {rows.length === 0 && <span className="av-teste-key">Sem dados numéricos</span>}
+        {rows.length === 0 && <span className="av-teste-key">{t("evolucao.testRows.noData")}</span>}
       </div>
     </div>
   );

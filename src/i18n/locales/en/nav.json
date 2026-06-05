@@ -1,0 +1,12 @@
+{
+  "dashboard": "Dashboard",
+  "agenda": "Schedule",
+  "patients": "Patients",
+  "library": "Library",
+  "documents": "Documents",
+  "settings": "Settings",
+  "brandSubtitle": "PHYSIOTHERAPY",
+  "collapse": "Collapse menu",
+  "expand": "Expand menu",
+  "alertsLabel": "{{count}} active alert(s)"
+}

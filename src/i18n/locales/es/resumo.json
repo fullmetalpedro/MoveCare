@@ -1,0 +1,14 @@
+{
+  "evolucao": {
+    "title": "Última Nota de Evolución",
+    "empty": "Ninguna nota de evolución registrada",
+    "new": "Nueva Nota",
+    "history": "Historial"
+  },
+  "adesao": {
+    "title": "Adherencia a los Ejercicios (7 días)",
+    "summary": "{{done}} de {{total}} días · {{pct}}% esta semana",
+    "done": "Completado",
+    "missed": "No completado"
+  }
+}

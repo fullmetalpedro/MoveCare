@@ -1,0 +1,228 @@
+{
+  "pageTitle": "Nova Avaliação",
+  "saveTests": "Salvar {{count}} teste",
+  "saveTests_plural": "Salvar {{count}} testes",
+  "concluded": "Concluído",
+  "timerStart": "Iniciar",
+  "timerStop": "Parar",
+  "timerReset": "Resetar cronômetro",
+  "timerExpired": "Tempo esgotado!",
+  "decrement": "Decrementar",
+  "increment": "Incrementar",
+  "confirmTest": "Confirmar {{name}}",
+  "confirmReps": "Confirmar — {{count}} rep",
+  "confirmReps_plural": "Confirmar — {{count}} reps",
+  "closeModal": "Fechar",
+  "totalLabel": "Total:",
+  "belowNormalMoca": " · Abaixo do normal (< 26)",
+  "belowNormalMmse": " · Sugestivo de comprometimento (< 24)",
+  "speedCalc": "Velocidade calculada:",
+  "tests": {
+    "mrc": {
+      "label": "Escala MRC",
+      "desc": "Força muscular 0–5 por grupo",
+      "hint": "Selecione a pontuação (0 = sem contração, 5 = normal)"
+    },
+    "dinamometria": {
+      "label": "Dinamometria de Preensão",
+      "desc": "Força de preensão em kgf (D e E)",
+      "leftHand": "Mão esquerda (kgf)",
+      "rightHand": "Mão direita (kgf)",
+      "leftPlaceholder": "ex: 22.5",
+      "rightPlaceholder": "ex: 24.0"
+    },
+    "sit_to_stand": {
+      "label": "Sentar-Levantar 30s",
+      "desc": "Repetições em 30 segundos",
+      "hint": "Inicie o cronômetro de 30 s e conte as repetições completas enquanto o tempo corre.",
+      "countdownLabel": "Cronômetro 30 s",
+      "repsLabel": "Repetições completas"
+    },
+    "tug": {
+      "label": "TUG",
+      "desc": "Timed Up and Go — 3 metros",
+      "hint": "Paciente levanta, caminha 3 m, gira e senta. Inicie o cronômetro no movimento.",
+      "timeLabel": "Tempo"
+    },
+    "10mwt": {
+      "label": "10MWT",
+      "desc": "Velocidade de marcha — 10 metros",
+      "hint": "Velocidade de marcha confortável em pista de 10 m.",
+      "timeLabel": "Tempo",
+      "distLabel": "Distância (m)"
+    },
+    "dgi": {
+      "label": "DGI",
+      "desc": "Dynamic Gait Index — 8 itens (0–3)",
+      "hint": "0 = alteração grave · 1 = moderada · 2 = leve · 3 = normal"
+    },
+    "tdr": {
+      "label": "Teste do Relógio",
+      "desc": "Upload ou foto do desenho do relógio",
+      "hint": "Faça upload da foto do desenho do relógio do paciente.",
+      "imgAlt": "Relógio",
+      "changeImage": "Trocar imagem",
+      "uploadZone": "Clique para selecionar ou tirar foto"
+    },
+    "mmse": {
+      "label": "MMSE",
+      "desc": "Mini-Exame do Estado Mental (0–30)",
+      "modalTitle": "MMSE",
+      "modalSubtitle": "Mini-Exame do Estado Mental · 0–30 pontos"
+    },
+    "moca": {
+      "label": "MoCA",
+      "desc": "Montreal Cognitive Assessment (0–30)",
+      "modalTitle": "MoCA",
+      "modalSubtitle": "Montreal Cognitive Assessment · 0–30 pontos (normal ≥ 26)",
+      "preamble": "Antes de começar: leia estas 5 palavras ao paciente e peça para memorizar — Rosto, Seda, Igreja, Cravo, Vermelho. A evocação será avaliada no final."
+    }
+  },
+  "mrcGroups": {
+    "Abdutores do ombro D": "Abdutores do ombro D",
+    "Abdutores do ombro E": "Abdutores do ombro E",
+    "Flexores do cotovelo D": "Flexores do cotovelo D",
+    "Flexores do cotovelo E": "Flexores do cotovelo E",
+    "Extensores do punho D": "Extensores do punho D",
+    "Extensores do punho E": "Extensores do punho E",
+    "Flexores do quadril D": "Flexores do quadril D",
+    "Flexores do quadril E": "Flexores do quadril E",
+    "Extensores do joelho D": "Extensores do joelho D",
+    "Extensores do joelho E": "Extensores do joelho E",
+    "Dorsiflexores D": "Dorsiflexores D",
+    "Dorsiflexores E": "Dorsiflexores E"
+  },
+  "dgiItems": {
+    "Marcha em superfície plana": "Marcha em superfície plana",
+    "Mudança de velocidade": "Mudança de velocidade",
+    "Rotação horizontal da cabeça": "Rotação horizontal da cabeça",
+    "Rotação vertical da cabeça": "Rotação vertical da cabeça",
+    "Marcha e pivô (180°)": "Marcha e pivô (180°)",
+    "Degrau": "Degrau",
+      "Obstáculos": "Obstáculos",
+    "Escadas": "Escadas"
+  },
+  "mmse": {
+    "sections": {
+      "Orientação Temporal": {
+        "title": "Orientação Temporal",
+        "hint": "Pergunte: \"Em que ano estamos? Estação? Mês? Dia do mês? Dia da semana?\""
+      },
+      "Orientação Espacial": {
+        "title": "Orientação Espacial",
+        "hint": "Pergunte: \"Em que país, estado, cidade, local e andar estamos?\""
+      },
+      "Registro": {
+        "title": "Registro",
+        "hint": "Diga pausadamente: \"Carro, Vaso, Tijolo\". Peça para repetir imediatamente."
+      },
+      "Atenção e Cálculo": {
+        "title": "Atenção e Cálculo",
+        "hint": "\"Subtraia 7 de 100 e continue subtraindo.\" Sequência: 93 → 86 → 79 → 72 → 65. Alternativa: soletre MUNDO de trás para frente (O-D-N-U-M)."
+      },
+      "Evocação": {
+        "title": "Evocação",
+        "hint": "\"Lembra das três palavras que pedí para repetir? Quais eram?\" (Carro, Vaso, Tijolo)"
+      },
+      "Linguagem e Práxis": {
+        "title": "Linguagem e Práxis",
+        "hint": "Avalie cada item individualmente conforme as instruções."
+      }
+    },
+    "items": {
+      "t_ano":    "Ano atual",
+      "t_est":    "Estação do ano",
+      "t_mes":    "Mês atual",
+      "t_dia_m":  "Dia do mês",
+      "t_dia_s":  "Dia da semana",
+      "e_pais":   "País",
+      "e_estado": "Estado",
+      "e_cidade": "Cidade",
+      "e_local":  "Local / prédio",
+      "e_andar":  "Andar / sala",
+      "r_carro":  "Carro",
+      "r_vaso":   "Vaso",
+      "r_tijolo": "Tijolo",
+      "c_93":  "93  (ou O)",
+      "c_86":  "86  (ou D)",
+      "c_79":  "79  (ou N)",
+      "c_72":  "72  (ou U)",
+      "c_65":  "65  (ou M)",
+      "ev_carro":  "Carro",
+      "ev_vaso":   "Vaso",
+      "ev_tijolo": "Tijolo",
+      "l_nom_can":  "Nomeação — Caneta",
+      "l_nom_rel":  "Nomeação — Relógio de pulso",
+      "l_rep":      "Repetição — \"Nem aqui, nem ali, nem lá\"",
+      "l_cmd1":     "Comando — Pegar papel com mão direita",
+      "l_cmd2":     "Comando — Dobrar ao meio",
+      "l_cmd3":     "Comando — Colocar no chão",
+      "l_leitura":  "Leitura — Fechar os olhos ao ver \"FECHE OS OLHOS\"",
+      "l_escrita":  "Escrita — Frase completa com sentido",
+      "l_copia":    "Cópia — Dois pentágonos cruzados"
+    }
+  },
+  "moca": {
+    "sections": {
+      "Visoespacial / Executiva": {
+        "title": "Visoespacial / Executiva",
+        "hint": "Trilha alternada (1→A→2→B→3→C…), cópia do cubo, relógio com ponteiros às 11h10."
+      },
+      "Nomeação": {
+        "title": "Nomeação",
+        "hint": "Mostre imagens de animais incomuns: leão, rinoceronte, camelo/dromedário."
+      },
+      "Atenção": {
+        "title": "Atenção",
+        "hint": "Dígitos diretos (5 números), inversos (3 números), vigilância (tapinha na letra A) e cálculo subtrativo."
+      },
+      "Linguagem": {
+        "title": "Linguagem",
+        "hint": "Repetir duas frases longas exatamente. Dizer o máximo de palavras com letra F em 1 min (≥11 = 1 pt)."
+      },
+      "Abstração": {
+        "title": "Abstração",
+        "hint": "Pergunte o que têm em comum: \"laranja e banana\" → frutas; \"trem e bicicleta\" → transporte."
+      },
+      "Evocação Tardia": {
+        "title": "Evocação Tardia",
+        "hint": "Palavras lidas no início: Rosto, Seda, Igreja, Cravo, Vermelho. Perguntar ao final do teste."
+      },
+      "Orientação": {
+        "title": "Orientação",
+        "hint": "1 ponto por resposta correta."
+      }
+    },
+    "items": {
+      "ve_trilha":    "Trilha alternada",
+      "ve_cubo":      "Cópia do cubo 3D",
+      "ve_rel_cont":  "Relógio — contorno circular",
+      "ve_rel_nums":  "Relógio — números corretos",
+      "ve_rel_pont":  "Relógio — ponteiros em 11h10",
+      "n_leao":   "Leão",
+      "n_rino":   "Rinoceronte",
+      "n_camelo": "Camelo / Dromedário",
+      "a_dig_d":  "Dígitos diretos (ex: 2 1 8 5 4)",
+      "a_dig_i":  "Dígitos inversos (repetir de trás)",
+      "a_vigil":  "Vigilância — tapinha ao ouvir letra A",
+      "a_calc":   "Cálculo — subtração de 7 (0 erros=3 pts, 1=2, 2-3=1, 4-5=0)",
+      "l_frase1": "Frase 1 — \"O gato sempre se escondia sob o sofá quando os cachorros estavam na sala\"",
+      "l_frase2": "Frase 2 — segunda frase complexa padronizada",
+      "l_fluenc": "Fluência verbal — ≥11 palavras com letra F em 1 min",
+      "ab1": "Laranja e banana (Frutas)",
+      "ab2": "Trem e bicicleta (Meios de transporte)",
+      "ev_rosto":    "Rosto",
+      "ev_seda":     "Seda",
+      "ev_igreja":   "Igreja",
+      "ev_cravo":    "Cravo",
+      "ev_vermelho": "Vermelho",
+      "or_dia_m":  "Dia do mês",
+      "or_mes":    "Mês",
+      "or_ano":    "Ano",
+      "or_dia_s":  "Dia da semana",
+      "or_local":  "Local / instituição",
+      "or_cidade": "Cidade"
+    }
+  },
+  "saveAlert": "Avaliação salva! (funcionalidade de persistência não implementada)"
+}

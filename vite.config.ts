@@ -12,7 +12,9 @@ export default defineConfig({
       manifest: {
         name: 'MoveCare',
         short_name: 'MoveCare',
-        description: 'MoveCare application',
+        description: 'Gestão de pacientes, agenda e planos de tratamento de fisioterapia.',
+        lang: 'pt-BR',
+        categories: ['medical', 'health', 'productivity'],
         theme_color: '#007AFF',
         background_color: '#ffffff',
         display: 'standalone',

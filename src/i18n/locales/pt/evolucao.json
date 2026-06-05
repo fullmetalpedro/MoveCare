@@ -1,0 +1,71 @@
+{
+  "pageTitle": "Evolução",
+  "subtitle": {
+    "assessments_one": "avaliação",
+    "assessments_other": "avaliações",
+    "sessions_one": "sessão",
+    "sessions_other": "sessões"
+  },
+  "btnRegisterSession": "Registrar Sessão",
+  "btnNewAssessment": "Nova Avaliação",
+  "formTitle": "Nova observação de sessão",
+  "formFields": {
+    "date": "Data",
+    "datePlaceholder": "DD/MM/AAAA",
+    "sessionNum": "Nº da Sessão",
+    "sessionNumPlaceholder": "Ex.: 12",
+    "exercisesDone": "Exercícios feitos",
+    "exercisesDonePlaceholder": "Ex.: 4",
+    "totalExercises": "Total de exercícios",
+    "totalExercisesFromPlan": "· do plano",
+    "totalExercisesPlaceholder": "Ex.: 7",
+    "observations": "Observações do profissional",
+    "observationsPlaceholder": "Descreva a evolução, dificuldades, ajustes realizados na sessão..."
+  },
+  "btnSaveSession": "Salvar Sessão",
+  "emptyState": {
+    "title": "Sem registros ainda",
+    "description": "Realize a primeira avaliação ou registre a observação de uma sessão para começar."
+  },
+  "charts": {
+    "insufficientData": "Dados insuficientes para gráfico",
+    "tugTitle": "TUG — Timed Up and Go",
+    "tugSub": "Tempo (s) · menor é melhor",
+    "dinamometriaTitle": "Dinamometria de Preensão",
+    "dinamometriaSub": "Força média (kgf) · maior é melhor",
+    "leftRight": "E {{left}} / D {{right}} kgf"
+  },
+  "sessions": {
+    "cardTitle": "Registro de Sessões",
+    "count_one": "{{count}} sessão",
+    "count_other": "{{count}} sessões",
+    "sessionBadge": "Sessão #{{num}}",
+    "expandLabel": "Expandir sessão {{num}}",
+    "collapseLabel": "Recolher sessão {{num}}"
+  },
+  "assessments": {
+    "cardTitle": "Histórico de Avaliações",
+    "count_one": "{{count}} avaliação",
+    "count_other": "{{count}} avaliações",
+    "expandHint": "detalhes",
+    "collapseHint": "fechar",
+    "clickToViewHint": "Clique para ver os resultados",
+    "shareWhatsApp": "Compartilhar no WhatsApp"
+  },
+  "modal": {
+    "title": "Compartilhar no WhatsApp",
+    "subtitle": "Copie e cole na conversa com o paciente",
+    "closeLabel": "Fechar modal"
+  },
+  "testRows": {
+    "tempo": "Tempo",
+    "distancia": "Distância",
+    "esquerda": "Esquerda",
+    "direita": "Direita",
+    "repeticoes": "Repetições (30s)",
+    "velocidade": "Velocidade",
+    "total": "Total",
+    "observacao": "Observação",
+    "noData": "Sem dados numéricos"
+  }
+}

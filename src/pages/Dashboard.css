@@ -39,10 +39,6 @@
   transition: all 0.15s;
 }
 
-.notification-btn:hover {
-  box-shadow: var(--shadow-md);
-}
-
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -59,19 +55,10 @@
   transition: box-shadow 0.2s;
 }
 
-.stat-card:hover {
-  box-shadow: var(--shadow-md);
-}
-
 .stat-card.clickable {
   display: block;
   cursor: pointer;
   transition: box-shadow 0.2s, transform 0.15s;
-}
-
-.stat-card.clickable:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
 }
 
 .stat-card.clickable:active {
@@ -215,12 +202,6 @@
   transition: box-shadow 0.2s, transform 0.15s, background 0.15s;
 }
 
-.agenda-row.clickable:hover {
-  background: var(--card-bg);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-
 .agenda-row.clickable:active {
   transform: translateY(0);
 }
@@ -289,5 +270,26 @@
   .dashboard-header {
     flex-direction: column;
     gap: 12px;
+  }
+}
+
+@media (hover: hover) {
+  .notification-btn:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .stat-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .stat-card.clickable:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .agenda-row.clickable:hover {
+    background: var(--card-bg);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
   }
 }

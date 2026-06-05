@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
 import type { Doctor } from "../types";
@@ -32,6 +33,7 @@ interface LayoutProps {
  * </Route>
  */
 export default function Layout({ doctor, alertCount }: LayoutProps) {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
@@ -54,12 +56,19 @@ export default function Layout({ doctor, alertCount }: LayoutProps) {
 
   return (
     <div className={`layout ${collapsed ? "sidebar-collapsed" : ""} ${mobileOpen ? "mobile-nav-open" : ""}`}>
-      <button className="mobile-menu-btn" onClick={() => setMobileOpen(true)}>
-        <Menu size={22} />
+      <a className="skip-link" href="#main-content">{t("common.skipToContent", "Pular para o conteúdo")}</a>
+      <button
+        className="mobile-menu-btn"
+        onClick={() => setMobileOpen(true)}
+        aria-label={t("common.openMenu")}
+        aria-expanded={mobileOpen}
+        aria-controls="primary-sidebar"
+      >
+        <Menu size={22} aria-hidden="true" />
       </button>
-      {mobileOpen && <div className="sidebar-backdrop" onClick={() => setMobileOpen(false)} />}
+      {mobileOpen && <div className="sidebar-backdrop" onClick={() => setMobileOpen(false)} aria-hidden="true" />}
       <Sidebar doctor={doctor} alertCount={alertCount} collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
-      <main className="main-content">
+      <main className="main-content" id="main-content">
         <div className="page-fade" key={location.pathname.split("/").slice(0, 3).join("/")}>
           <Outlet />
         </div>

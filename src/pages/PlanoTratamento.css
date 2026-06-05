@@ -99,10 +99,6 @@
   transition: box-shadow 0.15s;
 }
 
-.exercicio-row:hover {
-  box-shadow: var(--shadow-md);
-}
-
 .exercicio-row {
   transition: opacity 0.15s, box-shadow 0.15s;
 }
@@ -194,16 +190,8 @@
   transition: background 0.15s;
 }
 
-.ex-btn:hover {
-  background: var(--border);
-}
-
 .ex-btn-del {
   color: var(--danger);
-}
-
-.ex-btn-del:hover {
-  background: rgba(255, 59, 48, 0.08);
 }
 
 .add-exercise-zone {
@@ -220,11 +208,6 @@
   margin-bottom: 20px;
   background: transparent;
   transition: all 0.15s;
-}
-
-.add-exercise-zone:hover {
-  border-color: var(--accent);
-  background: rgba(0, 122, 255, 0.03);
 }
 
 .add-icon {
@@ -262,10 +245,6 @@
 .btn-whatsapp {
   color: #25D366;
   border-color: #25D366;
-}
-
-.btn-whatsapp:hover {
-  background: rgba(37, 211, 102, 0.07);
 }
 
 /* ─── WhatsApp Modal ─── */
@@ -366,10 +345,6 @@
   transition: background 0.15s;
 }
 
-.wa-close-btn:hover {
-  background: var(--border);
-}
-
 .wa-modal-body {
   flex: 1;
   overflow-y: auto;
@@ -413,10 +388,6 @@
   transition: opacity 0.15s, background 0.2s;
 }
 
-.wa-copy-btn:hover {
-  opacity: 0.88;
-}
-
 .wa-copy-btn.copied {
   background: #34C759;
 }
@@ -455,5 +426,36 @@
   .fase-tab {
     font-size: 12px;
     padding: 10px 0;
+  }
+}
+
+@media (hover: hover) {
+  .exercicio-row:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .ex-btn:hover {
+    background: var(--border);
+  }
+
+  .ex-btn-del:hover {
+    background: rgba(255, 59, 48, 0.08);
+  }
+
+  .add-exercise-zone:hover {
+    border-color: var(--accent);
+    background: rgba(0, 122, 255, 0.03);
+  }
+
+  .btn-whatsapp:hover {
+    background: rgba(37, 211, 102, 0.07);
+  }
+
+  .wa-close-btn:hover {
+    background: var(--border);
+  }
+
+  .wa-copy-btn:hover {
+    opacity: 0.88;
   }
 }

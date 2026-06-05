@@ -82,11 +82,6 @@
   transition: background 0.15s, color 0.15s;
 }
 
-.drawer-close:hover {
-  background: var(--border-light);
-  color: var(--text-primary);
-}
-
 .drawer-empty {
   flex: 1;
   display: flex;
@@ -123,4 +118,11 @@
   line-height: 1.5;
   max-width: 260px;
   margin: 0;
+}
+
+@media (hover: hover) {
+  .drawer-close:hover {
+    background: var(--border-light);
+    color: var(--text-primary);
+  }
 }

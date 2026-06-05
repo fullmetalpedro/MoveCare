@@ -1,6 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="0" fill="#007AFF"/>
-  <g transform="translate(256 256) scale(13.5) translate(-12 -12)" fill="#ffffff">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-  </g>
+  <defs>
+    <linearGradient id="mc-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3AA0FF"/>
+      <stop offset="1" stop-color="#0062E0"/>
+    </linearGradient>
+  </defs>
+  <!-- Full-bleed gradient background so the icon also works as a maskable icon. -->
+  <rect width="512" height="512" fill="url(#mc-bg)"/>
+  <!-- Care heart (brand mark), kept inside the maskable safe zone. -->
+  <path fill="#ffffff" transform="translate(256 268) scale(11) translate(-12 -12.5)"
+    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  <!-- Heartbeat / movement pulse cut through the heart. -->
+  <path fill="none" stroke="#0062E0" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"
+    d="M172 262 H224 L242 232 L264 298 L286 214 L302 262 H340"/>
 </svg>

@@ -50,10 +50,6 @@
   transition: opacity 0.15s;
 }
 
-.btn-primary-sm:hover {
-  opacity: 0.85;
-}
-
 .btn-outline-sm {
   display: inline-flex;
   align-items: center;
@@ -68,10 +64,6 @@
   font-weight: 500;
   box-shadow: var(--shadow-sm);
   transition: all 0.15s;
-}
-
-.btn-outline-sm:hover {
-  box-shadow: var(--shadow-md);
 }
 
 .adesao-weekly {
@@ -136,5 +128,15 @@
 @media (max-width: 768px) {
   .resumo-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (hover: hover) {
+  .btn-primary-sm:hover {
+    opacity: 0.85;
+  }
+
+  .btn-outline-sm:hover {
+    box-shadow: var(--shadow-md);
   }
 }

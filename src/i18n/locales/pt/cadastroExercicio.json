@@ -1,0 +1,42 @@
+{
+  "title": "Novo Exercício",
+  "subtitle": "Adicione um novo exercício à biblioteca",
+  "previewLabel": "Pré-visualização",
+  "previewNamePlaceholder": "Nome do exercício",
+  "saveExercise": "Salvar Exercício",
+  "sections": {
+    "basicInfo": "Informações Básicas",
+    "video": "Vídeo demonstrativo",
+    "descriptionInstructions": "Descrição e Instruções"
+  },
+  "fields": {
+    "name": "Nome do exercício",
+    "namePlaceholder": "Ex.: Agachamento Livre, Prancha Isométrica...",
+    "category": "Categoria",
+    "level": "Nível de dificuldade",
+    "series": "Séries / Duração",
+    "seriesPlaceholder": "Ex.: 3x12 rep, 3x30s, 5 min...",
+    "videoUrl": "URL do vídeo",
+    "description": "Descrição do exercício",
+    "descriptionPlaceholder": "Descreva brevemente o objetivo e benefícios do exercício...",
+    "instructions": "Instruções de execução",
+    "instructionsPlaceholder": "Passo a passo de como executar o exercício corretamente..."
+  },
+  "toggle": {
+    "label": "Possui vídeo demonstrativo",
+    "description": "Informe o link do vídeo para o paciente assistir"
+  },
+  "categories": {
+    "Fortalecimento": "Fortalecimento",
+    "Estabilização": "Estabilização",
+    "Flexibilidade": "Flexibilidade",
+    "Mobilidade": "Mobilidade",
+    "Funcional": "Funcional",
+    "Relaxamento": "Relaxamento"
+  },
+  "levels": {
+    "Iniciante": "Iniciante",
+    "Intermediário": "Intermediário",
+    "Avançado": "Avançado"
+  }
+}

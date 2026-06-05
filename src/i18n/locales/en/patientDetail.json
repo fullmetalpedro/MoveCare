@@ -1,0 +1,21 @@
+{
+  "sectionsNav": "Sections navigation",
+  "tabs": {
+    "resumo": "Summary",
+    "plano": "Treat. Plan",
+    "evolucao": "Progress",
+    "documentos": "Documents",
+    "novaAvaliacao": "New assessment"
+  },
+  "stats": {
+    "adesao": "Adherence",
+    "sessoes": "Sessions",
+    "dorEva": "Pain (VAS)",
+    "proximaSessao": "Next Session"
+  },
+  "vsLastMonth": "{{arrow}} {{pct}}% vs last month",
+  "previsaoAlta": "Est. discharge: {{date}}",
+  "dorInicio": "Start: {{value}}/10",
+  "semSessaoAgendada": "No session scheduled",
+  "session": "Session #{{n}} of {{total}}"
+}

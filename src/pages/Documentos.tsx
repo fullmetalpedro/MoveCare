@@ -1,4 +1,5 @@
 import { FileText, Plus, Download, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import PageHeader from "../components/PageHeader";
 import { documentService } from "../services";
 import "./PacienteDocumentos.css";
@@ -17,17 +18,18 @@ import "./PacienteDocumentos.css";
  * // Rendered at /documentos
  */
 export default function Documentos() {
+  const { t } = useTranslation();
   const docs = documentService.getTemplates();
 
   return (
     <div className="documentos-page">
-      <PageHeader title="Documentos & Modelos" backTo="/" />
+      <PageHeader title={t("documentos.title")} backTo="/" />
 
       <div className="documentos-grid">
         {docs.map((doc) => (
           <div key={doc.id} className="doc-card">
             <div className="doc-thumb">
-              <FileText size={32} />
+              <FileText size={32} aria-hidden="true" />
               <span className="doc-tipo">{doc.tipo}</span>
             </div>
             <div className="doc-info">
@@ -35,15 +37,20 @@ export default function Documentos() {
               <span className="doc-meta">{doc.tamanho} · {doc.data}</span>
             </div>
             <div className="doc-actions">
-              <button className="doc-btn"><Download size={14} /></button>
-              <button className="doc-btn doc-btn-del"><Trash2 size={14} /></button>
+              <button className="doc-btn" aria-label={t("common.download")}><Download size={14} aria-hidden="true" /></button>
+              <button className="doc-btn doc-btn-del" aria-label={t("common.delete")}><Trash2 size={14} aria-hidden="true" /></button>
             </div>
           </div>
         ))}
 
-        <div className="add-doc-zone">
-          <Plus size={24} />
-          <span>Clique ou arraste para adicionar um documento</span>
+        <div
+          className="add-doc-zone"
+          role="button"
+          tabIndex={0}
+          aria-label={t("documentos.addZone")}
+        >
+          <Plus size={24} aria-hidden="true" />
+          <span>{t("documentos.addZone")}</span>
         </div>
       </div>
     </div>

@@ -1,0 +1,43 @@
+{
+  "pageTitle": "Novo Paciente",
+  "pageSubtitle": "Preencha os dados para cadastrar um novo paciente",
+  "sections": {
+    "dadosPessoais": "Dados Pessoais",
+    "contato": "Contato",
+    "informacoesClinias": "Informações Clínicas",
+    "primeiraSessao": "Primeira Sessão"
+  },
+  "fields": {
+    "nomeCompleto": "Nome completo",
+    "nomePlaceholder": "Ex.: Ana Souza",
+    "idade": "Idade",
+    "idadePlaceholder": "Ex.: 35",
+    "sexo": "Sexo",
+    "condicao": "Condição / Diagnóstico",
+    "condicaoPlaceholder": "Ex.: Lombalgia crônica, Tendinite patelar...",
+    "telefone": "Telefone",
+    "telefonePlaceholder": "(11) 99999-9999",
+    "email": "E-mail",
+    "emailPlaceholder": "paciente@email.com",
+    "statusInicial": "Status inicial",
+    "totalSessoes": "Total de sessões previstas",
+    "totalSessoesPlaceholder": "Ex.: 20",
+    "dorEVA": "Dor inicial (EVA)",
+    "previsaoAlta": "Previsão de alta",
+    "data": "Data",
+    "horario": "Horário",
+    "observacoes": "Observações iniciais",
+    "observacoesPlaceholder": "Informações adicionais sobre o paciente, histórico, restrições..."
+  },
+  "sexoLabels": {
+    "Masculino": "Masculino",
+    "Feminino": "Feminino",
+    "Outro": "Outro"
+  },
+  "statusLabels": {
+    "Ativo": "Ativo",
+    "Avaliação": "Avaliação",
+    "Alta": "Alta"
+  },
+  "savePatient": "Salvar Paciente"
+}

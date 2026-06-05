@@ -20,10 +20,6 @@
   transition: box-shadow 0.2s;
 }
 
-.doc-card:hover {
-  box-shadow: var(--shadow-md);
-}
-
 .doc-thumb {
   display: flex;
   flex-direction: column;
@@ -82,16 +78,8 @@
   transition: background 0.15s;
 }
 
-.doc-btn:hover {
-  background: var(--border);
-}
-
 .doc-btn-del {
   color: var(--danger);
-}
-
-.doc-btn-del:hover {
-  background: rgba(255, 59, 48, 0.08);
 }
 
 .add-doc-zone {
@@ -112,11 +100,6 @@
   transition: all 0.15s;
 }
 
-.add-doc-zone:hover {
-  border-color: var(--accent);
-  background: rgba(0, 122, 255, 0.03);
-}
-
 @media (max-width: 768px) {
   .documentos-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -127,5 +110,24 @@
 @media (max-width: 480px) {
   .documentos-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (hover: hover) {
+  .doc-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .doc-btn:hover {
+    background: var(--border);
+  }
+
+  .doc-btn-del:hover {
+    background: rgba(255, 59, 48, 0.08);
+  }
+
+  .add-doc-zone:hover {
+    border-color: var(--accent);
+    background: rgba(0, 122, 255, 0.03);
   }
 }

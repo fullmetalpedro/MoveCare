@@ -1,0 +1,228 @@
+{
+  "pageTitle": "New Assessment",
+  "saveTests": "Save {{count}} test",
+  "saveTests_plural": "Save {{count}} tests",
+  "concluded": "Completed",
+  "timerStart": "Start",
+  "timerStop": "Stop",
+  "timerReset": "Reset timer",
+  "timerExpired": "Time's up!",
+  "decrement": "Decrement",
+  "increment": "Increment",
+  "confirmTest": "Confirm {{name}}",
+  "confirmReps": "Confirm — {{count}} rep",
+  "confirmReps_plural": "Confirm — {{count}} reps",
+  "closeModal": "Close",
+  "totalLabel": "Total:",
+  "belowNormalMoca": " · Below normal (< 26)",
+  "belowNormalMmse": " · Suggestive of impairment (< 24)",
+  "speedCalc": "Calculated speed:",
+  "tests": {
+    "mrc": {
+      "label": "MRC Scale",
+      "desc": "Muscle strength 0–5 per group",
+      "hint": "Select the score (0 = no contraction, 5 = normal)"
+    },
+    "dinamometria": {
+      "label": "Grip Dynamometry",
+      "desc": "Grip strength in kgf (R and L)",
+      "leftHand": "Left hand (kgf)",
+      "rightHand": "Right hand (kgf)",
+      "leftPlaceholder": "e.g. 22.5",
+      "rightPlaceholder": "e.g. 24.0"
+    },
+    "sit_to_stand": {
+      "label": "30s Sit-to-Stand",
+      "desc": "Repetitions in 30 seconds",
+      "hint": "Start the 30 s timer and count complete repetitions while time runs.",
+      "countdownLabel": "30 s Countdown",
+      "repsLabel": "Complete repetitions"
+    },
+    "tug": {
+      "label": "TUG",
+      "desc": "Timed Up and Go — 3 metres",
+      "hint": "Patient stands up, walks 3 m, turns and sits. Start the timer on movement.",
+      "timeLabel": "Time"
+    },
+    "10mwt": {
+      "label": "10MWT",
+      "desc": "Walking speed — 10 metres",
+      "hint": "Comfortable walking speed on a 10 m track.",
+      "timeLabel": "Time",
+      "distLabel": "Distance (m)"
+    },
+    "dgi": {
+      "label": "DGI",
+      "desc": "Dynamic Gait Index — 8 items (0–3)",
+      "hint": "0 = severe impairment · 1 = moderate · 2 = mild · 3 = normal"
+    },
+    "tdr": {
+      "label": "Clock Drawing Test",
+      "desc": "Upload or photo of clock drawing",
+      "hint": "Upload a photo of the patient's clock drawing.",
+      "imgAlt": "Clock drawing",
+      "changeImage": "Change image",
+      "uploadZone": "Click to select or take a photo"
+    },
+    "mmse": {
+      "label": "MMSE",
+      "desc": "Mini-Mental State Examination (0–30)",
+      "modalTitle": "MMSE",
+      "modalSubtitle": "Mini-Mental State Examination · 0–30 points"
+    },
+    "moca": {
+      "label": "MoCA",
+      "desc": "Montreal Cognitive Assessment (0–30)",
+      "modalTitle": "MoCA",
+      "modalSubtitle": "Montreal Cognitive Assessment · 0–30 points (normal ≥ 26)",
+      "preamble": "Before starting: read these 5 words to the patient and ask them to memorise — Face, Silk, Church, Carnation, Red. Recall will be assessed at the end."
+    }
+  },
+  "mrcGroups": {
+    "Abdutores do ombro D": "Shoulder abductors R",
+    "Abdutores do ombro E": "Shoulder abductors L",
+    "Flexores do cotovelo D": "Elbow flexors R",
+    "Flexores do cotovelo E": "Elbow flexors L",
+    "Extensores do punho D": "Wrist extensors R",
+    "Extensores do punho E": "Wrist extensors L",
+    "Flexores do quadril D": "Hip flexors R",
+    "Flexores do quadril E": "Hip flexors L",
+    "Extensores do joelho D": "Knee extensors R",
+    "Extensores do joelho E": "Knee extensors L",
+    "Dorsiflexores D": "Dorsiflexors R",
+    "Dorsiflexores E": "Dorsiflexors L"
+  },
+  "dgiItems": {
+    "Marcha em superfície plana": "Level surface gait",
+    "Mudança de velocidade": "Change in gait speed",
+    "Rotação horizontal da cabeça": "Horizontal head turns",
+    "Rotação vertical da cabeça": "Vertical head turns",
+    "Marcha e pivô (180°)": "Gait and pivot turn (180°)",
+    "Degrau": "Step",
+    "Obstáculos": "Obstacles",
+    "Escadas": "Stairs"
+  },
+  "mmse": {
+    "sections": {
+      "Orientação Temporal": {
+        "title": "Temporal Orientation",
+        "hint": "Ask: \"What year is it? Season? Month? Day of the month? Day of the week?\""
+      },
+      "Orientação Espacial": {
+        "title": "Spatial Orientation",
+        "hint": "Ask: \"What country, state, city, place and floor are we in?\""
+      },
+      "Registro": {
+        "title": "Registration",
+        "hint": "Say slowly: \"Car, Vase, Brick\". Ask to repeat immediately."
+      },
+      "Atenção e Cálculo": {
+        "title": "Attention and Calculation",
+        "hint": "\"Subtract 7 from 100 and keep subtracting.\" Sequence: 93 → 86 → 79 → 72 → 65. Alternative: spell WORLD backwards."
+      },
+      "Evocação": {
+        "title": "Recall",
+        "hint": "\"Do you remember the three words I asked you to repeat? What were they?\" (Car, Vase, Brick)"
+      },
+      "Linguagem e Práxis": {
+        "title": "Language and Praxis",
+        "hint": "Evaluate each item individually according to instructions."
+      }
+    },
+    "items": {
+      "t_ano":    "Current year",
+      "t_est":    "Season of the year",
+      "t_mes":    "Current month",
+      "t_dia_m":  "Day of the month",
+      "t_dia_s":  "Day of the week",
+      "e_pais":   "Country",
+      "e_estado": "State",
+      "e_cidade": "City",
+      "e_local":  "Place / building",
+      "e_andar":  "Floor / room",
+      "r_carro":  "Car",
+      "r_vaso":   "Vase",
+      "r_tijolo": "Brick",
+      "c_93":  "93  (or W)",
+      "c_86":  "86  (or O)",
+      "c_79":  "79  (or R)",
+      "c_72":  "72  (or L)",
+      "c_65":  "65  (or D)",
+      "ev_carro":  "Car",
+      "ev_vaso":   "Vase",
+      "ev_tijolo": "Brick",
+      "l_nom_can":  "Naming — Pen",
+      "l_nom_rel":  "Naming — Wristwatch",
+      "l_rep":      "Repetition — \"No ifs, ands or buts\"",
+      "l_cmd1":     "Command — Take the paper with your right hand",
+      "l_cmd2":     "Command — Fold it in half",
+      "l_cmd3":     "Command — Put it on the floor",
+      "l_leitura":  "Reading — Close eyes when seeing \"CLOSE YOUR EYES\"",
+      "l_escrita":  "Writing — Complete sentence that makes sense",
+      "l_copia":    "Copy — Two intersecting pentagons"
+    }
+  },
+  "moca": {
+    "sections": {
+      "Visoespacial / Executiva": {
+        "title": "Visuospatial / Executive",
+        "hint": "Alternating trail (1→A→2→B→3→C…), cube copy, clock with hands at 11:10."
+      },
+      "Nomeação": {
+        "title": "Naming",
+        "hint": "Show pictures of uncommon animals: lion, rhinoceros, camel/dromedary."
+      },
+      "Atenção": {
+        "title": "Attention",
+        "hint": "Forward digits (5 numbers), backward digits (3 numbers), vigilance (tap on letter A) and subtractive calculation."
+      },
+      "Linguagem": {
+        "title": "Language",
+        "hint": "Repeat two long sentences exactly. Say as many words as possible starting with letter F in 1 min (≥11 = 1 pt)."
+      },
+      "Abstração": {
+        "title": "Abstraction",
+        "hint": "Ask what they have in common: \"orange and banana\" → fruits; \"train and bicycle\" → transport."
+      },
+      "Evocação Tardia": {
+        "title": "Delayed Recall",
+        "hint": "Words read at the start: Face, Silk, Church, Carnation, Red. Ask at the end of the test."
+      },
+      "Orientação": {
+        "title": "Orientation",
+        "hint": "1 point per correct answer."
+      }
+    },
+    "items": {
+      "ve_trilha":    "Alternating trail",
+      "ve_cubo":      "3D cube copy",
+      "ve_rel_cont":  "Clock — circular contour",
+      "ve_rel_nums":  "Clock — correct numbers",
+      "ve_rel_pont":  "Clock — hands at 11:10",
+      "n_leao":   "Lion",
+      "n_rino":   "Rhinoceros",
+      "n_camelo": "Camel / Dromedary",
+      "a_dig_d":  "Forward digits (e.g. 2 1 8 5 4)",
+      "a_dig_i":  "Backward digits (repeat in reverse)",
+      "a_vigil":  "Vigilance — tap when hearing letter A",
+      "a_calc":   "Calculation — subtract 7 (0 errors=3 pts, 1=2, 2-3=1, 4-5=0)",
+      "l_frase1": "Sentence 1 — \"The cat always hid under the sofa when the dogs were in the room\"",
+      "l_frase2": "Sentence 2 — second standardised complex sentence",
+      "l_fluenc": "Verbal fluency — ≥11 words starting with letter F in 1 min",
+      "ab1": "Orange and banana (Fruits)",
+      "ab2": "Train and bicycle (Means of transport)",
+      "ev_rosto":    "Face",
+      "ev_seda":     "Silk",
+      "ev_igreja":   "Church",
+      "ev_cravo":    "Carnation",
+      "ev_vermelho": "Red",
+      "or_dia_m":  "Day of the month",
+      "or_mes":    "Month",
+      "or_ano":    "Year",
+      "or_dia_s":  "Day of the week",
+      "or_local":  "Place / institution",
+      "or_cidade": "City"
+    }
+  },
+  "saveAlert": "Assessment saved! (persistence not yet implemented)"
+}

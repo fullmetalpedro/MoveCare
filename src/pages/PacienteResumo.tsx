@@ -1,5 +1,6 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { Plus, Eye, CheckCircle2, XCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { Paciente } from "../types";
 import "./PacienteResumo.css";
 
@@ -19,6 +20,7 @@ import "./PacienteResumo.css";
 export default function PacienteResumo() {
   const paciente = useOutletContext<Paciente>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const diasFeitos = paciente.adesaoSemanal.filter(d => d.feito).length;
   const totalDias = paciente.adesaoSemanal.length;
@@ -27,7 +29,7 @@ export default function PacienteResumo() {
   return (
     <div className="resumo-grid">
       <div className="card evolucao-card">
-        <h2>Última Evolução</h2>
+        <h2>{t("resumo.evolucao.title")}</h2>
         {paciente.ultimaEvolucao ? (
           <>
             <p className="evolucao-meta">
@@ -38,16 +40,20 @@ export default function PacienteResumo() {
             </blockquote>
           </>
         ) : (
-          <p className="evolucao-meta">Nenhuma evolução registrada</p>
+          <p className="evolucao-meta">{t("resumo.evolucao.empty")}</p>
         )}
         <div className="evolucao-actions">
-          <button className="btn-primary-sm" onClick={() => navigate(`/pacientes/${paciente.id}/evolucao`)}><Plus size={14} /> Nova Evolução</button>
-          <button className="btn-outline-sm"><Eye size={14} /> Histórico</button>
+          <button className="btn-primary-sm" onClick={() => navigate(`/pacientes/${paciente.id}/evolucao`)}>
+            <Plus size={14} aria-hidden="true" /> {t("resumo.evolucao.new")}
+          </button>
+          <button className="btn-outline-sm">
+            <Eye size={14} aria-hidden="true" /> {t("resumo.evolucao.history")}
+          </button>
         </div>
       </div>
 
       <div className="card adesao-card">
-        <h2>Adesão aos Exercícios (7 dias)</h2>
+        <h2>{t("resumo.adesao.title")}</h2>
         <div className="adesao-weekly">
           {paciente.adesaoSemanal.map((d, i) => (
             <div key={i} className="adesao-day">
@@ -58,13 +64,13 @@ export default function PacienteResumo() {
                   style={{ width: d.feito ? "100%" : "0%", background: d.feito ? "#34C759" : "transparent" }}
                 />
               </div>
-              <span className={`adesao-check ${d.feito ? "done" : "miss"}`}>
-                {d.feito ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+              <span className={`adesao-check ${d.feito ? "done" : "miss"}`} aria-label={d.feito ? t("resumo.adesao.done") : t("resumo.adesao.missed")}>
+                {d.feito ? <CheckCircle2 size={16} aria-hidden="true" /> : <XCircle size={16} aria-hidden="true" />}
               </span>
             </div>
           ))}
         </div>
-        <p className="adesao-summary">{diasFeitos} de {totalDias} dias · {pctSemana}% esta semana</p>
+        <p className="adesao-summary">{t("resumo.adesao.summary", { done: diasFeitos, total: totalDias, pct: pctSemana })}</p>
       </div>
     </div>
   );

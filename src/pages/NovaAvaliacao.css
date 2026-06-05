@@ -40,8 +40,6 @@
   flex-shrink: 0;
 }
 
-.btn-salvar-av:hover { opacity: 0.85; }
-
 /* ─── Test list ─── */
 .nova-av-list {
   display: flex;
@@ -82,8 +80,6 @@
   text-align: left;
   transition: background 0.1s;
 }
-
-.nav-test-header:hover { background: var(--card-bg-alt); }
 
 .nav-test-icon {
   width: 38px;
@@ -228,7 +224,6 @@
 .timer-start  { background: var(--accent); color: #fff; }
 .timer-stop   { background: var(--danger); color: #fff; }
 .timer-reset  { background: var(--border-light); color: var(--text-secondary); padding: 6px 10px; }
-.timer-btn:hover { opacity: 0.85; }
 
 .mwt-speed {
   font-size: 14px;
@@ -274,11 +269,6 @@
   flex-shrink: 0;
 }
 
-.rep-btn:hover:not(:disabled) {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
 .rep-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .rep-btn-add {
@@ -286,8 +276,6 @@
   border-color: var(--accent);
   color: #fff;
 }
-
-.rep-btn-add:hover:not(:disabled) { opacity: 0.85; }
 
 /* ─── Score rows ─── */
 .score-row {
@@ -329,11 +317,6 @@
   font-weight: 700;
 }
 
-.score-btn:hover:not(.active) {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
 .dgi-total {
   font-size: 15px;
   color: var(--text-secondary);
@@ -356,8 +339,6 @@
   transition: border-color 0.15s, color 0.15s;
   margin-bottom: 14px;
 }
-
-.tdr-upload-zone:hover { border-color: var(--accent); color: var(--accent); }
 
 .tdr-preview-wrap { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
 
@@ -392,8 +373,6 @@
   transition: opacity 0.15s;
   margin-top: 4px;
 }
-
-.btn-confirmar:hover:not(:disabled) { opacity: 0.85; }
 
 .btn-confirmar:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -507,8 +486,6 @@
   transition: background 0.15s;
 }
 
-.test-modal-close:hover { background: var(--border); }
-
 .test-modal-body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -607,4 +584,30 @@
 
   .test-modal-footer { flex-direction: column; align-items: stretch; }
   .test-modal-footer .btn-confirmar { width: 100%; text-align: center; }
+}
+
+@media (hover: hover) {
+  .btn-salvar-av:hover { opacity: 0.85; }
+
+  .nav-test-header:hover { background: var(--card-bg-alt); }
+
+  .timer-btn:hover { opacity: 0.85; }
+
+  .rep-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .rep-btn-add:hover:not(:disabled) { opacity: 0.85; }
+
+  .score-btn:hover:not(.active) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tdr-upload-zone:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-confirmar:hover:not(:disabled) { opacity: 0.85; }
+
+  .test-modal-close:hover { background: var(--border); }
 }

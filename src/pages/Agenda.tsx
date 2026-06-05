@@ -2,12 +2,14 @@ import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { AlertTriangle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import type { DateClickArg } from "@fullcalendar/interaction";
 import ptBrLocale from "@fullcalendar/core/locales/pt-br";
+import esLocale from "@fullcalendar/core/locales/es";
 import type {
   EventInput,
   EventContentArg,
@@ -62,9 +64,9 @@ const REFERENCE_WEEK: Record<string, string> = {
 const INITIAL_DATE = "2026-04-29";
 
 const VIEWS = [
-  { label: "Dia", value: "timeGridDay" },
-  { label: "Semana", value: "timeGridWeek" },
-  { label: "Mês", value: "dayGridMonth" },
+  { labelKey: "agenda.viewDay", value: "timeGridDay" },
+  { labelKey: "agenda.viewWeek", value: "timeGridWeek" },
+  { labelKey: "agenda.viewMonth", value: "dayGridMonth" },
 ] as const;
 
 type ViewValue = (typeof VIEWS)[number]["value"];
@@ -123,6 +125,10 @@ function abreviarNome(nome: string): string {
 }
 
 export default function Agenda({ eventos, pacientes }: AgendaProps) {
+  const { t, i18n } = useTranslation();
+  const fcLocale = (
+    { pt: ptBrLocale, es: esLocale, en: "en" } as const
+  )[(i18n.language || "pt").slice(0, 2) as "pt" | "es" | "en"] ?? ptBrLocale;
   const calendarRef = useRef<FullCalendar>(null);
   const [searchParams] = useSearchParams();
   const initialView = VIEW_PARAM_MAP[searchParams.get("view") ?? ""] ?? "timeGridWeek";
@@ -269,16 +275,16 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
 
   return (
     <div className="agenda-page">
-      <PageHeader title="Agenda" backTo="/">
+      <PageHeader title={t("agenda.title")} backTo="/">
         <div className="agenda-nav">
           <button className="btn-hoje" onClick={() => api()?.today()}>
-            Hoje
+            {t("common.today")}
           </button>
-          <div className="nav-arrows" role="group" aria-label="Navegar período">
-            <button className="btn-nav" onClick={() => api()?.prev()} aria-label="Período anterior">
+          <div className="nav-arrows" role="group" aria-label={t("agenda.navigatePeriod")}>
+            <button className="btn-nav" onClick={() => api()?.prev()} aria-label={t("agenda.previousPeriod")}>
               ‹
             </button>
-            <button className="btn-nav" onClick={() => api()?.next()} aria-label="Próximo período">
+            <button className="btn-nav" onClick={() => api()?.next()} aria-label={t("agenda.nextPeriod")}>
               ›
             </button>
           </div>
@@ -292,11 +298,11 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
               className={`view-btn ${view === v.value ? "active" : ""}`}
               onClick={() => changeView(v.value)}
             >
-              {v.label}
+              {t(v.labelKey)}
             </button>
           ))}
         </div>
-        <button className="btn-agendar" onClick={() => abrirAgendamento(null)}>+ Agendar</button>
+        <button className="btn-agendar" onClick={() => abrirAgendamento(null)}>{t("agenda.schedule")}</button>
       </PageHeader>
 
       <div className={`agenda-calendar${viewAnim ? " view-fadein" : ""}`}>
@@ -305,7 +311,7 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView={initialView}
           initialDate={INITIAL_DATE}
-          locale={ptBrLocale}
+          locale={fcLocale}
           headerToolbar={false}
           events={events}
           eventContent={renderEvent}
@@ -357,23 +363,24 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
           >
             <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
               <div className="modal-warning-icon">
-                <AlertTriangle size={24} />
+                <AlertTriangle size={24} aria-hidden="true" />
               </div>
-              <h3 className="modal-title">Confirmar reagendamento</h3>
+              <h3 className="modal-title">{t("agenda.confirmReschedule")}</h3>
               <p className="modal-body">
-                Você está movendo <strong>{pendingMove.paciente}</strong> para{" "}
-                <strong>{pendingMove.quando}</strong>.
+                {t("agenda.rescheduleBodyText", {
+                  patient: pendingMove.paciente,
+                  when: pendingMove.quando,
+                })}
               </p>
               <p className="modal-notice">
-                Lembre-se de alinhar essa alteração com o paciente antes de
-                confirmar.
+                {t("agenda.rescheduleNotice")}
               </p>
               <div className="modal-actions">
                 <button className="modal-btn-cancel" onClick={cancelMove}>
-                  Cancelar
+                  {t("common.cancel")}
                 </button>
                 <button className="modal-btn-confirm" onClick={confirmMove}>
-                  Confirmar
+                  {t("common.confirm")}
                 </button>
               </div>
             </div>

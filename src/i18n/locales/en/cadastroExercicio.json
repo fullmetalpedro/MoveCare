@@ -1,0 +1,42 @@
+{
+  "title": "New Exercise",
+  "subtitle": "Add a new exercise to the library",
+  "previewLabel": "Preview",
+  "previewNamePlaceholder": "Exercise name",
+  "saveExercise": "Save Exercise",
+  "sections": {
+    "basicInfo": "Basic Information",
+    "video": "Demonstration video",
+    "descriptionInstructions": "Description & Instructions"
+  },
+  "fields": {
+    "name": "Exercise name",
+    "namePlaceholder": "E.g.: Squat, Isometric Plank...",
+    "category": "Category",
+    "level": "Difficulty level",
+    "series": "Sets / Duration",
+    "seriesPlaceholder": "E.g.: 3x12 reps, 3x30s, 5 min...",
+    "videoUrl": "Video URL",
+    "description": "Exercise description",
+    "descriptionPlaceholder": "Briefly describe the objective and benefits of the exercise...",
+    "instructions": "Execution instructions",
+    "instructionsPlaceholder": "Step-by-step guide on how to perform the exercise correctly..."
+  },
+  "toggle": {
+    "label": "Has demonstration video",
+    "description": "Provide the video link for the patient to watch"
+  },
+  "categories": {
+    "Fortalecimento": "Strengthening",
+    "Estabilização": "Stabilization",
+    "Flexibilidade": "Flexibility",
+    "Mobilidade": "Mobility",
+    "Funcional": "Functional",
+    "Relaxamento": "Relaxation"
+  },
+  "levels": {
+    "Iniciante": "Beginner",
+    "Intermediário": "Intermediate",
+    "Avançado": "Advanced"
+  }
+}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Plus, ChevronRight } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import Avatar from "../components/Avatar";
@@ -59,18 +60,22 @@ const STATUS_TONE: Record<string, BadgeTone> = {
 };
 
 /**
- * {@link Badge} wrapper that maps a patient status string to a semantic tone.
+ * {@link Badge} wrapper that maps a patient status string to a semantic tone
+ * and displays a translated label.
  *
  * @param props.status - One of `"Ativo"`, `"Avaliação"`, or `"Alta"`.
  * @returns A `<Badge>` with the appropriate tone applied.
  */
 function StatusBadge({ status }: { status: string }) {
-  return <Badge tone={STATUS_TONE[status] ?? "neutral"}>{status}</Badge>;
+  const { t } = useTranslation();
+  const label = t(`pacientes.statusLabels.${status}`, { defaultValue: status });
+  return <Badge tone={STATUS_TONE[status] ?? "neutral"}>{label}</Badge>;
 }
 
 const FILTERS: FilterType[] = ["Todos", "Ativos", "Avaliação", "Alta"];
 
 export default function Pacientes({ pacientes }: PacientesProps) {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const paramFilter = searchParams.get("filter") as FilterType | null;
   const initialFilter: FilterType =
@@ -81,11 +86,21 @@ export default function Pacientes({ pacientes }: PacientesProps) {
 
   const filtered = filterPatients(pacientes, filter, search);
 
+  const filterItems = FILTERS.map(f => ({
+    value: f,
+    label: t(`pacientes.filters.${f}`),
+  }));
+
   return (
     <div className="pacientes-page">
-      <PageHeader title="Pacientes" backTo="/">
-        <Button variant="primary" className="ds-btn--lift" iconLeft={<Plus size={16} />} onClick={() => navigate("/pacientes/novo")}>
-          Novo Paciente
+      <PageHeader title={t("pacientes.pageTitle")} backTo="/">
+        <Button
+          variant="primary"
+          className="ds-btn--lift"
+          iconLeft={<Plus size={16} aria-hidden="true" />}
+          onClick={() => navigate("/pacientes/novo")}
+        >
+          {t("pacientes.newPatient")}
         </Button>
       </PageHeader>
 
@@ -93,41 +108,74 @@ export default function Pacientes({ pacientes }: PacientesProps) {
         <SearchInput
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Buscar paciente..."
+          placeholder={t("pacientes.searchPlaceholder")}
           width={220}
+          aria-label={t("common.search")}
         />
         <Tabs
           value={filter}
           onChange={v => setFilter(v as FilterType)}
-          items={FILTERS.map(f => ({ value: f, label: f }))}
+          items={filterItems}
         />
       </div>
 
-      <div className="pacientes-table" key={filter}>
-        <div className="table-header">
-          <span className="col-paciente">PACIENTE</span>
-          <span className="col-idade">IDADE</span>
-          <span className="col-status">STATUS</span>
-          <span className="col-sessoes">SESSÕES</span>
-          <span className="col-adesao">ADESÃO</span>
-          <span className="col-ultima">ÚLTIMA</span>
-          <span className="col-action" />
+      <div
+        className="pacientes-table"
+        key={filter}
+        role="table"
+        aria-label={t("pacientes.pageTitle")}
+      >
+        <div className="table-header" role="row">
+          <span className="col-paciente" role="columnheader" aria-sort="none">
+            {t("pacientes.columns.patient")}
+          </span>
+          <span className="col-idade" role="columnheader">
+            {t("pacientes.columns.age")}
+          </span>
+          <span className="col-status" role="columnheader">
+            {t("pacientes.columns.status")}
+          </span>
+          <span className="col-sessoes" role="columnheader">
+            {t("pacientes.columns.sessions")}
+          </span>
+          <span className="col-adesao" role="columnheader">
+            {t("pacientes.columns.adherence")}
+          </span>
+          <span className="col-ultima" role="columnheader">
+            {t("pacientes.columns.lastVisit")}
+          </span>
+          <span className="col-action" role="columnheader" aria-hidden="true" />
         </div>
-        <div className="fade-list">
-        {filtered.map(p => (
-          <div key={p.id} className="table-row" onClick={() => navigate(`/pacientes/${p.id}`)}>
-            <span className="col-paciente">
-              <Avatar className="pac-avatar" name={p.nome} initials={p.initials} size={34} />
-              <span className="pac-nome">{p.nome}</span>
-            </span>
-            <span className="col-idade">{p.idade}</span>
-            <span className="col-status"><StatusBadge status={p.status} /></span>
-            <span className="col-sessoes">{p.sessoes}</span>
-            <span className="col-adesao"><AdesaoBar value={p.adesao} /></span>
-            <span className="col-ultima">{p.ultimaVisita}</span>
-            <span className="col-action"><ChevronRight size={16} /></span>
-          </div>
-        ))}
+        <div className="fade-list" role="rowgroup">
+          {filtered.map(p => (
+            <div
+              key={p.id}
+              className="table-row"
+              role="row"
+              tabIndex={0}
+              aria-label={t("pacientes.rowAriaLabel", { name: p.nome })}
+              onClick={() => navigate(`/pacientes/${p.id}`)}
+              onKeyDown={e => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  navigate(`/pacientes/${p.id}`);
+                }
+              }}
+            >
+              <span className="col-paciente" role="cell">
+                <Avatar className="pac-avatar" name={p.nome} initials={p.initials} size={34} />
+                <span className="pac-nome">{p.nome}</span>
+              </span>
+              <span className="col-idade" role="cell">{p.idade}</span>
+              <span className="col-status" role="cell"><StatusBadge status={p.status} /></span>
+              <span className="col-sessoes" role="cell">{p.sessoes}</span>
+              <span className="col-adesao" role="cell"><AdesaoBar value={p.adesao} /></span>
+              <span className="col-ultima" role="cell">{p.ultimaVisita}</span>
+              <span className="col-action" role="cell" aria-hidden="true">
+                <ChevronRight size={16} aria-hidden="true" />
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

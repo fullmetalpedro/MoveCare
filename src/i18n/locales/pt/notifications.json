@@ -1,0 +1,12 @@
+{
+  "drawer": {
+    "title": "Notificações",
+    "ariaLabel": "Notificações",
+    "emptyTitle": "Tudo em dia!",
+    "emptyText": "Você não tem notificações no momento. Novos alertas aparecerão aqui."
+  },
+  "splash": {
+    "brand": "MoveCare",
+    "tagline": "FISIOTERAPIA"
+  }
+}

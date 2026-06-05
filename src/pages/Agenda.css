@@ -34,8 +34,10 @@
   border-right: 1px solid var(--border);
 }
 
-.btn-nav:hover {
-  background: var(--border-light);
+@media (hover: hover) {
+  .btn-nav:hover {
+    background: var(--border-light);
+  }
 }
 
 .btn-nav:active {
@@ -55,9 +57,11 @@
   transition: background 0.15s, box-shadow 0.15s;
 }
 
-.btn-hoje:hover {
-  background: var(--border-light);
-  box-shadow: var(--shadow-md);
+@media (hover: hover) {
+  .btn-hoje:hover {
+    background: var(--border-light);
+    box-shadow: var(--shadow-md);
+  }
 }
 
 .agenda-periodo {
@@ -111,8 +115,10 @@
   transition: opacity 0.15s;
 }
 
-.btn-agendar:hover {
-  opacity: 0.85;
+@media (hover: hover) {
+  .btn-agendar:hover {
+    opacity: 0.85;
+  }
 }
 
 /* ─── FullCalendar container ─── */
@@ -792,13 +798,29 @@
 }
 
 @media (max-width: 768px) {
-  .page-header-actions {
+  /* The header actions (Hoje / prev-next / view toggle / Agendar) overflowed
+     the viewport on phones, clipping the "Agendar" button. Let the action row
+     span the full width and wrap, and give "Agendar" its own full-width row so
+     it is never cut off. */
+  .agenda-page .page-header-actions {
+    width: 100%;
     flex-wrap: wrap;
     gap: 8px;
   }
 
   .agenda-nav {
     order: 2;
+    flex: 1 1 auto;
+  }
+
+  .view-toggle {
+    order: 1;
+  }
+
+  .btn-agendar {
+    order: 3;
+    flex: 1 1 100%;
+    padding: 11px 20px;
   }
 
   .agenda-periodo {

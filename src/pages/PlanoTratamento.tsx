@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useOutletContext } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MessageCircle, Plus, Play, GripVertical, Pencil, Trash2, X, Copy, Check } from "lucide-react";
 import type { Paciente, Exercicio } from "../types";
 import { buildPlanWhatsAppText } from "../lib/whatsapp";
@@ -33,6 +34,7 @@ function WhatsAppModal({ paciente, exercicios, onClose }: {
   exercicios: Exercicio[];
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const [closing, setClosing] = useState(false);
   const [copied, setCopied] = useState(false);
   const text = buildPlanWhatsAppText(paciente, exercicios);
@@ -62,13 +64,15 @@ function WhatsAppModal({ paciente, exercicios, onClose }: {
       <div className="wa-modal">
         <div className="wa-modal-header">
           <div className="wa-modal-title-row">
-            <span className="wa-icon-badge"><MessageCircle size={18} /></span>
+            <span className="wa-icon-badge"><MessageCircle size={18} aria-hidden="true" /></span>
             <div>
-              <div className="wa-modal-title">Compartilhar no WhatsApp</div>
-              <div className="wa-modal-sub">Copie o texto e cole na conversa com o paciente</div>
+              <div className="wa-modal-title">{t("plano.wa.title")}</div>
+              <div className="wa-modal-sub">{t("plano.wa.subtitle")}</div>
             </div>
           </div>
-          <button className="wa-close-btn" onClick={handleClose}><X size={18} /></button>
+          <button className="wa-close-btn" onClick={handleClose} aria-label={t("common.close")}>
+            <X size={18} aria-hidden="true" />
+          </button>
         </div>
 
         <div className="wa-modal-body">
@@ -77,7 +81,9 @@ function WhatsAppModal({ paciente, exercicios, onClose }: {
 
         <div className="wa-modal-footer">
           <button className={`wa-copy-btn${copied ? " copied" : ""}`} onClick={handleCopy}>
-            {copied ? <><Check size={15} /> Copiado!</> : <><Copy size={15} /> Copiar texto</>}
+            {copied
+              ? <><Check size={15} aria-hidden="true" /> {t("common.copied")}</>
+              : <><Copy size={15} aria-hidden="true" /> {t("plano.wa.copyText")}</>}
           </button>
         </div>
       </div>
@@ -101,6 +107,7 @@ function WhatsAppModal({ paciente, exercicios, onClose }: {
  * // Rendered at /pacientes/:id/plano
  */
 export default function PlanoTratamento() {
+  const { t } = useTranslation();
   const paciente = useOutletContext<Paciente>();
   const plano = paciente.planoTratamento;
   const [exercicios, setExercicios] = useState<Exercicio[]>(() =>
@@ -113,7 +120,7 @@ export default function PlanoTratamento() {
   if (!plano) {
     return (
       <div className="card" style={{ padding: 40, textAlign: "center", color: "var(--text-secondary)" }}>
-        Nenhum plano de tratamento cadastrado para este paciente.
+        {t("plano.noPlan")}
       </div>
     );
   }
@@ -155,20 +162,22 @@ export default function PlanoTratamento() {
     <div className="plano-page">
       <div className="plano-header">
         <div>
-          <h1>Plano de Tratamento</h1>
+          <h1>{t("plano.title")}</h1>
           <p className="plano-subtitle">{paciente.nome} · {paciente.condicao}</p>
         </div>
         <div className="plano-actions">
           <button className="btn-outline-sm btn-whatsapp" onClick={() => setShowWaModal(true)}>
-            <MessageCircle size={14} /> Enviar pelo WhatsApp
+            <MessageCircle size={14} aria-hidden="true" /> {t("plano.sendWhatsApp")}
           </button>
-          <button className="btn-primary-sm"><Plus size={14} /> Adicionar da Biblioteca</button>
+          <button className="btn-primary-sm">
+            <Plus size={14} aria-hidden="true" /> {t("plano.addFromLibrary")}
+          </button>
         </div>
       </div>
 
       <div className="exercicios-list">
         {exercicios.length === 0 ? (
-          <div className="empty-fase">Nenhum exercício cadastrado no plano.</div>
+          <div className="empty-fase">{t("plano.noExercises")}</div>
         ) : (
           exercicios.map((ex, idx) => {
             const isDragging = draggingId === ex.id;
@@ -187,9 +196,11 @@ export default function PlanoTratamento() {
                   onDrop={e => handleDrop(e, ex.id)}
                   onDragEnd={handleDragEnd}
                 >
-                  <span className="ex-drag"><GripVertical size={16} /></span>
+                  <span className="ex-drag" aria-label={t("plano.drag")}>
+                    <GripVertical size={16} aria-hidden="true" />
+                  </span>
                   <div className={`ex-thumb ${ex.temVideo ? "has-video" : "no-video"}`}>
-                    {ex.temVideo ? <Play size={18} /> : "Sem vídeo"}
+                    {ex.temVideo ? <Play size={18} aria-hidden="true" /> : t("plano.noVideo")}
                   </div>
                   <div className="ex-info">
                     <div className="ex-name-row">
@@ -201,11 +212,15 @@ export default function PlanoTratamento() {
                         {ex.categoria}
                       </span>
                     </div>
-                    <div className="ex-series">Séries: {ex.series}</div>
+                    <div className="ex-series">{t("plano.series", { count: ex.series })}</div>
                   </div>
                   <div className="ex-actions">
-                    <button className="ex-btn"><Pencil size={14} /></button>
-                    <button className="ex-btn ex-btn-del"><Trash2 size={14} /></button>
+                    <button className="ex-btn" aria-label={t("plano.edit")}>
+                      <Pencil size={14} aria-hidden="true" />
+                    </button>
+                    <button className="ex-btn ex-btn-del" aria-label={t("plano.delete")}>
+                      <Trash2 size={14} aria-hidden="true" />
+                    </button>
                   </div>
                 </div>
                 <div className={`ex-drop-line${lineAfter ? " visible" : ""}`} />
@@ -215,13 +230,13 @@ export default function PlanoTratamento() {
         )}
       </div>
 
-      <div className="add-exercise-zone">
-        <Plus size={20} />
-        <span>Arrastar da Biblioteca ou clicar para adicionar</span>
+      <div className="add-exercise-zone" aria-label={t("plano.dragZone")}>
+        <Plus size={20} aria-hidden="true" />
+        <span>{t("plano.dragZone")}</span>
       </div>
 
       <div className="card observacoes-card">
-        <h2>Observações do Plano</h2>
+        <h2>{t("plano.observations")}</h2>
         <blockquote className="obs-text">{plano.observacoes}</blockquote>
       </div>
 

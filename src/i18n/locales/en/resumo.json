@@ -1,0 +1,14 @@
+{
+  "evolucao": {
+    "title": "Latest Evolution Note",
+    "empty": "No evolution note recorded",
+    "new": "New Note",
+    "history": "History"
+  },
+  "adesao": {
+    "title": "Exercise Adherence (7 days)",
+    "summary": "{{done}} of {{total}} days · {{pct}}% this week",
+    "done": "Done",
+    "missed": "Missed"
+  }
+}

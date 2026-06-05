@@ -4,6 +4,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* Remove the translucent blue/grey tap-highlight box mobile browsers draw
+     over the element being touched — gives a cleaner, app-like feel. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -31,6 +34,66 @@ a {
   color: inherit;
 }
 
+/* Skip-to-content link: hidden until focused via keyboard (Tab), then it
+   slides into view so keyboard users can bypass the sidebar nav. */
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transform: translateY(-150%);
+  transition: transform 0.15s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Visually hidden but available to screen readers (accessible labels, etc.). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Consistent, visible keyboard-focus ring for interactive elements that don't
+   define their own. Pointer interactions stay clean via :focus-visible. */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm, 6px);
+}
+
+/* Respect users who prefer reduced motion: neutralize entrance/loop animations. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 button {
   font-family: inherit;
 }
@@ -43,21 +106,27 @@ button:not(.filter-tab):not(.view-btn):not(.ds-tab):not(.mag-secao-header):not(.
     background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-button:not(.filter-tab):not(.view-btn):not(.ds-tab):not(.mag-secao-header):not(.ds-btn):hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-
 button:not(.filter-tab):not(.view-btn):not(.ds-tab):not(.mag-secao-header):not(.ds-btn):active {
   transform: translateY(0);
 }
 
-/* "Cancelar" buttons on form screens get a red accent on hover.
-   Legacy only — the Button primitive (.ds-btn) styles its own variants. */
-button.btn-cancelar:hover {
-  border-color: var(--danger);
-  color: var(--danger);
-  background: var(--danger-softer);
+/* Hover lift only on devices that truly support hover (mouse/trackpad).
+   On touchscreens `:hover` lingers after a tap until you tap elsewhere, so
+   gating it behind `hover: hover` makes tapped buttons settle back as soon as
+   the finger lifts. */
+@media (hover: hover) {
+  button:not(.filter-tab):not(.view-btn):not(.ds-tab):not(.mag-secao-header):not(.ds-btn):hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  /* "Cancelar" buttons on form screens get a red accent on hover.
+     Legacy only — the Button primitive (.ds-btn) styles its own variants. */
+  button.btn-cancelar:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: var(--danger-softer);
+  }
 }
 
 ::-webkit-scrollbar {
