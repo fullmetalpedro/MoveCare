@@ -456,8 +456,6 @@ export default function NovaAvaliacao() {
 
   const mwtSpeed  = mwtTempo && mwtDist ? (parseFloat(mwtDist) / parseFloat(mwtTempo)).toFixed(2) : "";
   const dgiTotal  = Object.values(dgiVals).reduce((a, b) => a + b, 0);
-  const mmseTotal = Object.values(mmseVals).reduce((a, b) => a + b, 0);
-  const mocaTotal = Object.values(mocaVals).reduce((a, b) => a + b, 0);
 
   const toggle = (id: string) => {
     if (id === "mmse" || id === "moca") {
