@@ -5,18 +5,40 @@ import { X } from "lucide-react";
 import "./overlay.css";
 
 export interface ModalProps {
+  /** Controls visibility; `false` unmounts the portal entirely. */
   open: boolean;
+  /** Called when the user closes via Escape key, the × button, or overlay click. */
   onClose: () => void;
+  /** Optional title rendered in the modal header. */
   title?: ReactNode;
   children: ReactNode;
+  /** Optional content rendered in the modal footer. */
   footer?: ReactNode;
+  /** Width preset. @default "md" */
   size?: "sm" | "md" | "lg";
+  /** When `true`, clicking the backdrop calls `onClose`. @default true */
   closeOnOverlayClick?: boolean;
 }
 
 /**
- * Centered dialog. Portal + Escape-to-close + scroll-lock + initial focus.
- * Consolidates the per-page modal/overlay implementations.
+ * Centered dialog rendered into `document.body` via a portal.
+ *
+ * Locks `overflow: hidden` on `<body>` while open and releases it on close.
+ * Focuses the dialog container on mount so keyboard navigation starts inside
+ * the modal. Dismisses on Escape key and, optionally, backdrop click.
+ *
+ * @param props - {@link ModalProps}
+ * @returns A portal containing the overlay and dialog `<div>`, or `null` when closed.
+ *
+ * @example
+ * <Modal
+ *   open={showConfirm}
+ *   onClose={() => setShowConfirm(false)}
+ *   title="Confirmar exclusão"
+ *   footer={<Button variant="danger" onClick={handleDelete}>Excluir</Button>}
+ * >
+ *   Tem certeza que deseja excluir este registro?
+ * </Modal>
  */
 export default function Modal({
   open,

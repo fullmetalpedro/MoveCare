@@ -2,15 +2,41 @@ import type { ReactNode } from "react";
 import "./Toggle.css";
 
 export interface ToggleProps {
+  /** Current on/off state. */
   checked: boolean;
+  /** Called with the new `checked` value when the user toggles. */
   onChange: (checked: boolean) => void;
-  /** When provided, renders a full bordered row with text + switch. */
+  /** When provided, renders a full-width bordered row with title and optional description. */
   label?: ReactNode;
+  /** Secondary descriptive text rendered below `label` in the row variant. */
   description?: ReactNode;
+  /** When `true`, the toggle is non-interactive. @default false */
   disabled?: boolean;
 }
 
-/** iOS-style switch. Replaces .cadex-toggle(-row/-knob). */
+/**
+ * iOS-style switch toggle with two render modes.
+ *
+ * - **Standalone** (no `label`): renders as a bare switch `<button>`.
+ * - **Row** (with `label`): renders a full-width bordered row with the label
+ *   and optional description on the left and the switch on the right.
+ *
+ * @param props - {@link ToggleProps}
+ * @returns A `<button role="switch">` with `aria-checked` reflecting the current state.
+ *
+ * @example
+ * // Standalone switch:
+ * <Toggle checked={enabled} onChange={setEnabled} />
+ *
+ * @example
+ * // Full row variant:
+ * <Toggle
+ *   checked={form.temVideo}
+ *   onChange={v => setField("temVideo", v)}
+ *   label="Possui vídeo demonstrativo"
+ *   description="Informe o link do vídeo para o paciente assistir"
+ * />
+ */
 export default function Toggle({
   checked,
   onChange,

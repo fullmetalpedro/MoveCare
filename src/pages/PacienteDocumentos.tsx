@@ -1,15 +1,26 @@
 import { useOutletContext } from "react-router-dom";
 import { FileText, Plus, Download, Trash2 } from "lucide-react";
 import type { Paciente } from "../types";
+import { documentService } from "../services";
 import "./PacienteDocumentos.css";
 
-const MOCK_DOCS = [
-  { id: "doc1", nome: "Exame - Eletrocardiograma", tipo: "PDF", tamanho: "2.4 MB", data: "20/04/2026" },
-  { id: "doc2", nome: "Exame - Raio X Mão", tipo: "PDF", tamanho: "5.1 MB", data: "18/04/2026" },
-];
-
+/**
+ * Patient documents sub-page listing uploaded files (exams, reports, etc.)
+ * with download and delete actions.
+ *
+ * Receives the active patient via `useOutletContext<Paciente>()` provided by
+ * `PacienteDetail`. Document data is sourced from {@link documentService.getForPatient}.
+ * Mounted at `/pacientes/:id/documentos`.
+ *
+ * @returns The documents grid `<div>` with a document card per file and an
+ *   upload drop zone.
+ *
+ * @example
+ * // Rendered at /pacientes/:id/documentos
+ */
 export default function PacienteDocumentos() {
   const paciente = useOutletContext<Paciente>();
+  const docs = documentService.getForPatient(paciente.id);
 
   return (
     <div className="documentos-page">
@@ -18,7 +29,7 @@ export default function PacienteDocumentos() {
       </div>
 
       <div className="documentos-grid">
-        {MOCK_DOCS.map((doc) => (
+        {docs.map((doc) => (
           <div key={doc.id} className="doc-card">
             <div className="doc-thumb">
               <FileText size={32} />

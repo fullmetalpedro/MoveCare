@@ -5,15 +5,33 @@ import { X } from "lucide-react";
 import "./overlay.css";
 
 export interface DrawerProps {
+  /** Controls visibility; `false` unmounts the portal entirely. */
   open: boolean;
+  /** Called when the user closes via Escape key, the × button, or backdrop click. */
   onClose: () => void;
+  /** Optional title rendered in the drawer header. */
   title?: ReactNode;
   children: ReactNode;
+  /** Which edge the panel slides in from. @default "right" */
   side?: "right" | "left";
+  /** Panel width as a pixel number or CSS length string. @default 380 */
   width?: number | string;
 }
 
-/** Side panel. Portal + Escape + scroll-lock. Replaces the notifications drawer overlay. */
+/**
+ * Side-sliding panel rendered into `document.body` via a portal.
+ *
+ * Locks `overflow: hidden` on `<body>` while open and focuses the panel on
+ * mount. Dismisses on Escape key and backdrop click.
+ *
+ * @param props - {@link DrawerProps}
+ * @returns A portal containing the overlay and the sliding panel `<div>`, or `null` when closed.
+ *
+ * @example
+ * <Drawer open={filtersOpen} onClose={() => setFiltersOpen(false)} title="Filtros">
+ *   <FilterPanel />
+ * </Drawer>
+ */
 export default function Drawer({
   open,
   onClose,

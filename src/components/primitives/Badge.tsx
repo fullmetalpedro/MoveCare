@@ -4,17 +4,26 @@ import "./Badge.css";
 export type BadgeTone = "neutral" | "accent" | "success" | "warning" | "danger";
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
+  /** Semantic color tone. Ignored when `color` is provided. @default "neutral" */
   tone?: BadgeTone;
-  /** Arbitrary brand color (e.g. exercise category). Overrides `tone`. */
+  /** Arbitrary hex/CSS color (e.g. an exercise category color). Overrides `tone` and renders a soft tint background. */
   color?: string;
   children?: ReactNode;
 }
 
 /**
- * Non-interactive status pill. Replaces nivel-badge, session-badge,
- * sessoes-count, ex-cat-badge, delta-*, tl-chip.
- * Pass `color` for data-driven colors (category palette) — it renders a soft
- * tint background with the color as text, matching the old `${color}15` trick.
+ * Non-interactive status pill for labelling entities with a status, level, or category.
+ *
+ * Pass a semantic `tone` for standard status colors, or an arbitrary `color` hex
+ * string for data-driven palettes such as exercise categories. When `color` is
+ * set it renders a `${color}1a` tint background with `color` as the text.
+ *
+ * @param props - {@link BadgeProps}
+ * @returns A `<span>` styled as a small pill.
+ *
+ * @example
+ * <Badge tone="success">Ativo</Badge>
+ * <Badge color="#AF52DE">Mobilidade</Badge>
  */
 export default function Badge({
   tone = "neutral",

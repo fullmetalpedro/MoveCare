@@ -12,6 +12,8 @@ import {
   Textarea,
 } from "../components/primitives";
 import type { ChipTone } from "../components/primitives";
+import { validatePatientForm } from "../lib/validation";
+import { evaColor } from "../lib/format";
 import "./CadastroPaciente.css";
 
 interface FormData {
@@ -38,13 +40,22 @@ const STATUS_OPTIONS: { value: string; tone: ChipTone }[] = [
 ];
 const EVA_OPTIONS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-function evaColor(val: string) {
-  const n = parseInt(val);
-  if (n <= 3) return "var(--success)";
-  if (n <= 6) return "var(--warning)";
-  return "#FF3B30";
-}
-
+/**
+ * New patient registration form with sections for personal data, contact,
+ * clinical information, and the first session.
+ *
+ * Validation is handled by {@link validatePatientForm} from
+ * `src/lib/validation.ts`. The EVA pain slider uses {@link evaColor} from
+ * `src/lib/format.ts` for color feedback. Scrolls to the first error on
+ * failed submission via `scrollToFirstError`.
+ * Mounted at `/pacientes/novo`.
+ *
+ * @returns The registration form page `<div>` with sectioned fields and
+ *   cancel/save actions.
+ *
+ * @example
+ * // Rendered at /pacientes/novo
+ */
 export default function CadastroPaciente() {
   const navigate = useNavigate();
   const [form, setForm] = useState<FormData>({
@@ -70,16 +81,7 @@ export default function CadastroPaciente() {
   }
 
   function validate() {
-    const errs: Partial<Record<keyof FormData, string>> = {};
-    if (!form.nome.trim()) errs.nome = "Nome é obrigatório";
-    if (!form.idade || isNaN(Number(form.idade)) || Number(form.idade) <= 0)
-      errs.idade = "Idade inválida";
-    if (!form.condicao.trim()) errs.condicao = "Condição é obrigatória";
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      errs.email = "E-mail inválido";
-    if (form.totalSessoes && (isNaN(Number(form.totalSessoes)) || Number(form.totalSessoes) <= 0))
-      errs.totalSessoes = "Número inválido";
-    return errs;
+    return validatePatientForm(form);
   }
 
   function handleSubmit(e: React.FormEvent) {

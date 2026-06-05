@@ -3,8 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import SplashScreen from "./components/SplashScreen";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
-import mockData from "./data/mock.json";
-import type { MockData } from "./types";
+import { dashboardService, patientService, agendaService } from "./services";
 
 // Dashboard + Layout stay eager (Dashboard is the landing route, so no
 // Suspense flash on first paint). Everything else is split into its own
@@ -25,8 +24,15 @@ const CadastroExercicio = lazy(() => import("./pages/CadastroExercicio"));
 // Design-system showcase (not linked in the sidebar; visit /styleguide directly).
 const Styleguide = lazy(() => import("./pages/Styleguide"));
 
-const data = mockData as MockData;
+const { doctor, stats, agendaHoje, alertCount } = dashboardService.getOverview();
+const pacientes = patientService.getAll();
+const eventos = agendaService.getWeek();
 
+/**
+ * Fallback spinner shown by `<Suspense>` while a lazy-loaded page chunk loads.
+ *
+ * @returns A centered `<div>` with a CSS spinner, aria-labeled as busy.
+ */
 function RouteFallback() {
   return (
     <div className="route-fallback" aria-busy="true">
@@ -41,21 +47,21 @@ export default function App() {
       <SplashScreen />
       <Suspense fallback={<RouteFallback />}>
         <Routes>
-          <Route element={<Layout doctor={data.doctor} alertCount={data.alertas.length} />}>
+          <Route element={<Layout doctor={doctor} alertCount={alertCount} />}>
             <Route
               index
               element={
                 <Dashboard
-                  stats={data.stats}
-                  agendaHoje={data.agendaHoje}
-                  doctorName={data.doctor.name}
-                  pacientes={data.pacientes}
+                  stats={stats}
+                  agendaHoje={agendaHoje}
+                  doctorName={doctor.name}
+                  pacientes={pacientes}
                 />
               }
             />
-            <Route path="agenda" element={<Agenda eventos={data.agendaSemanal} pacientes={data.pacientes} />} />
-            <Route path="pacientes" element={<Pacientes pacientes={data.pacientes} />} />
-            <Route path="pacientes/:id" element={<PacienteDetail pacientes={data.pacientes} />}>
+            <Route path="agenda" element={<Agenda eventos={eventos} pacientes={pacientes} />} />
+            <Route path="pacientes" element={<Pacientes pacientes={pacientes} />} />
+            <Route path="pacientes/:id" element={<PacienteDetail pacientes={pacientes} />}>
               <Route index element={<PacienteResumo />} />
               <Route path="plano" element={<PlanoTratamento />} />
               <Route path="evolucao" element={<Evolucao />} />

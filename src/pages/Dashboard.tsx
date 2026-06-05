@@ -6,12 +6,38 @@ import type { Stats, AgendaItem, Paciente } from "../types";
 import "./Dashboard.css";
 
 interface DashboardProps {
+  /** High-level practice statistics for the current period. */
   stats: Stats;
+  /** Today's schedule entries shown in the agenda section. */
   agendaHoje: AgendaItem[];
+  /** Clinician's first name used in the "Bom dia, ..." greeting. */
   doctorName: string;
+  /** Full patient list used to populate the recent-patients section. */
   pacientes: Paciente[];
 }
 
+/**
+ * Landing page showing a stats overview, today's agenda, and recent patients.
+ *
+ * Receives all data as props from `App.tsx` (sourced via `dashboardService` and
+ * `patientService`). Renders a loading skeleton for 800 ms on mount to simulate
+ * an async fetch and prevent content from flashing in before styles settle.
+ *
+ * @param props - {@link DashboardProps}
+ * @returns The dashboard layout `<div>` with stats grid, agenda, and patient shortcuts.
+ *
+ * @example
+ * // Mounted at the root index route in App.tsx:
+ * <Dashboard stats={overview.stats} agendaHoje={overview.agendaHoje}
+ *   doctorName={doctor.name} pacientes={pacientes} />
+ */
+
+/**
+ * Colored indicator dot mapping an appointment status string to a brand color.
+ *
+ * @param props.status - One of `"confirmado"`, `"avaliacao"`, or `"livre"`.
+ * @returns A `<span>` styled as a small filled circle.
+ */
 function StatusDot({ status }: { status: string }) {
   const colors: Record<string, string> = {
     confirmado: "#34C759",
@@ -21,6 +47,11 @@ function StatusDot({ status }: { status: string }) {
   return <span className="status-dot" style={{ background: colors[status] || "#C7C7CC" }} />;
 }
 
+/**
+ * Placeholder skeleton layout shown while the dashboard data loads.
+ *
+ * @returns A `<div>` mimicking the dashboard layout with shimmer blocks.
+ */
 function DashboardSkeleton() {
   return (
     <div className="dashboard">

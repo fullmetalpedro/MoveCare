@@ -1,8 +1,13 @@
 export interface Doctor {
+  /** Unique clinician identifier. */
   id: string;
+  /** Full display name, e.g. `"Dr. Carlos Reis"`. */
   name: string;
+  /** Two-letter initials used in {@link Avatar}. */
   initials: string;
+  /** Professional role label, e.g. `"Fisioterapeuta"`. */
   role: string;
+  /** Registration code, e.g. `"CREFITO-3"`. */
   crefito: string;
 }
 
@@ -99,26 +104,47 @@ export interface ProximaSessao {
 }
 
 export interface Paciente {
+  /** Unique patient identifier. */
   id: string;
+  /** Full patient name. */
   nome: string;
+  /** Two-letter initials for {@link Avatar}. */
   initials: string;
+  /** Patient age in years. */
   idade: number;
+  /** Biological sex label. */
   sexo: string;
+  /** Current care status: `"Ativo"`, `"Avaliação"`, or `"Alta"`. */
   status: string;
+  /** Primary diagnosis or condition description. */
   condicao: string;
+  /** Number of sessions completed so far. */
   sessoes: number;
+  /** Total sessions planned in the treatment protocol. */
   totalSessoes: number;
+  /** Overall adherence percentage (0–100). */
   adesao: number;
+  /** Adherence change vs previous period (positive = improved). */
   adesaoVariacao: number;
+  /** Date string of the most recent visit. */
   ultimaVisita: string;
+  /** Current pain level on the EVA scale (0–10). */
   dorEVA: number;
+  /** Initial EVA score recorded at intake. */
   dorInicio: number;
+  /** Expected discharge date string. */
   previsaoAlta: string;
+  /** Upcoming session details, or `null` if none scheduled. */
   proximaSessao: ProximaSessao | null;
+  /** Most recent clinical evolution note, or `null` if none exists. */
   ultimaEvolucao: Evolucao | null;
+  /** Per-day adherence markers for the current week. */
   adesaoSemanal: AdesaoDia[];
+  /** Active treatment plan, or `null` if none assigned. */
   planoTratamento: PlanoTratamento | null;
+  /** Clinical assessment history (optional — may be absent on older records). */
   avaliacoes?: AvaliacaoTeste[];
+  /** Session registration history (optional — may be absent on older records). */
   registrosSessoes?: RegistroSessao[];
 }
 
@@ -139,4 +165,21 @@ export interface MockData {
   alertas: Alerta[];
   pacientes: Paciente[];
   agendaSemanal: AgendaSemanal[];
+}
+
+export interface Documento {
+  id: string;
+  nome: string;
+  tipo: string;
+  tamanho: string;
+  data: string;
+}
+
+export interface LibraryExercicio {
+  id: string;
+  nome: string;
+  categoria: string;
+  duracao: string;
+  temVideo: boolean;
+  nivel: "Iniciante" | "Intermediário" | "Avançado";
 }

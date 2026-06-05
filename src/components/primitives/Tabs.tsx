@@ -3,24 +3,44 @@ import type { ReactNode } from "react";
 import "./Tabs.css";
 
 export interface TabItem {
+  /** Unique string identifier matched against the `value` prop. */
   value: string;
+  /** Display content for the tab button. */
   label: ReactNode;
 }
 
 export interface TabsProps {
+  /** Array of tab descriptors. */
   items: TabItem[];
+  /** Currently active tab value. */
   value: string;
+  /** Called with the new value when the user clicks a tab. */
   onChange: (value: string) => void;
-  /** "slide" = sliding pill indicator (default); "flat" = underline/weight only. */
+  /**
+   * Indicator style. `"slide"` renders an animated pill behind the active tab;
+   * `"flat"` uses font weight and color only. @default "slide"
+   */
   variant?: "slide" | "flat";
+  /** When `true`, each tab stretches equally to fill the container. @default false */
   fullWidth?: boolean;
 }
 
 /**
- * Segmented control. Encapsulates the sliding-indicator logic that was
- * reimplemented in Biblioteca / Pacientes / Agenda (measure offsetLeft/Width
- * of the active tab in a layout effect + on resize).
- * Replaces .slide-tabs/.slide-indicator/.filter-tab, .view-btn, .fase-tab.
+ * Segmented control with an animated active-tab indicator.
+ *
+ * The sliding pill is positioned with `useLayoutEffect` to avoid a visible
+ * jump on first render. Window resize events trigger a re-measurement so the
+ * indicator stays aligned at any viewport width.
+ *
+ * @param props - {@link TabsProps}
+ * @returns A `<div role="tablist">` containing one `<button role="tab">` per item.
+ *
+ * @example
+ * <Tabs
+ *   value={filtro}
+ *   onChange={setFiltro}
+ *   items={CATEGORIAS.map(cat => ({ value: cat, label: cat }))}
+ * />
  */
 export default function Tabs({
   items,

@@ -47,6 +47,17 @@ function Block({ title, children }: { title: string; children: React.ReactNode }
   );
 }
 
+/**
+ * Design system showcase page displaying all primitives and their variants.
+ *
+ * Not linked in the sidebar — accessible directly at `/styleguide`. Used
+ * during development to verify component appearance and interactions.
+ *
+ * @returns The styleguide `<div>` with sections for each primitive component.
+ *
+ * @example
+ * // Visit /styleguide in the browser to view the design system.
+ */
 export default function Styleguide() {
   const [tab, setTab] = useState("month");
   const [ftab, setFtab] = useState("fase1");

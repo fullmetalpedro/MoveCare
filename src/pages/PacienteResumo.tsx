@@ -3,6 +3,19 @@ import { Plus, Eye, CheckCircle2, XCircle } from "lucide-react";
 import type { Paciente } from "../types";
 import "./PacienteResumo.css";
 
+/**
+ * Patient summary sub-page showing the latest evolution note, weekly adherence
+ * dots, upcoming session, and clinical highlights.
+ *
+ * Receives the active patient via `useOutletContext<Paciente>()` provided by
+ * `PacienteDetail`. Mounted at the index route under `/pacientes/:id`.
+ *
+ * @returns The summary grid `<div>` with cards for evolution, adherence,
+ *   next session, and pain/discharge info.
+ *
+ * @example
+ * // Rendered automatically at /pacientes/:id (index nested route)
+ */
 export default function PacienteResumo() {
   const paciente = useOutletContext<Paciente>();
   const navigate = useNavigate();

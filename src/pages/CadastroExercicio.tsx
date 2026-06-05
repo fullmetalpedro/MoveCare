@@ -12,6 +12,7 @@ import {
   Textarea,
   Toggle,
 } from "../components/primitives";
+import { validateExerciseForm } from "../lib/validation";
 import "./CadastroExercicio.css";
 
 interface FormData {
@@ -42,6 +43,21 @@ const NIVEIS = [
 
 const SERIES_SUGESTOES = ["2x10 rep", "3x10 rep", "3x12 rep", "3x15 rep", "4x10 rep", "3x30s", "3x45s", "5 min", "10 min"];
 
+/**
+ * New exercise registration form with a live preview card showing how the
+ * exercise will look in the library.
+ *
+ * Validation is handled by {@link validateExerciseForm} from
+ * `src/lib/validation.ts`. Scrolls to the first error on failed submission
+ * via `scrollToFirstError`.
+ * Mounted at `/biblioteca/novo`.
+ *
+ * @returns The exercise form page `<div>` with a preview card, sectioned
+ *   fields, and cancel/save actions.
+ *
+ * @example
+ * // Rendered at /biblioteca/novo
+ */
 export default function CadastroExercicio() {
   const navigate = useNavigate();
   const [form, setForm] = useState<FormData>({
@@ -62,12 +78,7 @@ export default function CadastroExercicio() {
   }
 
   function validate() {
-    const errs: Partial<Record<keyof FormData, string>> = {};
-    if (!form.nome.trim()) errs.nome = "Nome do exercício é obrigatório";
-    if (!form.series.trim()) errs.series = "Séries / duração é obrigatório";
-    if (form.temVideo && !form.videoUrl.trim())
-      errs.videoUrl = "Informe a URL do vídeo";
-    return errs;
+    return validateExerciseForm(form);
   }
 
   function handleSubmit(e: React.FormEvent) {

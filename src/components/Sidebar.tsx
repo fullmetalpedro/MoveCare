@@ -6,12 +6,36 @@ import Avatar from "./Avatar";
 import "./Sidebar.css";
 
 interface SidebarProps {
+  /** Clinician profile data rendered in the bottom footer. */
   doctor: Doctor;
+  /** Number of active alerts; shows a badge on the Dashboard link when greater than 0. */
   alertCount: number;
+  /** Whether the sidebar is in narrow (icon-only) collapsed mode. */
   collapsed: boolean;
+  /** Called when the user clicks the expand/collapse toggle button. */
   onToggle: () => void;
 }
 
+/**
+ * Primary navigation sidebar with an animated active-item highlight slider.
+ *
+ * The sliding indicator is repositioned with `useLayoutEffect` so it sits
+ * behind the active `<NavLink>` before the browser paints — preventing a
+ * visible jump on the first render. Resize events and route changes both
+ * trigger a re-measurement.
+ *
+ * @param props - {@link SidebarProps}
+ * @returns An `<aside>` element containing the branding logo, navigation
+ *   links, and the clinician footer row.
+ *
+ * @example
+ * <Sidebar
+ *   doctor={doctor}
+ *   alertCount={3}
+ *   collapsed={false}
+ *   onToggle={() => setCollapsed(c => !c)}
+ * />
+ */
 export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: SidebarProps) {
   const navRef = useRef<HTMLElement>(null);
   const location = useLocation();

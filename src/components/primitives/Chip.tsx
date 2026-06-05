@@ -4,15 +4,39 @@ import "./Chip.css";
 export type ChipTone = "accent" | "success" | "warning" | "danger" | "neutral";
 
 export interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Whether this chip is in the selected/active state. @default false */
   selected?: boolean;
+  /** Semantic color tone for the selected state. @default "accent" */
   tone?: ChipTone;
+  /** Size preset. @default "sm" */
   size?: "sm" | "md";
-  /** Arbitrary brand color for the selected state (e.g. exercise category). Overrides `tone`. */
+  /** Arbitrary hex/CSS color for the selected state (overrides `tone`). */
   color?: string;
   children?: ReactNode;
 }
 
-/** Interactive selectable pill. Replaces cadex-chip, cadex-cat-btn, cadex-nivel-btn, select-chip. */
+/**
+ * Interactive selectable pill used for filter groups and category or level pickers.
+ *
+ * Renders as a `<button>` with `aria-pressed` so screen readers announce the
+ * selected state. Pass `color` for data-driven selection colors (e.g. exercise
+ * categories).
+ *
+ * @param props - {@link ChipProps}
+ * @returns A `<button>` styled as a chip, reflecting the `selected` state.
+ *
+ * @example
+ * // Status filter group:
+ * {["Todos", "Ativos", "Alta"].map(f => (
+ *   <Chip key={f} selected={filter === f} onClick={() => setFilter(f)}>{f}</Chip>
+ * ))}
+ *
+ * @example
+ * // Category picker with a custom color:
+ * <Chip color="#E04F5F" selected={cat === "Fortalecimento"} onClick={...}>
+ *   Fortalecimento
+ * </Chip>
+ */
 export default function Chip({
   selected = false,
   tone = "accent",

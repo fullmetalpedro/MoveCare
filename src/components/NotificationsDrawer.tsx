@@ -4,10 +4,27 @@ import { X, BellOff } from "lucide-react";
 import "./NotificationsDrawer.css";
 
 interface NotificationsDrawerProps {
+  /** Whether the drawer is currently visible; `false` unmounts the portal entirely. */
   open: boolean;
+  /** Invoked after the closing CSS transition (~220 ms) completes. */
   onClose: () => void;
 }
 
+/**
+ * Slide-in notifications panel rendered into `document.body` via a portal.
+ *
+ * Handles its own close animation: the overlay/panel fade-out runs for ~220 ms
+ * before `onClose` is called, so the parent should not forcibly unmount before
+ * that. Dismisses on Escape key press and backdrop click.
+ *
+ * @param props - {@link NotificationsDrawerProps}
+ * @returns A portal containing the drawer overlay and slide-in panel, or
+ *   `null` when `open` is `false`.
+ *
+ * @example
+ * const [open, setOpen] = useState(false);
+ * <NotificationsDrawer open={open} onClose={() => setOpen(false)} />
+ */
 export default function NotificationsDrawer({ open, onClose }: NotificationsDrawerProps) {
   const [closing, setClosing] = useState(false);
 

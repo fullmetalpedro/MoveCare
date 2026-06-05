@@ -6,6 +6,25 @@ import "./SplashScreen.css";
 const VISIBLE_MS = 1750;
 const FADE_MS = 450;
 
+/**
+ * Full-screen animated loading splash rendered over the app on first mount.
+ *
+ * Visible for {@link VISIBLE_MS} ms, then fades out over {@link FADE_MS} ms
+ * before unmounting. Rendered into `document.body` via a portal so it sits
+ * above all app content regardless of stacking context. Locks
+ * `overflow: hidden` on `<html>` while visible to prevent the scrollbar from
+ * appearing and shifting the layout behind the splash.
+ *
+ * @returns A portal wrapping the animated splash `<div>`, or `null` once the
+ *   fade-out completes.
+ *
+ * @example
+ * // Mount once at the top of the component tree (App.tsx):
+ * <>
+ *   <SplashScreen />
+ *   <Routes>...</Routes>
+ * </>
+ */
 export default function SplashScreen() {
   const [phase, setPhase] = useState<"show" | "hide" | "done">("show");
 

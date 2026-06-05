@@ -6,14 +6,38 @@ import Avatar from "../components/Avatar";
 import { Button, SearchInput, Tabs, Badge } from "../components/primitives";
 import type { BadgeTone } from "../components/primitives";
 import type { Paciente } from "../types";
+import { filterPatients } from "../lib/patient";
 import "./Pacientes.css";
 
 interface PacientesProps {
+  /** Full patient list to display; filtering is applied client-side via {@link filterPatients}. */
   pacientes: Paciente[];
 }
 
+/**
+ * Patient list page with status tab filtering and free-text search.
+ *
+ * Filtering is performed client-side by {@link filterPatients} from
+ * `src/lib/patient.ts`. The active filter can be pre-set via the `?filter=`
+ * query parameter (used by Dashboard shortcuts).
+ *
+ * @param props - {@link PacientesProps}
+ * @returns The patients page `<div>` with a search bar, tab filters, and a
+ *   sortable table of patient rows.
+ *
+ * @example
+ * // Mounted at /pacientes in App.tsx:
+ * <Pacientes pacientes={pacientes} />
+ */
+
 type FilterType = "Todos" | "Ativos" | "Avaliação" | "Alta";
 
+/**
+ * Horizontal progress bar visualizing a patient's overall adherence percentage.
+ *
+ * @param props.value - Adherence as a number 0–100.
+ * @returns A bar + numeric label colored green/amber/red by threshold.
+ */
 function AdesaoBar({ value }: { value: number }) {
   let color = "var(--success)";
   if (value < 50) color = "var(--danger)";
@@ -34,6 +58,12 @@ const STATUS_TONE: Record<string, BadgeTone> = {
   Alta: "neutral",
 };
 
+/**
+ * {@link Badge} wrapper that maps a patient status string to a semantic tone.
+ *
+ * @param props.status - One of `"Ativo"`, `"Avaliação"`, or `"Alta"`.
+ * @returns A `<Badge>` with the appropriate tone applied.
+ */
 function StatusBadge({ status }: { status: string }) {
   return <Badge tone={STATUS_TONE[status] ?? "neutral"}>{status}</Badge>;
 }
@@ -49,11 +79,7 @@ export default function Pacientes({ pacientes }: PacientesProps) {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const filtered = pacientes.filter(p => {
-    if (filter !== "Todos" && p.status !== (filter === "Ativos" ? "Ativo" : filter)) return false;
-    if (search && !p.nome.toLowerCase().includes(search.toLowerCase())) return false;
-    return true;
-  });
+  const filtered = filterPatients(pacientes, filter, search);
 
   return (
     <div className="pacientes-page">

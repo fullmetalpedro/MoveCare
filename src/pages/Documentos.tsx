@@ -1,19 +1,30 @@
 import { FileText, Plus, Download, Trash2 } from "lucide-react";
 import PageHeader from "../components/PageHeader";
+import { documentService } from "../services";
 import "./PacienteDocumentos.css";
 
-const MOCK_DOCS = [
-  { id: "doc1", nome: "Guia médica", tipo: "PDF", tamanho: "1.2 MB", data: "15/04/2026" },
-  { id: "doc2", nome: "Contrato", tipo: "PDF", tamanho: "340 KB", data: "10/03/2026" },
-];
-
+/**
+ * Global documents page listing clinic-level templates and shared files
+ * (contracts, guides, forms) with download and delete actions.
+ *
+ * Data is sourced from {@link documentService.getTemplates}.
+ * Mounted at `/documentos`.
+ *
+ * @returns The documents grid `<div>` with a document card per file and an
+ *   upload drop zone.
+ *
+ * @example
+ * // Rendered at /documentos
+ */
 export default function Documentos() {
+  const docs = documentService.getTemplates();
+
   return (
     <div className="documentos-page">
       <PageHeader title="Documentos & Modelos" backTo="/" />
 
       <div className="documentos-grid">
-        {MOCK_DOCS.map((doc) => (
+        {docs.map((doc) => (
           <div key={doc.id} className="doc-card">
             <div className="doc-thumb">
               <FileText size={32} />

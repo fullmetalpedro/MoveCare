@@ -3,16 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Play, Plus, Dumbbell, StretchHorizontal, Activity, Footprints, HeartPulse, Wind } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { Button, SearchInput, Tabs, Badge } from "../components/primitives";
+import { exerciseService } from "../services";
+import type { LibraryExercicio } from "../types";
 import "./Biblioteca.css";
-
-interface Exercicio {
-  id: string;
-  nome: string;
-  categoria: string;
-  duracao: string;
-  temVideo: boolean;
-  nivel: "Iniciante" | "Intermediário" | "Avançado";
-}
 
 const CATEGORIAS = ["Todos", "Fortalecimento", "Estabilização", "Flexibilidade", "Mobilidade", "Funcional", "Relaxamento"];
 
@@ -34,24 +27,14 @@ const CATEGORIA_COLORS: Record<string, string> = {
   Relaxamento: "#5AC8FA",
 };
 
-const MOCK_EXERCICIOS: Exercicio[] = [
-  { id: "ex1", nome: "Agachamento Livre", categoria: "Fortalecimento", duracao: "3x12 rep", temVideo: true, nivel: "Intermediário" },
-  { id: "ex2", nome: "Prancha Isométrica", categoria: "Estabilização", duracao: "3x30s", temVideo: true, nivel: "Iniciante" },
-  { id: "ex3", nome: "Alongamento Isquiotibiais", categoria: "Flexibilidade", duracao: "3x30s", temVideo: true, nivel: "Iniciante" },
-  { id: "ex4", nome: "Ponte de Glúteo", categoria: "Fortalecimento", duracao: "3x15 rep", temVideo: true, nivel: "Iniciante" },
-  { id: "ex5", nome: "Rotação de Quadril", categoria: "Mobilidade", duracao: "2x15 rep", temVideo: false, nivel: "Iniciante" },
-  { id: "ex6", nome: "Leg Press 45°", categoria: "Fortalecimento", duracao: "4x10 rep", temVideo: true, nivel: "Avançado" },
-  { id: "ex7", nome: "Bird Dog", categoria: "Estabilização", duracao: "3x10 rep", temVideo: true, nivel: "Iniciante" },
-  { id: "ex8", nome: "Caminhada Lateral com Elástico", categoria: "Funcional", duracao: "3x12 rep", temVideo: true, nivel: "Intermediário" },
-  { id: "ex9", nome: "Alongamento de Panturrilha", categoria: "Flexibilidade", duracao: "3x30s", temVideo: false, nivel: "Iniciante" },
-  { id: "ex10", nome: "Dead Bug", categoria: "Estabilização", duracao: "3x10 rep", temVideo: true, nivel: "Intermediário" },
-  { id: "ex11", nome: "Step-Up Funcional", categoria: "Funcional", duracao: "3x12 rep", temVideo: true, nivel: "Intermediário" },
-  { id: "ex12", nome: "Respiração Diafragmática", categoria: "Relaxamento", duracao: "5 min", temVideo: true, nivel: "Iniciante" },
-  { id: "ex13", nome: "Abdução de Quadril", categoria: "Fortalecimento", duracao: "3x15 rep", temVideo: true, nivel: "Iniciante" },
-  { id: "ex14", nome: "Mobilização de Tornozelo", categoria: "Mobilidade", duracao: "2x20 rep", temVideo: false, nivel: "Iniciante" },
-  { id: "ex15", nome: "Flexão de Ombro com Bastão", categoria: "Flexibilidade", duracao: "3x15 rep", temVideo: true, nivel: "Iniciante" },
-];
+const EXERCICIOS = exerciseService.getLibrary();
 
+/**
+ * {@link Badge} that maps an exercise difficulty level to a brand color.
+ *
+ * @param props.nivel - One of `"Iniciante"`, `"Intermediário"`, or `"Avançado"`.
+ * @returns A colored `<Badge>` with the level label.
+ */
 function NivelBadge({ nivel }: { nivel: string }) {
   const colors: Record<string, string> = {
     Iniciante: "#34C759",
@@ -61,6 +44,11 @@ function NivelBadge({ nivel }: { nivel: string }) {
   return <Badge color={colors[nivel] ?? "#86868B"}>{nivel}</Badge>;
 }
 
+/**
+ * Placeholder skeleton grid shown while the exercise library data loads.
+ *
+ * @returns A `<div>` with 8 shimmer card placeholders matching the library grid layout.
+ */
 function BibliotecaSkeleton() {
   return (
     <div className="biblioteca-grid">
@@ -80,6 +68,20 @@ function BibliotecaSkeleton() {
   );
 }
 
+/**
+ * Exercise library page showing the full exercise catalogue with category tab
+ * filtering and free-text search.
+ *
+ * Data is sourced from {@link exerciseService.getLibrary}. Renders a skeleton
+ * grid for 800 ms on mount before fading in the content.
+ * Mounted at `/biblioteca`.
+ *
+ * @returns The library page `<div>` with a search bar, category tabs, and an
+ *   exercise card grid.
+ *
+ * @example
+ * // Rendered at /biblioteca
+ */
 export default function Biblioteca() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -91,7 +93,7 @@ export default function Biblioteca() {
     return () => clearTimeout(t);
   }, []);
 
-  const filtered = MOCK_EXERCICIOS.filter(ex => {
+  const filtered: LibraryExercicio[] = EXERCICIOS.filter(ex => {
     if (filtro !== "Todos" && ex.categoria !== filtro) return false;
     if (search && !ex.nome.toLowerCase().includes(search.toLowerCase())) return false;
     return true;

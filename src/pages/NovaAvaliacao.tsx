@@ -11,6 +11,13 @@ import "../styles/forms.css";
 import "./NovaAvaliacao.css";
 
 // ─── Up/down timer (freerunning) ──────────────────────────────────────────────
+/**
+ * Free-running stopwatch widget that records elapsed time to one decimal place.
+ *
+ * @param props.value - Current committed time string (e.g. `"12.3"`); shown when stopped.
+ * @param props.onChange - Called with the elapsed time string when the user stops the timer.
+ * @returns A time display and start/stop/reset button group.
+ */
 function TimerWidget({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [running, setRunning] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -52,6 +59,13 @@ function TimerWidget({ value, onChange }: { value: string; onChange: (v: string)
 }
 
 // ─── Countdown timer (fixed duration) ────────────────────────────────────────
+/**
+ * Countdown timer that counts down from `totalSeconds` and shows a "Tempo esgotado!"
+ * label when it reaches zero.
+ *
+ * @param props.totalSeconds - Duration in seconds to count down from.
+ * @returns A countdown display and start/reset button group; turns red when ≤ 5 s remain.
+ */
 function CountdownWidget({ totalSeconds }: { totalSeconds: number }) {
   const [remaining, setRemaining] = useState(totalSeconds);
   const [running, setRunning] = useState(false);
@@ -109,6 +123,13 @@ function CountdownWidget({ totalSeconds }: { totalSeconds: number }) {
 }
 
 // ─── Rep counter ──────────────────────────────────────────────────────────────
+/**
+ * Tap counter for incrementing or decrementing a repetition count.
+ *
+ * @param props.value - Current repetition count; cannot go below 0.
+ * @param props.onChange - Called with the new count after each button press.
+ * @returns A row with decrement, count display, and increment buttons.
+ */
 function RepCounter({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
     <div className="rep-counter">
@@ -129,6 +150,17 @@ function RepCounter({ value, onChange }: { value: number; onChange: (v: number) 
 }
 
 // ─── Score selector (0–N buttons) ─────────────────────────────────────────────
+/**
+ * Labeled row of score buttons ranging from 0 to `max` (inclusive).
+ *
+ * Used for MMSE/MoCA section items and DGI/MRC group scores.
+ *
+ * @param props.label - Descriptive text for the score item.
+ * @param props.max - Highest selectable score value.
+ * @param props.value - Currently selected score.
+ * @param props.onChange - Called with the new score when a button is clicked.
+ * @returns A row with the label and a series of numbered score buttons.
+ */
 function ScoreRow({ label, max, value, onChange }: { label: string; max: number; value: number; onChange: (v: number) => void }) {
   return (
     <div className="score-row">
@@ -316,6 +348,25 @@ function initVals(sections: TestSection[]): Record<string, number> {
 }
 
 // ─── Test modal (MMSE / MoCA) ─────────────────────────────────────────────────
+/**
+ * Full-screen modal for administering scored cognitive assessments (MMSE and MoCA).
+ *
+ * Renders a scrollable body of {@link ScoreRow} groups, a live running total in
+ * the footer, and a confirm button. Locks body scroll on mount, dismisses on
+ * Escape key, and animates out before calling `onClose`.
+ *
+ * @param props.testId - Identifier (`"mmse"` or `"moca"`) used for threshold labelling.
+ * @param props.title - Display title shown in the modal header.
+ * @param props.subtitle - Secondary descriptor (score range, normative cutoff).
+ * @param props.preamble - Optional instructional content rendered above the sections.
+ * @param props.sections - Array of scored sections, each with items and hints.
+ * @param props.maxTotal - Maximum achievable total score (30 for both MMSE and MoCA).
+ * @param props.values - Current score map keyed by item `id`.
+ * @param props.onChange - Called with `(itemId, newScore)` when a score button is clicked.
+ * @param props.onClose - Called after the close animation (~180 ms) completes.
+ * @param props.onConfirm - Called when the user confirms the assessment results.
+ * @returns A portal containing the full-screen assessment modal.
+ */
 function TestModal({
   testId,
   title,
@@ -433,6 +484,20 @@ const TESTS = [
 ];
 
 // ─── Main component ────────────────────────────────────────────────────────────
+/**
+ * New clinical assessment page with collapsible test panels for MRC, Dinamometria,
+ * TUG, 10MWT, Sit-to-Stand, DGI, Teste do Relógio, MMSE, and MoCA.
+ *
+ * Receives the active patient via `useOutletContext<Paciente>()` provided by
+ * `PacienteDetail`. Each test has its own inline form or modal (MMSE/MoCA).
+ * Mounted at `/pacientes/:id/avaliacao/nova`.
+ *
+ * @returns The assessment page `<div>` with a collapsible test list and
+ *   save/cancel footer.
+ *
+ * @example
+ * // Rendered at /pacientes/:id/avaliacao/nova
+ */
 export default function NovaAvaliacao() {
   const paciente = useOutletContext<Paciente>();
   const navigate  = useNavigate();

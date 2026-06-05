@@ -14,14 +14,46 @@ const HORARIOS = [
 type Secao = 1 | 2;
 
 interface Props {
+  /** Full patient list; only patients with status `"Ativo"` are displayed. */
   pacientes: Paciente[];
+  /** Current week's schedule events; used to mark occupied time slots as disabled. */
   eventos: AgendaSemanal[];
+  /** Pre-selected weekday abbreviation (e.g. `"Seg"`); snaps to `"Seg"` if invalid. */
   diaInicial?: string;
+  /**
+   * Pre-selected time string (e.g. `"09:00"`); when provided, opens the patient
+   * search section first since the time is already chosen.
+   */
   horaInicial?: string | null;
+  /** Invoked after the close animation completes (~180 ms). */
   onClose: () => void;
+  /**
+   * Invoked when the user confirms the appointment; receives the selected
+   * patient ID, weekday abbreviation, and time string.
+   */
   onConfirm: (pacienteId: string, dia: Dia, hora: string) => void;
 }
 
+/**
+ * Two-step accordion modal for creating a new appointment.
+ *
+ * Step 1 — patient search: filters active patients by name. Step 2 — date and
+ * time: shows weekday buttons and 30-min slot grid with occupied slots
+ * (derived from `eventos`) disabled. Both sections can be collapsed; selecting
+ * a patient auto-advances to step 2.
+ *
+ * @param props - {@link Props}
+ * @returns A portal containing the appointment scheduling modal dialog.
+ *
+ * @example
+ * <AgendamentoModal
+ *   pacientes={pacientes}
+ *   eventos={eventos}
+ *   diaInicial="Ter"
+ *   onClose={() => setOpen(false)}
+ *   onConfirm={(id, dia, hora) => console.log(id, dia, hora)}
+ * />
+ */
 export default function AgendamentoModal({
   pacientes,
   eventos,

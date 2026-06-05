@@ -20,9 +20,31 @@ import type { AgendaSemanal, Paciente } from "../types";
 import "./Agenda.css";
 
 interface AgendaProps {
+  /** Weekly schedule events used to populate the FullCalendar instance. */
   eventos: AgendaSemanal[];
+  /** Full patient list forwarded to {@link AgendamentoModal} for patient selection. */
   pacientes: Paciente[];
 }
+
+/**
+ * Weekly/daily/monthly calendar page powered by FullCalendar.
+ *
+ * Receives data as props from `App.tsx` (sourced via `agendaService` and
+ * `patientService`). Supports event drag-and-drop rescheduling (with a
+ * pending-confirmation dialog), day/week/month view switching, and opening
+ * the {@link AgendamentoModal} from date clicks or the "+ Agendar" button.
+ *
+ * FullCalendar is lazy-loaded in its own chunk — this page is the sole
+ * consumer, keeping the library out of the main bundle.
+ *
+ * @param props - {@link AgendaProps}
+ * @returns The agenda page `<div>` containing the FullCalendar instance and
+ *   the scheduling modal portal.
+ *
+ * @example
+ * // Mounted at /agenda in App.tsx:
+ * <Agenda eventos={eventos} pacientes={pacientes} />
+ */
 
 /**
  * The mock data is anchored to a reference week (Abril 2026, semana 18).

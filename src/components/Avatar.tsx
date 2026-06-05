@@ -31,7 +31,23 @@ function colorFor(name: string): string {
   return PALETTE[Math.abs(hash) % PALETTE.length];
 }
 
-/** Lightweight, offline-friendly avatar: initials on a color-hashed circle. */
+/**
+ * Lightweight, offline-friendly avatar that renders initials on a
+ * deterministically color-hashed circle — no image required.
+ *
+ * The background color is derived from `name` so the same person always gets
+ * the same color across renders and sessions.
+ *
+ * @param props - {@link AvatarProps}
+ * @returns A `<span>` styled as a circle with the initials centered inside.
+ *
+ * @example
+ * // Explicit initials (e.g. from a Doctor record):
+ * <Avatar name="Dr. Carlos Reis" initials="CR" size={34} />
+ *
+ * // Auto-derived initials from a full name:
+ * <Avatar name="Maria Silva" size={40} />
+ */
 export default function Avatar({ name, initials, size = 40, className }: AvatarProps) {
   const text = initials?.trim() || deriveInitials(name);
   return (

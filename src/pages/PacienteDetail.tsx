@@ -8,9 +8,27 @@ import type { BadgeTone } from "../components/primitives";
 import "./PacienteDetail.css";
 
 interface PacienteDetailProps {
+  /** Full patient list used to look up the active patient by the `:id` URL param. */
   pacientes: Paciente[];
 }
 
+/**
+ * Patient detail layout shell that provides the patient context to all nested
+ * sub-pages via `<Outlet context={paciente}>`.
+ *
+ * Resolves the active patient from `pacientes` using the `:id` URL parameter
+ * and redirects to `/pacientes` if none is found. Sub-pages (`PacienteResumo`,
+ * `PlanoTratamento`, `Evolucao`, `NovaAvaliacao`, `PacienteDocumentos`) access
+ * the patient via `useOutletContext<Paciente>()` — no further prop-drilling needed.
+ *
+ * @param props - {@link PacienteDetailProps}
+ * @returns The patient detail layout `<div>` with a header, contextual nav
+ *   tabs, and the `<Outlet>` rendering the active sub-page.
+ *
+ * @example
+ * // Mounted at /pacientes/:id in App.tsx — child routes render via Outlet:
+ * <PacienteDetail pacientes={pacientes} />
+ */
 const STATUS_TONE: Record<string, BadgeTone> = {
   Ativo: "success",
   Avaliação: "warning",

@@ -5,8 +5,9 @@ import {
   Timer, Dumbbell, PlusCircle, ClipboardList, CheckCircle2, Circle,
   ChevronDown, ChevronUp, MessageCircle, Copy, Check, X, ClipboardCheck,
 } from "lucide-react";
-import type { Paciente, TUGResult, DinamometriaResult, RegistroSessao, AvaliacaoTeste, TesteResult } from "../types";
+import type { Paciente, TUGResult, DinamometriaResult, RegistroSessao, TesteResult } from "../types";
 import { scrollToFirstError } from "../utils/scrollToError";
+import { buildAvaliacaoWhatsAppText, validateSessionForm, inferNextSessionNumber } from "../lib";
 import "./Evolucao.css";
 
 const TEST_LABELS: Record<string, string> = {
@@ -21,69 +22,15 @@ const TEST_LABELS: Record<string, string> = {
   moca: "MoCA",
 };
 
-// ─── WhatsApp text builders ───────────────────────────────────────────────────
-
-function formatTesteWA(t: TesteResult): string {
-  const lines: string[] = [];
-  switch (t.tipo) {
-    case "tug":
-      lines.push(`⏱ *TUG — Timed Up and Go*`);
-      lines.push(`   Tempo: ${t.tempoSegundos}s  |  Distância: ${t.distanciaMetros}m`);
-      break;
-    case "dinamometria":
-      lines.push(`💪 *Dinamometria de Preensão*`);
-      lines.push(`   Esquerda: ${t.esquerda} kgf  |  Direita: ${t.direita} kgf`);
-      break;
-    case "mrc":
-      lines.push(`📋 *Escala MRC*`);
-      t.grupos.forEach(g => lines.push(`   ${g.nome}: ${g.valor}/5`));
-      break;
-    case "sit_to_stand":
-      lines.push(`🪑 *Sentar-Levantar 30s*`);
-      lines.push(`   Repetições: ${t.repeticoes}`);
-      break;
-    case "10mwt":
-      lines.push(`🚶 *10MWT — Teste de Caminhada*`);
-      lines.push(`   Tempo: ${t.tempoSegundos}s  |  Velocidade: ${t.velocidade} m/s`);
-      break;
-    case "dgi":
-      lines.push(`🏃 *DGI — Índice de Marcha Dinâmica*`);
-      lines.push(`   Total: ${t.total}/24`);
-      break;
-    case "tdr":
-      lines.push(`🕐 *Teste do Relógio*`);
-      if (t.observacao) lines.push(`   Obs: ${t.observacao}`);
-      break;
-    case "mmse":
-      lines.push(`🧠 *MMSE*`);
-      lines.push(`   Total: ${t.total}/30`);
-      break;
-    case "moca":
-      lines.push(`🧩 *MoCA*`);
-      lines.push(`   Total: ${t.total}/30`);
-      break;
-  }
-  return lines.join("\n");
-}
-
-function buildAvaliacaoWAText(paciente: Paciente, av: AvaliacaoTeste): string {
-  const lines: string[] = [];
-  lines.push(`📊 *Avaliação Clínica — ${av.data}*`);
-  lines.push(`👤 *${paciente.nome}*`);
-  lines.push(`🩺 ${av.doutor}`);
-  lines.push(``);
-  lines.push(`*Resultados:*`);
-  lines.push(``);
-  av.testes.forEach(t => {
-    lines.push(formatTesteWA(t));
-    lines.push(``);
-  });
-  lines.push(`_Relatório gerado via MoveCare_`);
-  return lines.join("\n");
-}
-
 // ─── Shared WhatsApp modal ────────────────────────────────────────────────────
 
+/**
+ * WhatsApp share modal that displays pre-formatted text and a one-click copy button.
+ *
+ * @param props.text - The formatted text to display and copy.
+ * @param props.onClose - Called after the close animation (~180 ms) completes.
+ * @returns A portal overlay containing the share modal.
+ */
 function WAModal({ text, onClose }: { text: string; onClose: () => void }) {
   const [closing, setClosing] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -135,6 +82,14 @@ function WAModal({ text, onClose }: { text: string; onClose: () => void }) {
 
 // ─── Sparkline & helpers ──────────────────────────────────────────────────────
 
+/**
+ * Inline SVG sparkline chart with a gradient fill and dot markers.
+ *
+ * @param props.values - Array of numeric data points (minimum 2 for a line).
+ * @param props.color - Hex/CSS color applied to the line, dots, and gradient.
+ * @param props.invert - When `true`, inverts values so lower numbers appear higher (e.g. TUG time). @default false
+ * @returns An `<svg>` sparkline, or a "Dados insuficientes" paragraph if fewer than 2 points.
+ */
 function Sparkline({ values, color, invert = false }: { values: number[]; color: string; invert?: boolean }) {
   const W = 300, H = 72, PAD = 10;
   if (values.length < 2) return <p className="spark-na">Dados insuficientes para gráfico</p>;
@@ -164,6 +119,14 @@ function Sparkline({ values, color, invert = false }: { values: number[]; color:
   );
 }
 
+/**
+ * Badge showing the percentage change between two measurements.
+ *
+ * @param props.first - The earlier (baseline) measurement value.
+ * @param props.last - The most recent measurement value.
+ * @param props.invertGood - When `true`, a decrease is treated as an improvement (e.g. TUG time). @default false
+ * @returns A colored arrow + percentage badge, or `null` when the difference is negligible.
+ */
 function DeltaBadge({ first, last, invertGood }: { first: number; last: number; invertGood?: boolean }) {
   const diff = last - first;
   if (Math.abs(diff) < 0.01) return null;
@@ -176,6 +139,13 @@ function DeltaBadge({ first, last, invertGood }: { first: number; last: number; 
   );
 }
 
+/**
+ * Inline adherence bar for a single session showing exercises completed vs total.
+ *
+ * @param props.feitos - Number of exercises completed in the session.
+ * @param props.total - Total number of exercises prescribed for the session.
+ * @returns A progress bar and a `feitos/total (pct%)` label colored by threshold.
+ */
 function AdesaoBar({ feitos, total }: { feitos: number; total: number }) {
   const pct = total > 0 ? Math.round((feitos / total) * 100) : 0;
   const color = pct >= 80 ? "#34C759" : pct >= 50 ? "#FF9500" : "#FF3B30";
@@ -209,13 +179,21 @@ function makeEmptyForm(totalPlano: number, nextSessao: number): NovaRegistroForm
   };
 }
 
-function inferNextSessaoNum(registros: RegistroSessao[], paciente: Paciente): number {
-  if (registros.length > 0) {
-    return Math.max(...registros.map(r => r.sessaoNum)) + 1;
-  }
-  return paciente.sessoes > 0 ? paciente.sessoes : 1;
-}
-
+/**
+ * Patient evolution sub-page showing TUG/Dinamometria sparkline charts, a
+ * session-registration form, and the full assessment history.
+ *
+ * Receives the active patient via `useOutletContext<Paciente>()` provided by
+ * `PacienteDetail`. Session validation is handled by {@link validateSessionForm}
+ * from `src/lib/validation.ts`. WhatsApp text is generated by
+ * {@link buildAvaliacaoWhatsAppText} from `src/lib/whatsapp.ts`.
+ * Mounted at `/pacientes/:id/evolucao`.
+ *
+ * @returns The evolution page `<div>` with charts, session list, and assessment history.
+ *
+ * @example
+ * // Rendered at /pacientes/:id/evolucao
+ */
 export default function Evolucao() {
   const paciente = useOutletContext<Paciente>();
   const navigate = useNavigate();
@@ -229,7 +207,7 @@ export default function Evolucao() {
   );
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<NovaRegistroForm>(
-    () => makeEmptyForm(totalExerciciosPlano, inferNextSessaoNum(paciente.registrosSessoes ?? [], paciente))
+    () => makeEmptyForm(totalExerciciosPlano, inferNextSessionNumber(paciente.registrosSessoes ?? [], paciente))
   );
   const [errors, setErrors] = useState<Partial<Record<keyof NovaRegistroForm, string>>>({});
   const [expandedSessaoId, setExpandedSessaoId] = useState<string | null>(null);
@@ -251,15 +229,7 @@ export default function Evolucao() {
   }
 
   function validate(): boolean {
-    const errs: Partial<Record<keyof NovaRegistroForm, string>> = {};
-    if (!form.data.trim()) errs.data = "Informe a data";
-    if (!form.sessaoNum.trim() || isNaN(Number(form.sessaoNum))) errs.sessaoNum = "Número inválido";
-    if (!form.observacoes.trim()) errs.observacoes = "Adicione uma observação";
-    const feitos = Number(form.exerciciosFeitos);
-    const total = Number(form.totalExercicios);
-    if (!form.exerciciosFeitos.trim() || isNaN(feitos) || feitos < 0) errs.exerciciosFeitos = "Inválido";
-    if (!form.totalExercicios.trim() || isNaN(total) || total <= 0) errs.totalExercicios = "Inválido";
-    if (!errs.exerciciosFeitos && !errs.totalExercicios && feitos > total) errs.exerciciosFeitos = "Maior que o total";
+    const errs = validateSessionForm(form);
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -279,13 +249,13 @@ export default function Evolucao() {
     };
     const novosRegistros = [novoRegistro, ...registros];
     setRegistros(novosRegistros);
-    setForm(makeEmptyForm(totalExerciciosPlano, inferNextSessaoNum(novosRegistros, paciente)));
+    setForm(makeEmptyForm(totalExerciciosPlano, inferNextSessionNumber(novosRegistros, paciente)));
     setShowForm(false);
     setErrors({});
   }
 
   function openFormReset() {
-    setForm(makeEmptyForm(totalExerciciosPlano, inferNextSessaoNum(registros, paciente)));
+    setForm(makeEmptyForm(totalExerciciosPlano, inferNextSessionNumber(registros, paciente)));
     setErrors({});
     setShowForm(true);
   }
@@ -541,7 +511,7 @@ export default function Evolucao() {
                       </div>
                       <button
                         className="wa-share-btn"
-                        onClick={() => setWaText(buildAvaliacaoWAText(paciente, av))}
+                        onClick={() => setWaText(buildAvaliacaoWhatsAppText(paciente, av))}
                       >
                         <MessageCircle size={14} /> Compartilhar no WhatsApp
                       </button>
@@ -561,6 +531,15 @@ export default function Evolucao() {
 
 // ─── Card de resultado de teste ───────────────────────────────────────────────
 
+/**
+ * Detail card rendering the key-value results for a single clinical test.
+ *
+ * Handles all {@link TesteResult} discriminated union variants and falls back
+ * gracefully when a variant has no numeric data.
+ *
+ * @param props.teste - The test result to display.
+ * @returns A card `<div>` with the test label and a list of result rows.
+ */
 function AvaliacaoTesteCard({ teste }: { teste: TesteResult }) {
   const label = TEST_LABELS[teste.tipo] ?? teste.tipo;
 
