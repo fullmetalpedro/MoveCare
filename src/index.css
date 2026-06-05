@@ -93,6 +93,28 @@ button.btn-cancelar:hover {
   border-radius: 3px;
 }
 
+/* ─── Lazy-route loading fallback ─── */
+.route-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  width: 100%;
+}
+
+.route-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: route-spin 0.7s linear infinite;
+}
+
+@keyframes route-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ─── Skeleton shimmer ─── */
 @keyframes shimmer {
   0%   { background-position: -600px 0; }

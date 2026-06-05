@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Dumbbell, StretchHorizontal, Activity, Footprints, HeartPulse, Wind, Video, FileText } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { scrollToFirstError } from "../utils/scrollToError";
+import "../styles/forms.css";
 import "./CadastroExercicio.css";
 
 interface FormData {

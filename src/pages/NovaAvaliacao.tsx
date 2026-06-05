@@ -7,6 +7,7 @@ import {
   Camera, Brain, ClipboardList, Footprints, X, Plus, Minus,
 } from "lucide-react";
 import type { Paciente } from "../types";
+import "../styles/forms.css";
 import "./NovaAvaliacao.css";
 
 // ─── Up/down timer (freerunning) ──────────────────────────────────────────────
@@ -441,18 +442,18 @@ export default function NovaAvaliacao() {
   const [done,      setDone]      = useState<Set<string>>(new Set());
 
   // Per-test state
-  const [mrcVals,   setMrcVals]  = useState<Record<string, number>>(Object.fromEntries(MRC_GROUPS.map(g => [g, 5])));
+  const [mrcVals,   setMrcVals]  = useState<Record<string, number>>(() => Object.fromEntries(MRC_GROUPS.map(g => [g, 5])));
   const [dinaEsq,   setDinaEsq]  = useState("");
   const [dinaDrt,   setDinaDrt]  = useState("");
   const [sitReps,   setSitReps]  = useState(0);
   const [tugTempo,  setTugTempo] = useState("");
   const [mwtTempo,  setMwtTempo] = useState("");
   const [mwtDist,   setMwtDist]  = useState("10");
-  const [dgiVals,   setDgiVals]  = useState<Record<string, number>>(Object.fromEntries(DGI_ITEMS.map(g => [g, 0])));
+  const [dgiVals,   setDgiVals]  = useState<Record<string, number>>(() => Object.fromEntries(DGI_ITEMS.map(g => [g, 0])));
   const [tdrFile,   setTdrFile]  = useState<File | null>(null);
   const [tdrPreview,setTdrPreview] = useState<string | null>(null);
-  const [mmseVals,  setMmseVals] = useState<Record<string, number>>(initVals(MMSE_SECTIONS));
-  const [mocaVals,  setMocaVals] = useState<Record<string, number>>(initVals(MOCA_SECTIONS));
+  const [mmseVals,  setMmseVals] = useState<Record<string, number>>(() => initVals(MMSE_SECTIONS));
+  const [mocaVals,  setMocaVals] = useState<Record<string, number>>(() => initVals(MOCA_SECTIONS));
 
   const mwtSpeed  = mwtTempo && mwtDist ? (parseFloat(mwtDist) / parseFloat(mwtTempo)).toFixed(2) : "";
   const dgiTotal  = Object.values(dgiVals).reduce((a, b) => a + b, 0);
@@ -473,10 +474,16 @@ export default function NovaAvaliacao() {
 
   const handleTDRFile = (file: File) => {
     setTdrFile(file);
-    const reader = new FileReader();
-    reader.onload = e => setTdrPreview(e.target?.result as string);
-    reader.readAsDataURL(file);
+    // Object URL instead of a base64 data URL: keeps the (potentially large)
+    // image out of React state / memory — the browser holds the blob.
+    setTdrPreview(URL.createObjectURL(file));
   };
+
+  // Revoke the previous object URL when it changes or on unmount.
+  useEffect(() => {
+    if (!tdrPreview) return;
+    return () => URL.revokeObjectURL(tdrPreview);
+  }, [tdrPreview]);
 
   const handleSave = () => {
     alert("Avaliação salva! (funcionalidade de persistência não implementada)");

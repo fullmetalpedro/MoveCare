@@ -2,6 +2,7 @@ import { useRef, useEffect, useLayoutEffect, useCallback, useState } from "react
 import { NavLink, useLocation } from "react-router-dom";
 import { Heart, LayoutDashboard, Calendar, Users, BookOpen, FileText, Settings, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import type { Doctor } from "../types";
+import Avatar from "./Avatar";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -80,7 +81,7 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
       </nav>
 
       <div className="sidebar-footer">
-        <img className="doctor-avatar" src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(doctor.name)}`} alt={doctor.initials} />
+        <Avatar className="doctor-avatar" name={doctor.name} initials={doctor.initials} size={34} />
         <div className="doctor-info">
           <div className="doctor-name">{doctor.name}</div>
           <div className="doctor-role">{doctor.role} · {doctor.crefito}</div>

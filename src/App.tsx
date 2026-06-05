@@ -1,56 +1,72 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import SplashScreen from "./components/SplashScreen";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
-import Agenda from "./pages/Agenda";
-import Pacientes from "./pages/Pacientes";
-import PacienteDetail from "./pages/PacienteDetail";
-import PacienteResumo from "./pages/PacienteResumo";
-import PlanoTratamento from "./pages/PlanoTratamento";
-import PacienteDocumentos from "./pages/PacienteDocumentos";
-import Evolucao from "./pages/Evolucao";
-import NovaAvaliacao from "./pages/NovaAvaliacao";
-import Documentos from "./pages/Documentos";
-import Biblioteca from "./pages/Biblioteca";
-import CadastroPaciente from "./pages/CadastroPaciente";
-import CadastroExercicio from "./pages/CadastroExercicio";
 import mockData from "./data/mock.json";
 import type { MockData } from "./types";
 
+// Dashboard + Layout stay eager (Dashboard is the landing route, so no
+// Suspense flash on first paint). Everything else is split into its own
+// chunk and loaded on demand — this is what moves @fullcalendar out of the
+// initial bundle, since Agenda is the only consumer.
+const Agenda = lazy(() => import("./pages/Agenda"));
+const Pacientes = lazy(() => import("./pages/Pacientes"));
+const PacienteDetail = lazy(() => import("./pages/PacienteDetail"));
+const PacienteResumo = lazy(() => import("./pages/PacienteResumo"));
+const PlanoTratamento = lazy(() => import("./pages/PlanoTratamento"));
+const PacienteDocumentos = lazy(() => import("./pages/PacienteDocumentos"));
+const Evolucao = lazy(() => import("./pages/Evolucao"));
+const NovaAvaliacao = lazy(() => import("./pages/NovaAvaliacao"));
+const Documentos = lazy(() => import("./pages/Documentos"));
+const Biblioteca = lazy(() => import("./pages/Biblioteca"));
+const CadastroPaciente = lazy(() => import("./pages/CadastroPaciente"));
+const CadastroExercicio = lazy(() => import("./pages/CadastroExercicio"));
+
 const data = mockData as MockData;
+
+function RouteFallback() {
+  return (
+    <div className="route-fallback" aria-busy="true">
+      <span className="route-spinner" />
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <>
-    <SplashScreen />
-    <Routes>
-      <Route element={<Layout doctor={data.doctor} alertCount={data.alertas.length} />}>
-        <Route
-          index
-          element={
-            <Dashboard
-              stats={data.stats}
-              agendaHoje={data.agendaHoje}
-              doctorName={data.doctor.name}
-              pacientes={data.pacientes}
+      <SplashScreen />
+      <Suspense fallback={<RouteFallback />}>
+        <Routes>
+          <Route element={<Layout doctor={data.doctor} alertCount={data.alertas.length} />}>
+            <Route
+              index
+              element={
+                <Dashboard
+                  stats={data.stats}
+                  agendaHoje={data.agendaHoje}
+                  doctorName={data.doctor.name}
+                  pacientes={data.pacientes}
+                />
+              }
             />
-          }
-        />
-        <Route path="agenda" element={<Agenda eventos={data.agendaSemanal} pacientes={data.pacientes} />} />
-        <Route path="pacientes" element={<Pacientes pacientes={data.pacientes} />} />
-        <Route path="pacientes/:id" element={<PacienteDetail pacientes={data.pacientes} />}>
-          <Route index element={<PacienteResumo />} />
-          <Route path="plano" element={<PlanoTratamento />} />
-          <Route path="evolucao" element={<Evolucao />} />
-          <Route path="avaliacao/nova" element={<NovaAvaliacao />} />
-          <Route path="documentos" element={<PacienteDocumentos />} />
-        </Route>
-        <Route path="biblioteca" element={<Biblioteca />} />
-        <Route path="biblioteca/novo" element={<CadastroExercicio />} />
-        <Route path="pacientes/novo" element={<CadastroPaciente />} />
-        <Route path="documentos" element={<Documentos />} />
-      </Route>
-    </Routes>
+            <Route path="agenda" element={<Agenda eventos={data.agendaSemanal} pacientes={data.pacientes} />} />
+            <Route path="pacientes" element={<Pacientes pacientes={data.pacientes} />} />
+            <Route path="pacientes/:id" element={<PacienteDetail pacientes={data.pacientes} />}>
+              <Route index element={<PacienteResumo />} />
+              <Route path="plano" element={<PlanoTratamento />} />
+              <Route path="evolucao" element={<Evolucao />} />
+              <Route path="avaliacao/nova" element={<NovaAvaliacao />} />
+              <Route path="documentos" element={<PacienteDocumentos />} />
+            </Route>
+            <Route path="biblioteca" element={<Biblioteca />} />
+            <Route path="biblioteca/novo" element={<CadastroExercicio />} />
+            <Route path="pacientes/novo" element={<CadastroPaciente />} />
+            <Route path="documentos" element={<Documentos />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </>
   );
 }

@@ -405,19 +405,7 @@
   padding-top: 4px;
 }
 
-.btn-cancelar {
-  padding: 11px 24px;
-  border-radius: 10px;
-  border: 1.5px solid var(--border);
-  background: var(--card-bg);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-cancelar:hover { border-color: var(--text-muted); color: var(--text-primary); }
+/* .btn-cancelar lives in ../styles/forms.css */
 
 /* ─── Test Modal (MMSE / MoCA) ─── */
 @keyframes overlayFadeIn {
