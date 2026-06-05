@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# MoveCare
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+MoveCare is a practice management web app for physiotherapists. It brings the
+day-to-day of a clinic into a single interface: the day's schedule, the patient
+roster, treatment plans, progress tracking, an exercise library, and documents.
+It is built as an installable PWA, so it works on phones, tablets, and desktops
+from the same codebase.
 
-Currently, two official plugins are available:
+## What it does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Dashboard**: daily greeting, key stats (patients today, active patients,
+  overall adherence), and the day's agenda at a glance.
+- **Agenda**: day, week, and month calendar views of appointments, with
+  scheduling, powered by FullCalendar.
+- **Patients**: searchable, filterable roster (active, under evaluation,
+  discharged) with per-patient detail, treatment plan, progress, assessments,
+  and documents.
+- **Library**: a catalog of reusable exercises that feed into treatment plans.
+- **Documents**: clinic and patient document management.
 
-## React Compiler
+The interface is available in English, Spanish, and Portuguese (auto-detected
+from the browser, Portuguese by default).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## How it works
 
-## Expanding the ESLint configuration
+- **React 19 + TypeScript**, bundled with **Vite**.
+- **React Router** drives client-side navigation; non-landing routes are
+  code-split and lazy-loaded, keeping FullCalendar out of the initial bundle.
+- A **services + lib** layer sits between the UI and the data, so pages read
+  from `dashboardService`, `patientService`, and `agendaService` rather than
+  touching raw data. Sample data lives in `src/data/mock.json`.
+- **react-i18next** handles localization; locale strings live in
+  `src/i18n/locales/<lang>/`.
+- **vite-plugin-pwa** provides the installable, offline-capable shell.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Screenshots
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Desktop (Dashboard) | Tablet (Agenda) | Mobile (Patients) |
+| --- | --- | --- |
+| ![Dashboard on desktop](docs/screenshots/dashboard-desktop.png) | ![Agenda on tablet](docs/screenshots/agenda-tablet.png) | ![Patients on mobile](docs/screenshots/pacientes-mobile.png) |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Setup
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Requires Node.js 20+ and npm.
+
+```bash
+# install dependencies
+npm install
+
+# start the dev server (http://localhost:5173)
+npm run dev
+
+# type-check and build for production
+npm run build
+
+# preview the production build locally
+npm run preview
+
+# lint
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+  components/   shared UI (Layout, Sidebar, etc.)
+  pages/        route views (Dashboard, Agenda, Pacientes, ...)
+  services/     data access used by pages
+  lib/          lower-level helpers behind the services
+  data/         mock data
+  i18n/         localization setup and locale strings
+  types/        shared TypeScript types
 ```
