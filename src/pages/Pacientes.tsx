@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Search, Plus, ChevronRight } from "lucide-react";
 import PageHeader from "../components/PageHeader";
+import Avatar from "../components/Avatar";
 import type { Paciente } from "../types";
 import "./Pacientes.css";
 
@@ -109,10 +110,11 @@ export default function Pacientes({ pacientes }: PacientesProps) {
         {filtered.map(p => (
           <div key={p.id} className="table-row" onClick={() => navigate(`/pacientes/${p.id}`)}>
             <span className="col-paciente">
-                  <img
+                  <Avatar
                 className="pac-avatar"
-                src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(p.nome)}`}
-                alt={p.initials}
+                name={p.nome}
+                initials={p.initials}
+                size={34}
               />
               <span className="pac-nome">{p.nome}</span>
             </span>

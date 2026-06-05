@@ -1,7 +1,8 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { Suspense, useRef, useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, NavLink, Outlet, useLocation } from "react-router-dom";
 import { ChevronLeft, TrendingUp, CalendarDays, Heart, Clock, ClipboardList, Stethoscope, BarChart3, FolderOpen, ClipboardPlus } from "lucide-react";
 import type { Paciente } from "../types";
+import Avatar from "../components/Avatar";
 import "./PacienteDetail.css";
 
 interface PacienteDetailProps {
@@ -55,10 +56,11 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
           <button className="back-btn" onClick={() => navigate("/pacientes")}>
             <ChevronLeft size={20} />
           </button>
-          <img
+          <Avatar
             className="detail-avatar"
-            src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(paciente.nome)}`}
-            alt={paciente.initials}
+            name={paciente.nome}
+            initials={paciente.initials}
+            size={56}
           />
           <div>
             <h1 className="detail-name">{paciente.nome}</h1>
@@ -145,7 +147,9 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
 
         <div className="detail-main">
           <div key={location.pathname} className="detail-outlet-wrap">
-            <Outlet context={paciente} />
+            <Suspense fallback={<div className="route-fallback"><span className="route-spinner" /></div>}>
+              <Outlet context={paciente} />
+            </Suspense>
           </div>
         </div>
       </div>

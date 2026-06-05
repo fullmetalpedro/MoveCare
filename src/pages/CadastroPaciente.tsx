@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { User, Phone, Mail, Activity, Calendar } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { scrollToFirstError } from "../utils/scrollToError";
+import "../styles/forms.css";
 import "./CadastroPaciente.css";
 
 interface FormData {
