@@ -83,6 +83,25 @@
   transform: scale(0.98);
 }
 
+/* ─── Lift modifier ─── */
+/* Opt-in card-style hover (shadow + raise) for primary page CTAs
+   like "Novo Paciente" / "Novo Exercício". */
+.ds-btn--lift {
+  transition: background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard),
+    opacity var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    transform 0.15s var(--ease-standard);
+}
+.ds-btn--lift:not(:disabled):hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.ds-btn--lift:not(:disabled):active {
+  transform: translateY(0);
+}
+
 /* ─── Loading spinner ─── */
 .ds-btn--loading {
   cursor: progress;

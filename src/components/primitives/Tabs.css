@@ -22,9 +22,6 @@
   white-space: nowrap;
   transition: color var(--duration-slow) var(--ease-standard);
 }
-.ds-tab:hover {
-  color: var(--text-primary);
-}
 .ds-tab.is-active {
   color: var(--text-primary);
   font-weight: var(--weight-semibold);
