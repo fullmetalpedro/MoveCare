@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, BellOff } from "lucide-react";
 import "./NotificationsDrawer.css";
@@ -11,13 +11,13 @@ interface NotificationsDrawerProps {
 export default function NotificationsDrawer({ open, onClose }: NotificationsDrawerProps) {
   const [closing, setClosing] = useState(false);
 
-  function handleClose() {
+  const handleClose = useCallback(() => {
     setClosing(true);
     setTimeout(() => {
       setClosing(false);
       onClose();
     }, 220);
-  }
+  }, [onClose]);
 
   useEffect(() => {
     if (!open) return;
@@ -26,7 +26,7 @@ export default function NotificationsDrawer({ open, onClose }: NotificationsDraw
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, handleClose]);
 
   if (!open) return null;
 

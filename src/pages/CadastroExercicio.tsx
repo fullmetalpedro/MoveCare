@@ -3,7 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { Dumbbell, StretchHorizontal, Activity, Footprints, HeartPulse, Wind, Video, FileText } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { scrollToFirstError } from "../utils/scrollToError";
-import "../styles/forms.css";
+import {
+  Button,
+  Chip,
+  FormSection,
+  FormField,
+  TextField,
+  Textarea,
+  Toggle,
+} from "../components/primitives";
 import "./CadastroExercicio.css";
 
 interface FormData {
@@ -74,6 +82,7 @@ export default function CadastroExercicio() {
   }
 
   const catInfo = CATEGORIAS.find(c => c.label === form.categoria)!;
+  const nivelInfo = NIVEIS.find(n => n.label === form.nivel);
 
   return (
     <div className="cadex-page">
@@ -84,7 +93,7 @@ export default function CadastroExercicio() {
       />
 
       <form className="cadex-form" onSubmit={handleSubmit} noValidate>
-        {/* ── Preview do card ── */}
+        {/* ── Live preview (bespoke) ── */}
         <div className="cadex-preview-wrap">
           <span className="cadex-preview-label">Pré-visualização</span>
           <div className="cadex-preview-card">
@@ -108,8 +117,8 @@ export default function CadastroExercicio() {
               <span
                 className="cadex-prev-nivel"
                 style={{
-                  background: `${NIVEIS.find(n => n.label === form.nivel)?.color ?? "#86868B"}18`,
-                  color: NIVEIS.find(n => n.label === form.nivel)?.color ?? "#86868B",
+                  background: `${nivelInfo?.color ?? "#86868B"}18`,
+                  color: nivelInfo?.color ?? "#86868B",
                 }}
               >
                 {form.nivel}
@@ -118,184 +127,123 @@ export default function CadastroExercicio() {
           </div>
         </div>
 
-        {/* ── Informações Básicas ── */}
-        <section className="cadex-section">
-          <div className="cadex-section-header">
-            <span className="cadex-section-icon"><Dumbbell size={16} /></span>
-            <h2 className="cadex-section-title">Informações Básicas</h2>
-          </div>
+        <FormSection title="Informações Básicas" icon={<Dumbbell size={16} />}>
+          <FormField label="Nome do exercício" required colSpan={2} htmlFor="ex-nome" error={errors.nome}>
+            <TextField
+              id="ex-nome"
+              placeholder="Ex.: Agachamento Livre, Prancha Isométrica..."
+              value={form.nome}
+              error={!!errors.nome}
+              onChange={e => set("nome", e.target.value)}
+            />
+          </FormField>
 
-          <div className="cadex-grid">
-            <div className={`cadex-group col-2 ${errors.nome ? "has-error" : ""}`}>
-              <label className="cadex-label">Nome do exercício <span className="required">*</span></label>
-              <input
-                className="cadex-input"
-                type="text"
-                placeholder="Ex.: Agachamento Livre, Prancha Isométrica..."
-                value={form.nome}
-                onChange={e => set("nome", e.target.value)}
-              />
-              {errors.nome && <span className="cadex-error">{errors.nome}</span>}
-            </div>
-
-            <div className="cadex-group col-2">
-              <label className="cadex-label">Categoria</label>
-              <div className="cadex-cat-grid">
-                {CATEGORIAS.map(cat => (
-                  <button
-                    key={cat.label}
-                    type="button"
-                    className={`cadex-cat-btn ${form.categoria === cat.label ? "active" : ""}`}
-                    style={form.categoria === cat.label ? {
-                      background: `${cat.color}12`,
-                      borderColor: cat.color,
-                      color: cat.color,
-                    } : {}}
-                    onClick={() => set("categoria", cat.label)}
-                  >
-                    <span style={{ display: "flex" }}>{cat.icon}</span>
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="cadex-group">
-              <label className="cadex-label">Nível de dificuldade</label>
-              <div className="cadex-nivel-group">
-                {NIVEIS.map(niv => (
-                  <button
-                    key={niv.label}
-                    type="button"
-                    className={`cadex-nivel-btn ${form.nivel === niv.label ? "active" : ""}`}
-                    style={form.nivel === niv.label ? {
-                      background: `${niv.color}12`,
-                      borderColor: niv.color,
-                      color: niv.color,
-                    } : {}}
-                    onClick={() => set("nivel", niv.label)}
-                  >
-                    {niv.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className={`cadex-group ${errors.series ? "has-error" : ""}`}>
-              <label className="cadex-label">Séries / Duração <span className="required">*</span></label>
-              <input
-                className="cadex-input"
-                type="text"
-                placeholder="Ex.: 3x12 rep, 3x30s, 5 min..."
-                value={form.series}
-                onChange={e => set("series", e.target.value)}
-                list="series-sugestoes"
-              />
-              <datalist id="series-sugestoes">
-                {SERIES_SUGESTOES.map(s => <option key={s} value={s} />)}
-              </datalist>
-              {errors.series && <span className="cadex-error">{errors.series}</span>}
-              <div className="cadex-chips">
-                {SERIES_SUGESTOES.slice(0, 5).map(s => (
-                  <button
-                    key={s}
-                    type="button"
-                    className={`cadex-chip ${form.series === s ? "active" : ""}`}
-                    onClick={() => set("series", s)}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Vídeo ── */}
-        <section className="cadex-section">
-          <div className="cadex-section-header">
-            <span className="cadex-section-icon" style={{ background: "rgba(90,200,250,0.12)", color: "#5AC8FA" }}>
-              <Video size={16} />
-            </span>
-            <h2 className="cadex-section-title">Vídeo demonstrativo</h2>
-          </div>
-
-          <div className="cadex-grid">
-            <div className="cadex-group col-2">
-              <label className="cadex-toggle-row">
-                <span className="cadex-toggle-text">
-                  <span className="cadex-toggle-title">Possui vídeo demonstrativo</span>
-                  <span className="cadex-toggle-sub">Informe o link do vídeo para o paciente assistir</span>
-                </span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={form.temVideo}
-                  className={`cadex-toggle ${form.temVideo ? "on" : ""}`}
-                  onClick={() => set("temVideo", !form.temVideo)}
+          <FormField label="Categoria" colSpan={2}>
+            <div className="cadex-cat-grid">
+              {CATEGORIAS.map(cat => (
+                <Chip
+                  key={cat.label}
+                  color={cat.color}
+                  selected={form.categoria === cat.label}
+                  onClick={() => set("categoria", cat.label)}
                 >
-                  <span className="cadex-toggle-knob" />
-                </button>
-              </label>
+                  <span style={{ display: "flex" }}>{cat.icon}</span>
+                  {cat.label}
+                </Chip>
+              ))}
             </div>
+          </FormField>
 
-            {form.temVideo && (
-              <div className={`cadex-group col-2 ${errors.videoUrl ? "has-error" : ""}`}>
-                <label className="cadex-label">URL do vídeo</label>
-                <input
-                  className="cadex-input"
-                  type="url"
-                  placeholder="https://youtube.com/..."
-                  value={form.videoUrl}
-                  onChange={e => set("videoUrl", e.target.value)}
-                />
-                {errors.videoUrl && <span className="cadex-error">{errors.videoUrl}</span>}
-              </div>
-            )}
-          </div>
-        </section>
+          <FormField label="Nível de dificuldade">
+            <div className="ds-chip-row">
+              {NIVEIS.map(niv => (
+                <Chip
+                  key={niv.label}
+                  color={niv.color}
+                  selected={form.nivel === niv.label}
+                  onClick={() => set("nivel", niv.label)}
+                >
+                  {niv.label}
+                </Chip>
+              ))}
+            </div>
+          </FormField>
 
-        {/* ── Descrição ── */}
-        <section className="cadex-section">
-          <div className="cadex-section-header">
-            <span className="cadex-section-icon" style={{ background: "rgba(52,199,89,0.1)", color: "#34C759" }}>
-              <FileText size={16} />
-            </span>
-            <h2 className="cadex-section-title">Descrição e Instruções</h2>
-          </div>
+          <FormField label="Séries / Duração" required htmlFor="ex-series" error={errors.series}>
+            <TextField
+              id="ex-series"
+              placeholder="Ex.: 3x12 rep, 3x30s, 5 min..."
+              value={form.series}
+              error={!!errors.series}
+              onChange={e => set("series", e.target.value)}
+              list="series-sugestoes"
+            />
+            <datalist id="series-sugestoes">
+              {SERIES_SUGESTOES.map(s => <option key={s} value={s} />)}
+            </datalist>
+            <div className="ds-chip-row" style={{ marginTop: "var(--space-1-5)" }}>
+              {SERIES_SUGESTOES.slice(0, 5).map(s => (
+                <Chip key={s} selected={form.series === s} onClick={() => set("series", s)}>
+                  {s}
+                </Chip>
+              ))}
+            </div>
+          </FormField>
+        </FormSection>
 
-          <div className="cadex-grid">
-            <div className="cadex-group col-2">
-              <label className="cadex-label">Descrição do exercício</label>
-              <textarea
-                className="cadex-input cadex-textarea"
-                placeholder="Descreva brevemente o objetivo e benefícios do exercício..."
-                value={form.descricao}
-                onChange={e => set("descricao", e.target.value)}
-                rows={3}
+        <FormSection title="Vídeo demonstrativo" icon={<Video size={16} />} iconColor="#5AC8FA">
+          <FormField colSpan={2}>
+            <Toggle
+              checked={form.temVideo}
+              onChange={v => set("temVideo", v)}
+              label="Possui vídeo demonstrativo"
+              description="Informe o link do vídeo para o paciente assistir"
+            />
+          </FormField>
+
+          {form.temVideo && (
+            <FormField label="URL do vídeo" colSpan={2} htmlFor="ex-video" error={errors.videoUrl}>
+              <TextField
+                id="ex-video"
+                type="url"
+                placeholder="https://youtube.com/..."
+                value={form.videoUrl}
+                error={!!errors.videoUrl}
+                onChange={e => set("videoUrl", e.target.value)}
               />
-            </div>
+            </FormField>
+          )}
+        </FormSection>
 
-            <div className="cadex-group col-2">
-              <label className="cadex-label">Instruções de execução</label>
-              <textarea
-                className="cadex-input cadex-textarea"
-                placeholder="Passo a passo de como executar o exercício corretamente..."
-                value={form.instrucoes}
-                onChange={e => set("instrucoes", e.target.value)}
-                rows={4}
-              />
-            </div>
-          </div>
-        </section>
+        <FormSection title="Descrição e Instruções" icon={<FileText size={16} />} iconColor="#34C759">
+          <FormField label="Descrição do exercício" colSpan={2} htmlFor="ex-desc">
+            <Textarea
+              id="ex-desc"
+              placeholder="Descreva brevemente o objetivo e benefícios do exercício..."
+              value={form.descricao}
+              onChange={e => set("descricao", e.target.value)}
+              rows={3}
+            />
+          </FormField>
+
+          <FormField label="Instruções de execução" colSpan={2} htmlFor="ex-instr">
+            <Textarea
+              id="ex-instr"
+              placeholder="Passo a passo de como executar o exercício corretamente..."
+              value={form.instrucoes}
+              onChange={e => set("instrucoes", e.target.value)}
+              rows={4}
+            />
+          </FormField>
+        </FormSection>
 
         <div className="cadex-actions">
-          <button type="button" className="btn-cancelar" onClick={() => navigate("/biblioteca")}>
+          <Button variant="secondary" onClick={() => navigate("/biblioteca")}>
             Cancelar
-          </button>
-          <button type="submit" className="btn-salvar">
+          </Button>
+          <Button type="submit" variant="primary">
             Salvar Exercício
-          </button>
+          </Button>
         </div>
       </form>
     </div>

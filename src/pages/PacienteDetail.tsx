@@ -3,11 +3,19 @@ import { useParams, useNavigate, NavLink, Outlet, useLocation } from "react-rout
 import { ChevronLeft, TrendingUp, CalendarDays, Heart, Clock, ClipboardList, Stethoscope, BarChart3, FolderOpen, ClipboardPlus } from "lucide-react";
 import type { Paciente } from "../types";
 import Avatar from "../components/Avatar";
+import { Badge } from "../components/primitives";
+import type { BadgeTone } from "../components/primitives";
 import "./PacienteDetail.css";
 
 interface PacienteDetailProps {
   pacientes: Paciente[];
 }
+
+const STATUS_TONE: Record<string, BadgeTone> = {
+  Ativo: "success",
+  Avaliação: "warning",
+  Alta: "neutral",
+};
 
 export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
   const { id } = useParams<{ id: string }>();
@@ -68,9 +76,7 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
               {paciente.idade} anos · {paciente.sexo} · {paciente.condicao}
             </p>
             <div className="detail-badges">
-              <span className={`status-badge ${paciente.status === "Ativo" ? "badge-ativo" : paciente.status === "Avaliação" ? "badge-avaliacao" : "badge-alta"}`}>
-                {paciente.status}
-              </span>
+              <Badge tone={STATUS_TONE[paciente.status] ?? "neutral"}>{paciente.status}</Badge>
               <span className="session-badge">Sessão #{paciente.sessoes} de {paciente.totalSessoes}</span>
             </div>
           </div>

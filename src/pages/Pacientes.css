@@ -2,61 +2,11 @@
   width: 100%;
 }
 
-.btn-novo-paciente {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 22px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: opacity 0.15s;
-}
-
-.btn-novo-paciente:hover {
-  opacity: 0.85;
-}
-
 .pacientes-filters {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 20px;
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--card-bg);
-  border: none;
-  border-radius: 8px;
-  padding: 7px 12px;
-  width: 200px;
-  box-shadow: var(--shadow-sm);
-}
-
-.search-box input {
-  border: none;
-  outline: none;
-  font-size: 13px;
-  color: var(--text-primary);
-  width: 100%;
-  background: transparent;
-}
-
-.search-box input::placeholder {
-  color: var(--text-muted);
-}
-
-.search-icon {
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
+  gap: var(--space-3-5);
+  margin-bottom: var(--space-5);
 }
 
 .pacientes-table {
@@ -135,28 +85,6 @@
   color: var(--text-secondary);
 }
 
-.status-badge {
-  font-size: 12px;
-  padding: 3px 12px;
-  border-radius: 12px;
-  font-weight: 500;
-}
-
-.badge-ativo {
-  background: rgba(52, 199, 89, 0.1);
-  color: var(--success);
-}
-
-.badge-avaliacao {
-  background: rgba(255, 149, 0, 0.1);
-  color: var(--warning);
-}
-
-.badge-alta {
-  background: var(--border-light);
-  color: var(--text-muted);
-}
-
 .adesao-cell {
   display: flex;
   align-items: center;
@@ -206,21 +134,6 @@
     align-items: stretch;
   }
 
-  .search-box {
-    flex: 1;
-  }
-
-  .filter-tabs {
-    width: 100%;
-  }
-
-  .filter-tab {
-    flex: 1;
-    text-align: center;
-    padding: 8px 8px;
-    font-size: 12px;
-  }
-
   .table-header {
     display: none;
   }
@@ -258,11 +171,6 @@
 
   .col-action {
     order: 4;
-  }
-
-  .btn-novo-paciente {
-    padding: 8px 14px;
-    font-size: 13px;
   }
 }
 

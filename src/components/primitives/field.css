@@ -1,0 +1,75 @@
+/* Shared styling for TextField / Textarea / Select. */
+
+.ds-input {
+  width: 100%;
+  padding: var(--space-2-5) var(--space-3-5);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--text-base);
+  outline: none;
+  transition: border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.ds-input::placeholder {
+  color: var(--text-muted);
+}
+
+.ds-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.ds-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Error state — set by FormField via the .has-error group, or directly. */
+.ds-input.is-error,
+.has-error .ds-input {
+  border-color: var(--danger);
+}
+.ds-input.is-error:focus,
+.has-error .ds-input:focus {
+  box-shadow: 0 0 0 3px var(--danger-soft);
+}
+
+/* Textarea */
+.ds-input--textarea {
+  resize: vertical;
+  min-height: 88px;
+  line-height: var(--leading-normal);
+}
+
+/* Select: native control with a custom chevron */
+.ds-input--select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2386868B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  padding-right: var(--space-8);
+  cursor: pointer;
+}
+
+/* Leading-icon wrapper (TextField with leadingIcon) */
+.ds-input-wrap {
+  position: relative;
+  width: 100%;
+}
+.ds-input-wrap__icon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.ds-input-wrap .ds-input {
+  padding-left: var(--space-8);
+}

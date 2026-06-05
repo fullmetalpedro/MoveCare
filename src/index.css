@@ -1,25 +1,4 @@
-:root {
-  --primary-dark: #1D1D1F;
-  --primary: #007AFF;
-  --accent: #007AFF;
-  --accent-light: #5AC8FA;
-  --bg: #F5F5F7;
-  --card-bg: #FFFFFF;
-  --card-bg-alt: #FBFBFD;
-  --text-primary: #1D1D1F;
-  --text-secondary: #6E6E73;
-  --text-muted: #86868B;
-  --border: #E8E8ED;
-  --border-light: #F2F2F7;
-  --success: #34C759;
-  --warning: #E8973A;
-  --danger: #E04F5F;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
-  --shadow-lg: 0 8px 28px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-  --radius: 12px;
-  --radius-lg: 16px;
-}
+/* Design tokens live in ./styles/tokens.css (imported first in main.tsx). */
 
 * {
   margin: 0;
@@ -59,25 +38,26 @@ button {
 /* Global button hover: same lift + shadow as the cards.
    Tab-style toggles (.filter-tab / .view-btn) and the accordion section headers
    (.mag-secao-header) are excluded — they must stay flat. */
-button:not(.filter-tab):not(.view-btn):not(.mag-secao-header) {
+button:not(.filter-tab):not(.view-btn):not(.mag-secao-header):not(.ds-btn) {
   transition: box-shadow 0.2s ease, transform 0.15s ease, opacity 0.15s ease,
     background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-button:not(.filter-tab):not(.view-btn):not(.mag-secao-header):hover {
+button:not(.filter-tab):not(.view-btn):not(.mag-secao-header):not(.ds-btn):hover {
   box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
 }
 
-button:not(.filter-tab):not(.view-btn):not(.mag-secao-header):active {
+button:not(.filter-tab):not(.view-btn):not(.mag-secao-header):not(.ds-btn):active {
   transform: translateY(0);
 }
 
-/* "Cancelar" buttons on form screens get a red accent on hover. */
+/* "Cancelar" buttons on form screens get a red accent on hover.
+   Legacy only — the Button primitive (.ds-btn) styles its own variants. */
 button.btn-cancelar:hover {
   border-color: var(--danger);
   color: var(--danger);
-  background: rgba(224, 79, 95, 0.06);
+  background: var(--danger-softer);
 }
 
 ::-webkit-scrollbar {
