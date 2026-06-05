@@ -148,11 +148,6 @@ export default function Dashboard({ stats, agendaHoje, doctorName, pacientes }: 
             {stats.adesaoVariacao < 0 ? "↓" : "↑"} {Math.abs(stats.adesaoVariacao)}{t("dashboard.stats.vsWeekPrior")}
           </div>
         </div>
-        <div className="stat-card stat-card-centered">
-          <span className="stat-label">{t("dashboard.stats.receitaMes")}</span>
-          <div className="stat-value stat-value-lg">{stats.receitaMes}</div>
-          <div className="stat-detail">{stats.receitaDetalhe}</div>
-        </div>
       </div>
 
       <div className="card agenda-card">

@@ -7,8 +7,7 @@
     "pacientesAtivos": "Active Patients",
     "emAvaliacao": "under evaluation",
     "adesaoGeral": "Overall Adherence",
-    "vsWeekPrior": "% vs prior week",
-    "receitaMes": "Monthly Revenue"
+    "vsWeekPrior": "% vs prior week"
   },
   "agenda": {
     "title": "Today's Agenda",

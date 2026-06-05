@@ -7,8 +7,7 @@
     "pacientesAtivos": "Pacientes Ativos",
     "emAvaliacao": "em avaliação",
     "adesaoGeral": "Adesão Geral",
-    "vsWeekPrior": "% vs semana anterior",
-    "receitaMes": "Receita do Mês"
+    "vsWeekPrior": "% vs semana anterior"
   },
   "agenda": {
     "title": "Agenda de Hoje",

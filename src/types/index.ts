@@ -16,8 +16,6 @@ export interface Stats {
   pacientesHojeDetalhe: string;
   adesaoGeral: number;
   adesaoVariacao: number;
-  receitaMes: string;
-  receitaDetalhe: string;
   pacientesAtivos: number;
   pacientesEmAvaliacao: number;
 }
