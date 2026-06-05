@@ -36,19 +36,19 @@ button {
 }
 
 /* Global button hover: same lift + shadow as the cards.
-   Tab-style toggles (.filter-tab / .view-btn) and the accordion section headers
-   (.mag-secao-header) are excluded — they must stay flat. */
-button:not(.filter-tab):not(.view-btn):not(.mag-secao-header):not(.ds-btn) {
+   Tab-style toggles (.filter-tab / .view-btn / .ds-tab) and the accordion section
+   headers (.mag-secao-header) are excluded — they must stay flat. */
+button:not(.filter-tab):not(.view-btn):not(.ds-tab):not(.mag-secao-header):not(.ds-btn) {
   transition: box-shadow 0.2s ease, transform 0.15s ease, opacity 0.15s ease,
     background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-button:not(.filter-tab):not(.view-btn):not(.mag-secao-header):not(.ds-btn):hover {
+button:not(.filter-tab):not(.view-btn):not(.ds-tab):not(.mag-secao-header):not(.ds-btn):hover {
   box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
 }
 
-button:not(.filter-tab):not(.view-btn):not(.mag-secao-header):not(.ds-btn):active {
+button:not(.filter-tab):not(.view-btn):not(.ds-tab):not(.mag-secao-header):not(.ds-btn):active {
   transform: translateY(0);
 }
 
@@ -143,10 +143,6 @@ button.btn-cancelar:hover {
   border-radius: 8px;
   transition: color 0.2s;
   white-space: nowrap;
-}
-
-.slide-tabs .filter-tab:hover {
-  color: var(--text-primary);
 }
 
 .slide-tabs .filter-tab.active {

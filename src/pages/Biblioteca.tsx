@@ -102,7 +102,7 @@ export default function Biblioteca() {
   return (
     <div className="biblioteca-page">
       <PageHeader title="Biblioteca de Exercícios" backTo="/">
-        <Button variant="primary" iconLeft={<Plus size={16} />} onClick={() => navigate("/biblioteca/novo")}>
+        <Button variant="primary" className="ds-btn--lift" iconLeft={<Plus size={16} />} onClick={() => navigate("/biblioteca/novo")}>
           Novo Exercício
         </Button>
       </PageHeader>
