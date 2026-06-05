@@ -14,6 +14,7 @@ import type {
   EventInput,
   EventContentArg,
   EventDropArg,
+  EventClickArg,
   DatesSetArg,
 } from "@fullcalendar/core";
 import PageHeader from "../components/PageHeader";
@@ -137,20 +138,35 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
   const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
   const [closingModal, setClosingModal] = useState(false);
   const [showAgendar, setShowAgendar] = useState(false);
-  const [agendarInit, setAgendarInit] = useState<{ dia: string; hora: string | null } | null>(null);
+  const [agendarInit, setAgendarInit] = useState<{
+    dia: string;
+    hora: string | null;
+    /** Set when editing an existing event — pre-selects the patient. */
+    paciente?: Paciente | null;
+    /** Id of the event being edited; moved (removed + re-added) on confirm. */
+    eventId?: string;
+  } | null>(null);
   const [localEventos, setLocalEventos] = useState<AgendaSemanal[]>([]);
+  // Ids of events that have been moved away from their original slot (so the
+  // stale occurrence is hidden once the rescheduled copy is added).
+  const [removedIds, setRemovedIds] = useState<string[]>([]);
+  // Monotonic counter guaranteeing each rescheduled event gets a unique id.
+  const seqRef = useRef(0);
   const [viewAnim, setViewAnim] = useState(true);
   const viewRef = useRef<HTMLDivElement>(null);
   const [vSlider, setVSlider] = useState({ left: 0, width: 0 });
 
-  const todosEventos = useMemo(() => [...eventos, ...localEventos], [eventos, localEventos]);
+  const todosEventos = useMemo(
+    () => [...eventos, ...localEventos].filter((e) => !removedIds.includes(e.id)),
+    [eventos, localEventos, removedIds]
+  );
   const events = useMemo(() => mapEventos(todosEventos), [todosEventos]);
 
   function handleAgendamentoConfirm(pacienteId: string, dia: string, hora: string) {
     const paciente = pacientes.find((p) => p.id === pacienteId);
     if (!paciente) return;
     const novoEvento: AgendaSemanal = {
-      id: `local-${pacienteId}-${dia}-${hora}`,
+      id: `local-${pacienteId}-${dia}-${hora}-${seqRef.current++}`,
       dia,
       diaNum: REFERENCE_WEEK_NUMS[dia] ?? 0,
       hora,
@@ -158,12 +174,33 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
       tipo: "Sessão",
       cor: "green",
     };
+    // Editing an existing appointment → hide the original occurrence so the
+    // rescheduled copy replaces it instead of duplicating the patient.
+    const editId = agendarInit?.eventId;
+    if (editId) {
+      setRemovedIds((prev) => (prev.includes(editId) ? prev : [...prev, editId]));
+    }
     setLocalEventos((prev) => [...prev, novoEvento]);
   }
 
-  function abrirAgendamento(init: { dia: string; hora: string | null } | null) {
+  function abrirAgendamento(
+    init: { dia: string; hora: string | null; paciente?: Paciente | null; eventId?: string } | null
+  ) {
     setAgendarInit(init);
     setShowAgendar(true);
+  }
+
+  // Clicking an existing appointment opens the scheduling modal pre-filled with
+  // its patient, day and hour, letting the user reschedule it.
+  function handleEventClick(arg: EventClickArg) {
+    const start = arg.event.start;
+    if (!start) return;
+    const dia = DOW_TO_LABEL[start.getDay()];
+    if (!dia) return;
+    const hora = `${String(start.getHours()).padStart(2, "0")}:00`;
+    const nomeAbrev = arg.event.extendedProps.paciente as string;
+    const paciente = pacientes.find((p) => abreviarNome(p.nome) === nomeAbrev) ?? null;
+    abrirAgendamento({ dia, hora, paciente, eventId: arg.event.id });
   }
 
   // Clicking an empty slot opens the modal pre-filled with that day/time.
@@ -317,6 +354,7 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
           eventContent={renderEvent}
           datesSet={handleDatesSet}
           eventDrop={handleEventDrop}
+          eventClick={handleEventClick}
           dateClick={handleDateClick}
           editable
           eventDurationEditable={false}
@@ -347,9 +385,16 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
       {showAgendar && (
         <AgendamentoModal
           pacientes={pacientes}
-          eventos={todosEventos}
+          // When editing, exclude the event being moved so its own slot shows as
+          // selected (and reselectable) rather than disabled-occupied.
+          eventos={
+            agendarInit?.eventId
+              ? todosEventos.filter((e) => e.id !== agendarInit.eventId)
+              : todosEventos
+          }
           diaInicial={agendarInit?.dia}
           horaInicial={agendarInit?.hora ?? null}
+          pacienteInicial={agendarInit?.paciente ?? null}
           onClose={() => setShowAgendar(false)}
           onConfirm={handleAgendamentoConfirm}
         />

@@ -12,6 +12,8 @@
   "rescheduleNotice": "Lembre-se de alinhar essa alteração com o paciente antes de confirmar.",
   "rescheduleBodyText": "Você está movendo {{patient}} para {{when}}.",
   "newAppointment": "Novo Agendamento",
+  "editAppointment": "Editar Agendamento",
+  "saveAppointment": "Salvar alterações",
   "closeModal": "Fechar",
   "stepPatient": "Paciente",
   "stepDateTime": "Data e horário",

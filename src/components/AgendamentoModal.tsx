@@ -26,6 +26,12 @@ interface Props {
    * search section first since the time is already chosen.
    */
   horaInicial?: string | null;
+  /**
+   * Pre-selected patient. When provided the modal enters "edit" mode: the title
+   * and confirm label change, and the date/time section opens first so the user
+   * can immediately adjust the existing appointment's day/hour.
+   */
+  pacienteInicial?: Paciente | null;
   /** Invoked after the close animation completes (~180 ms). */
   onClose: () => void;
   /**
@@ -60,20 +66,23 @@ export default function AgendamentoModal({
   eventos,
   diaInicial,
   horaInicial,
+  pacienteInicial,
   onClose,
   onConfirm,
 }: Props) {
+  const edicao = !!pacienteInicial;
   const diaValido =
     diaInicial && (DIAS as readonly string[]).includes(diaInicial)
       ? (diaInicial as Dia)
       : "Seg";
+  // Edit mode → open the date/time section so the user can change the hour.
   // Pre-filled time → only the patient is left, open section 1. Pre-filled day
   // only (month view / occupied slot) → open section 2 to pick the time.
-  const secaoInicial: Secao = horaInicial ? 1 : diaInicial ? 2 : 1;
+  const secaoInicial: Secao = edicao ? 2 : horaInicial ? 1 : diaInicial ? 2 : 1;
 
   const [secaoAberta, setSecaoAberta] = useState<Secao | null>(secaoInicial);
   const [busca, setBusca] = useState("");
-  const [pacienteSelecionado, setPacienteSelecionado] = useState<Paciente | null>(null);
+  const [pacienteSelecionado, setPacienteSelecionado] = useState<Paciente | null>(pacienteInicial ?? null);
   const [diaSelecionado, setDiaSelecionado] = useState<Dia>(diaValido);
   const [horaSelecionada, setHoraSelecionada] = useState<string | null>(horaInicial ?? null);
   const [closing, setClosing] = useState(false);
@@ -129,7 +138,7 @@ export default function AgendamentoModal({
             <div className="mag-icon">
               <CalendarPlus size={20} aria-hidden="true" />
             </div>
-            <h3 className="modal-title">{t("agenda.newAppointment")}</h3>
+            <h3 className="modal-title">{edicao ? t("agenda.editAppointment") : t("agenda.newAppointment")}</h3>
           </div>
           <button className="mag-close" onClick={handleClose} aria-label={t("common.close")}>
             <X size={18} aria-hidden="true" />
@@ -266,7 +275,7 @@ export default function AgendamentoModal({
             onClick={handleConfirm}
             disabled={!canConfirm}
           >
-            {t("agenda.confirmAppointment")}
+            {edicao ? t("agenda.saveAppointment") : t("agenda.confirmAppointment")}
           </button>
         </div>
       </div>
