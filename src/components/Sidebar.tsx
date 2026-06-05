@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Heart, LayoutDashboard, Calendar, Users, BookOpen, FileText, Settings, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import type { Doctor } from "../types";
 import Avatar from "./Avatar";
-import LanguageSwitcher from "./LanguageSwitcher";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -107,10 +106,6 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
           <span className="nav-label">{t("nav.documents")}</span>
         </NavLink>
       </nav>
-
-      <div className="sidebar-lang">
-        <LanguageSwitcher />
-      </div>
 
       <div className="sidebar-footer">
         <Avatar className="doctor-avatar" name={doctor.name} initials={doctor.initials} size={34} />

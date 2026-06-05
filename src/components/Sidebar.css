@@ -184,20 +184,6 @@
   opacity: 1;
 }
 
-.sidebar-lang {
-  padding: 10px 16px;
-  border-top: 1px solid var(--border);
-  min-width: 220px;
-  flex-shrink: 0;
-  opacity: 1;
-  transition: opacity 0.15s ease;
-}
-
-.collapsed .sidebar-lang {
-  opacity: 0;
-  pointer-events: none;
-}
-
 .sidebar-footer {
   display: flex;
   align-items: center;

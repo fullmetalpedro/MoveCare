@@ -2,21 +2,14 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-/**
- * Languages the app ships translations for. The `code` matches the resource
- * bundle key and the value persisted to `localStorage`; `label`/`flag` are used
- * by the in-app {@link LanguageSwitcher}.
- */
+/** Languages the app ships translations for; `code` matches the bundle key. */
 export const SUPPORTED_LANGUAGES = [
-  { code: "pt", label: "Português", flag: "🇧🇷" },
-  { code: "en", label: "English", flag: "🇺🇸" },
-  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "pt" },
+  { code: "en" },
+  { code: "es" },
 ] as const;
 
 export type LanguageCode = (typeof SUPPORTED_LANGUAGES)[number]["code"];
-
-/** Persisted-language key, also used by the language detector below. */
-export const LANG_STORAGE_KEY = "movecare-lang";
 
 /**
  * Eagerly import every locale JSON under `./locales/<lng>/<namespace>.json`.
@@ -51,9 +44,10 @@ i18n
     nonExplicitSupportedLngs: true, // map "pt-BR" → "pt", "en-US" → "en", etc.
     interpolation: { escapeValue: false }, // React already escapes
     detection: {
-      order: ["localStorage", "navigator", "htmlTag"],
-      lookupLocalStorage: LANG_STORAGE_KEY,
-      caches: ["localStorage"],
+      // Follow the browser/device language automatically; nothing is persisted,
+      // so the UI always matches the user's current browser language setting.
+      order: ["navigator", "htmlTag"],
+      caches: [],
     },
   });
 
