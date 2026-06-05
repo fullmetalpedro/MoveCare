@@ -78,6 +78,8 @@
     margin-left: 0;
   }
 
+  /* Backdrop stays mounted so it can fade both in (open) and out (close).
+     When the nav is closed it is transparent and click-through. */
   .sidebar-backdrop {
     display: block;
     position: fixed;
@@ -85,6 +87,17 @@
     background: rgba(0, 0, 0, 0.3);
     z-index: 199;
     backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .mobile-nav-open .sidebar-backdrop {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 }
 

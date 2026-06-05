@@ -66,7 +66,9 @@ export default function Layout({ doctor, alertCount }: LayoutProps) {
       >
         <Menu size={22} aria-hidden="true" />
       </button>
-      {mobileOpen && <div className="sidebar-backdrop" onClick={() => setMobileOpen(false)} aria-hidden="true" />}
+      {/* Always mounted (hidden via CSS when closed) so it can fade out on
+          close as well as in on open; harmless on desktop where it's display:none. */}
+      <div className="sidebar-backdrop" onClick={() => setMobileOpen(false)} aria-hidden="true" />
       <Sidebar doctor={doctor} alertCount={alertCount} collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
       <main className="main-content" id="main-content">
         <div className="page-fade" key={location.pathname.split("/").slice(0, 3).join("/")}>

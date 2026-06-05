@@ -265,6 +265,12 @@
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(40px) saturate(180%);
     -webkit-backdrop-filter: blur(40px) saturate(180%);
+    /* Slide in/out instead of the desktop width animation. The sidebar stays
+       mounted (just translated off-canvas), so this transition plays in both
+       directions. */
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    box-shadow: var(--shadow-lg);
   }
 
   .mobile-nav-open .sidebar {
