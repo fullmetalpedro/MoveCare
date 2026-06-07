@@ -658,6 +658,29 @@
   margin: 0;
 }
 
+.mag-new-patient {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 9px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.mag-new-patient:hover {
+  background: var(--accent-soft, rgba(0, 122, 255, 0.08));
+  border-color: var(--accent);
+}
+
 .mag-patient-item {
   display: flex;
   align-items: center;

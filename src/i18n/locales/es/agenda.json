@@ -19,6 +19,7 @@
   "stepDateTime": "Fecha y horario",
   "searchPatient": "Buscar paciente...",
   "noPatientFound": "No se encontró ningún paciente activo.",
+  "newPatient": "Nuevo paciente",
   "slotOccupied": "Horario ocupado",
   "slotScheduleAt": "Agendar a las {{time}}",
   "confirmAppointment": "Confirmar cita"
