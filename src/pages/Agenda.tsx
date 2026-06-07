@@ -19,50 +19,42 @@ import type {
 } from "@fullcalendar/core";
 import PageHeader from "../components/PageHeader";
 import AgendamentoModal from "../components/AgendamentoModal";
+import { usePacientes } from "../hooks";
+import { patientService } from "../services";
+import {
+  REFERENCE_WEEK,
+  sessionDates,
+  weekdayLabel,
+  dateForWeekdayInWeek,
+  addDaysISO,
+  formatDayMonth,
+  calcAltaDate,
+} from "../lib/schedule";
 import type { AgendaSemanal, Paciente } from "../types";
 import "./Agenda.css";
-
-interface AgendaProps {
-  /** Weekly schedule events used to populate the FullCalendar instance. */
-  eventos: AgendaSemanal[];
-  /** Full patient list forwarded to {@link AgendamentoModal} for patient selection. */
-  pacientes: Paciente[];
-}
 
 /**
  * Weekly/daily/monthly calendar page powered by FullCalendar.
  *
- * Receives data as props from `App.tsx` (sourced via `agendaService` and
- * `patientService`). Supports event drag-and-drop rescheduling (with a
- * pending-confirmation dialog), day/week/month view switching, and opening
- * the {@link AgendamentoModal} from date clicks or the "+ Agendar" button.
+ * The calendar is **derived from patients' recurring session slots** ({@link
+ * usePacientes}): each patient with a `sessao` contributes `totalSessoes` weekly
+ * occurrences, so a slot stays booked for the full course of treatment. There is
+ * no standalone event store — scheduling and rescheduling write back to the
+ * patient via `patientService.update`, and the live query re-renders the grid.
  *
- * FullCalendar is lazy-loaded in its own chunk — this page is the sole
- * consumer, keeping the library out of the main bundle.
+ * Dragging or editing any occurrence moves the **whole series** (a patient's
+ * day/time is fixed unless the doctor changes it). FullCalendar is lazy-loaded
+ * in its own chunk — this page is the sole consumer.
  *
- * @param props - {@link AgendaProps}
  * @returns The agenda page `<div>` containing the FullCalendar instance and
  *   the scheduling modal portal.
  *
  * @example
  * // Mounted at /agenda in App.tsx:
- * <Agenda eventos={eventos} pacientes={pacientes} />
+ * <Agenda />
  */
 
-/**
- * The mock data is anchored to a reference week (Abril 2026, semana 18).
- * We map the weekday labels to real ISO dates so FullCalendar can render
- * proper Date objects. Seg=28/04 ... Sex=02/05/2026.
- */
-const REFERENCE_WEEK: Record<string, string> = {
-  Seg: "2026-04-28",
-  Ter: "2026-04-29",
-  Qua: "2026-04-30",
-  Qui: "2026-05-01",
-  Sex: "2026-05-02",
-};
-
-const INITIAL_DATE = "2026-04-29";
+const INITIAL_DATE = "2026-04-28";
 
 const VIEWS = [
   { labelKey: "agenda.viewDay", value: "timeGridDay" },
@@ -79,54 +71,71 @@ const VIEW_PARAM_MAP: Record<string, ViewValue> = {
   mes: "dayGridMonth",
 };
 
-function mapEventos(eventos: AgendaSemanal[]): EventInput[] {
-  return eventos.flatMap((e) => {
-    const date = REFERENCE_WEEK[e.dia];
-    if (!date) return [];
-    const start = `${date}T${e.hora}:00`;
-    const [h, m] = e.hora.split(":").map(Number);
-    const endH = String(h + 1).padStart(2, "0");
-    const end = `${date}T${endH}:${String(m).padStart(2, "0")}:00`;
-    return [
-      {
-        id: e.id,
-        title: e.paciente,
-        start,
-        end,
-        classNames: [`fc-event-${e.cor}`],
-        extendedProps: { paciente: e.paciente, tipo: e.tipo, cor: e.cor },
-      },
-    ];
-  });
-}
-
-type PendingMove = {
-  info: EventDropArg;
-  paciente: string;
-  quando: string;
-};
-
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
-// Maps weekday label to the calendar day-number in the reference week
-const REFERENCE_WEEK_NUMS: Record<string, number> = {
-  Seg: 28, Ter: 29, Qua: 30, Qui: 1, Sex: 2,
-};
 
 // JS Date.getDay() (0=Sun..6=Sat) → weekday label used across the app.
 const DOW_TO_LABEL: Record<number, string> = {
   1: "Seg", 2: "Ter", 3: "Qua", 4: "Qui", 5: "Sex",
 };
 
-// Abbreviate full name to "Nome S." format matching mock data style
-function abreviarNome(nome: string): string {
-  const parts = nome.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0];
-  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+/** Colour class suffix for an event, by patient status. */
+function corForStatus(status: string): string {
+  if (status === "Avaliação") return "yellow";
+  if (status === "Alta") return "blue";
+  return "green";
 }
 
-export default function Agenda({ eventos, pacientes }: AgendaProps) {
+/** `yyyy-mm-dd` from a Date's local calendar fields (no timezone shift). */
+function localISODate(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+/** Expands every patient's recurring slot into FullCalendar events. */
+function buildEvents(pacientes: Paciente[]): EventInput[] {
+  return pacientes
+    .filter((p): p is Paciente & { sessao: NonNullable<Paciente["sessao"]> } => !!p.sessao)
+    .flatMap((p) => {
+      const { dataInicio, hora } = p.sessao;
+      const [h, m] = hora.split(":").map(Number);
+      const cor = corForStatus(p.status);
+      return sessionDates(dataInicio, p.totalSessoes).map((d, i) => {
+        const start = `${d}T${hora}:00`;
+        const end = `${d}T${String(h + 1).padStart(2, "0")}:${String(m).padStart(2, "0")}:00`;
+        return {
+          id: `${p.id}#${i}`,
+          title: p.nome,
+          start,
+          end,
+          classNames: [`fc-event-${cor}`],
+          extendedProps: {
+            pacienteId: p.id,
+            paciente: p.nome,
+            tipo: `Sessão ${i + 1}/${p.totalSessoes}`,
+            cor,
+          },
+        };
+      });
+    });
+}
+
+type PendingMove = {
+  info: EventDropArg;
+  paciente: string;
+  quando: string;
+  /** Id of the patient whose series is being moved. */
+  pacienteId: string;
+  /** Whole-day shift to apply to the series start, derived from the drag. */
+  deltaDays: number;
+  /** New time-of-day for the series, e.g. `"10:00"`. */
+  hora: string;
+};
+
+export default function Agenda() {
   const { t, i18n } = useTranslation();
+  const pacientes = usePacientes();
   const fcLocale = (
     { pt: ptBrLocale, es: esLocale, en: "en" } as const
   )[(i18n.language || "pt").slice(0, 2) as "pt" | "es" | "en"] ?? ptBrLocale;
@@ -141,80 +150,93 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
   const [agendarInit, setAgendarInit] = useState<{
     dia: string;
     hora: string | null;
-    /** Set when editing an existing event — pre-selects the patient. */
+    /** ISO date of the clicked slot — forwarded to the new-patient form. */
+    data?: string | null;
+    /** Set when rescheduling — pre-selects the patient. */
     paciente?: Paciente | null;
-    /** Id of the event being edited; moved (removed + re-added) on confirm. */
-    eventId?: string;
+    /** Id of the patient whose series is being rescheduled. */
+    pacienteId?: string;
   } | null>(null);
-  const [localEventos, setLocalEventos] = useState<AgendaSemanal[]>([]);
-  // Ids of events that have been moved away from their original slot (so the
-  // stale occurrence is hidden once the rescheduled copy is added).
-  const [removedIds, setRemovedIds] = useState<string[]>([]);
-  // Monotonic counter guaranteeing each rescheduled event gets a unique id.
-  const seqRef = useRef(0);
   const [viewAnim, setViewAnim] = useState(true);
   const viewRef = useRef<HTMLDivElement>(null);
   const [vSlider, setVSlider] = useState({ left: 0, width: 0 });
 
-  const todosEventos = useMemo(
-    () => [...eventos, ...localEventos].filter((e) => !removedIds.includes(e.id)),
-    [eventos, localEventos, removedIds]
-  );
-  const events = useMemo(() => mapEventos(todosEventos), [todosEventos]);
+  const lista = useMemo(() => pacientes ?? [], [pacientes]);
+  const events = useMemo(() => buildEvents(lista), [lista]);
 
-  function handleAgendamentoConfirm(pacienteId: string, dia: string, hora: string) {
-    const paciente = pacientes.find((p) => p.id === pacienteId);
+  // Synthetic weekday/time events so the modal can mark occupied slots. One per
+  // patient slot, keyed by patient id so a patient's own slot can be excluded
+  // when rescheduling them.
+  const occupiedEventos = useMemo<AgendaSemanal[]>(
+    () =>
+      lista
+        .filter((p) => p.sessao)
+        .map((p) => ({
+          id: p.id,
+          dia: weekdayLabel(p.sessao!.dataInicio),
+          diaNum: 0,
+          hora: p.sessao!.hora,
+          paciente: p.nome,
+          tipo: "Sessão",
+          cor: corForStatus(p.status),
+        })),
+    [lista],
+  );
+
+  /**
+   * Sets (or reschedules) a patient's recurring slot. Keeps the series' existing
+   * start week when it has one, otherwise anchors to the reference week.
+   */
+  async function handleAgendamentoConfirm(pacienteId: string, dia: string, hora: string) {
+    const paciente = lista.find((p) => p.id === pacienteId);
     if (!paciente) return;
-    const novoEvento: AgendaSemanal = {
-      id: `local-${pacienteId}-${dia}-${hora}-${seqRef.current++}`,
-      dia,
-      diaNum: REFERENCE_WEEK_NUMS[dia] ?? 0,
-      hora,
-      paciente: abreviarNome(paciente.nome),
-      tipo: "Sessão",
-      cor: "green",
-    };
-    // Editing an existing appointment → hide the original occurrence so the
-    // rescheduled copy replaces it instead of duplicating the patient.
-    const editId = agendarInit?.eventId;
-    if (editId) {
-      setRemovedIds((prev) => (prev.includes(editId) ? prev : [...prev, editId]));
-    }
-    setLocalEventos((prev) => [...prev, novoEvento]);
+    const base = paciente.sessao?.dataInicio ?? REFERENCE_WEEK.Seg;
+    const dataInicio = dateForWeekdayInWeek(base, dia);
+    await patientService.update(pacienteId, {
+      sessao: { dataInicio, hora },
+      proximaSessao: { data: formatDayMonth(dataInicio), hora, label: "" },
+      previsaoAlta: calcAltaDate(dataInicio, paciente.totalSessoes),
+    });
   }
 
   function abrirAgendamento(
-    init: { dia: string; hora: string | null; paciente?: Paciente | null; eventId?: string } | null
+    init: {
+      dia: string;
+      hora: string | null;
+      data?: string | null;
+      paciente?: Paciente | null;
+      pacienteId?: string;
+    } | null,
   ) {
     setAgendarInit(init);
     setShowAgendar(true);
   }
 
-  // Clicking an existing appointment opens the scheduling modal pre-filled with
-  // its patient, day and hour, letting the user reschedule it.
+  // Clicking an existing session opens the modal to reschedule the whole series.
   function handleEventClick(arg: EventClickArg) {
     const start = arg.event.start;
     if (!start) return;
     const dia = DOW_TO_LABEL[start.getDay()];
     if (!dia) return;
     const hora = `${String(start.getHours()).padStart(2, "0")}:00`;
-    const nomeAbrev = arg.event.extendedProps.paciente as string;
-    const paciente = pacientes.find((p) => abreviarNome(p.nome) === nomeAbrev) ?? null;
-    abrirAgendamento({ dia, hora, paciente, eventId: arg.event.id });
+    const pacienteId = arg.event.extendedProps.pacienteId as string;
+    const paciente = lista.find((p) => p.id === pacienteId) ?? null;
+    abrirAgendamento({ dia, hora, paciente, pacienteId });
   }
 
   // Clicking an empty slot opens the modal pre-filled with that day/time.
   function handleDateClick(arg: DateClickArg) {
     const dia = DOW_TO_LABEL[arg.date.getDay()];
     if (!dia) return; // ignore weekends / unsupported days
+    const data = localISODate(arg.date);
     if (arg.allDay) {
       // Month view: only the day is known — let the user pick the time.
-      abrirAgendamento({ dia, hora: null });
+      abrirAgendamento({ dia, hora: null, data });
       return;
     }
     const hora = `${String(arg.date.getHours()).padStart(2, "0")}:00`;
-    const ocupado = todosEventos.some((e) => e.dia === dia && e.hora === hora);
-    abrirAgendamento({ dia, hora: ocupado ? null : hora });
+    const ocupado = occupiedEventos.some((e) => e.dia === dia && e.hora === hora);
+    abrirAgendamento({ dia, hora: ocupado ? null : hora, data });
   }
 
   const updateViewSlider = useCallback(() => {
@@ -261,18 +283,22 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
 
   function handleEventDrop(info: EventDropArg) {
     const start = info.event.start;
-    if (!start) return;
-    const dia = capitalize(
-      new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(start)
+    const old = info.oldEvent.start;
+    if (!start || !old) return;
+    const diaLongo = capitalize(
+      new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(start),
     );
-    const hora = new Intl.DateTimeFormat("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(start);
+    const hora = `${String(start.getHours()).padStart(2, "0")}:00`;
+    // Whole-day shift between the dragged occurrence's old and new dates; applied
+    // to the series start so every remaining session moves with it.
+    const deltaDays = Math.round((start.getTime() - old.getTime()) / 86_400_000);
     setPendingMove({
       info,
       paciente: info.event.extendedProps.paciente,
-      quando: `${dia}, ${hora}`,
+      quando: `${diaLongo}, ${hora}`,
+      pacienteId: info.event.extendedProps.pacienteId as string,
+      deltaDays,
+      hora,
     });
   }
 
@@ -289,8 +315,18 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
     closeModal();
   }
 
-  function confirmMove() {
-    // The drag already mutated FullCalendar's internal state; nothing more to do.
+  async function confirmMove() {
+    if (pendingMove) {
+      const paciente = lista.find((p) => p.id === pendingMove.pacienteId);
+      if (paciente?.sessao) {
+        const dataInicio = addDaysISO(paciente.sessao.dataInicio, pendingMove.deltaDays);
+        await patientService.update(pendingMove.pacienteId, {
+          sessao: { dataInicio, hora: pendingMove.hora },
+          proximaSessao: { data: formatDayMonth(dataInicio), hora: pendingMove.hora, label: "" },
+          previsaoAlta: calcAltaDate(dataInicio, paciente.totalSessoes),
+        });
+      }
+    }
     closeModal();
   }
 
@@ -384,16 +420,17 @@ export default function Agenda({ eventos, pacientes }: AgendaProps) {
 
       {showAgendar && (
         <AgendamentoModal
-          pacientes={pacientes}
-          // When editing, exclude the event being moved so its own slot shows as
+          pacientes={lista}
+          // When rescheduling, exclude the patient's own slot so it shows as
           // selected (and reselectable) rather than disabled-occupied.
           eventos={
-            agendarInit?.eventId
-              ? todosEventos.filter((e) => e.id !== agendarInit.eventId)
-              : todosEventos
+            agendarInit?.pacienteId
+              ? occupiedEventos.filter((e) => e.id !== agendarInit.pacienteId)
+              : occupiedEventos
           }
           diaInicial={agendarInit?.dia}
           horaInicial={agendarInit?.hora ?? null}
+          dataInicial={agendarInit?.data ?? null}
           pacienteInicial={agendarInit?.paciente ?? null}
           onClose={() => setShowAgendar(false)}
           onConfirm={handleAgendamentoConfirm}

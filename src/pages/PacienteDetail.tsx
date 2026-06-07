@@ -2,33 +2,28 @@ import { Suspense, useRef, useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, NavLink, Outlet, useLocation } from "react-router-dom";
 import { ChevronLeft, ClipboardList, Stethoscope, BarChart3, FolderOpen, ClipboardPlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import type { Paciente } from "../types";
 import Avatar from "../components/Avatar";
 import { Badge } from "../components/primitives";
 import type { BadgeTone } from "../components/primitives";
+import { usePaciente } from "../hooks";
 import "./PacienteDetail.css";
-
-interface PacienteDetailProps {
-  /** Full patient list used to look up the active patient by the `:id` URL param. */
-  pacientes: Paciente[];
-}
 
 /**
  * Patient detail layout shell that provides the patient context to all nested
  * sub-pages via `<Outlet context={paciente}>`.
  *
- * Resolves the active patient from `pacientes` using the `:id` URL parameter
- * and redirects to `/pacientes` if none is found. Sub-pages (`PacienteResumo`,
- * `PlanoTratamento`, `Evolucao`, `NovaAvaliacao`, `PacienteDocumentos`) access
- * the patient via `useOutletContext<Paciente>()` — no further prop-drilling needed.
+ * Resolves the active patient from the live {@link usePaciente} query using the
+ * `:id` URL parameter, redirecting to `/pacientes` if none is found. Sub-pages
+ * (`PacienteResumo`, `PlanoTratamento`, `Evolucao`, `NovaAvaliacao`,
+ * `PacienteDocumentos`) access the patient via `useOutletContext<Paciente>()` —
+ * no further prop-drilling needed.
  *
- * @param props - {@link PacienteDetailProps}
  * @returns The patient detail layout `<div>` with a header, contextual nav
  *   tabs, and the `<Outlet>` rendering the active sub-page.
  *
  * @example
  * // Mounted at /pacientes/:id in App.tsx — child routes render via Outlet:
- * <PacienteDetail pacientes={pacientes} />
+ * <PacienteDetail />
  */
 const STATUS_TONE: Record<string, BadgeTone> = {
   Ativo: "success",
@@ -36,9 +31,10 @@ const STATUS_TONE: Record<string, BadgeTone> = {
   Alta: "neutral",
 };
 
-export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
+export default function PacienteDetail() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const paciente = usePaciente(id);
   const navigate = useNavigate();
   const location = useLocation();
   const navRef = useRef<HTMLElement>(null);
@@ -71,9 +67,11 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
     return () => window.removeEventListener("resize", updateSlider);
   }, [updateSlider]);
 
-  const paciente = pacientes.find(p => p.id === id);
-
-  if (!paciente) {
+  // `undefined` = the live query is still loading; `null` = resolved with no match.
+  if (paciente === undefined) {
+    return <div className="route-fallback"><span className="route-spinner" /></div>;
+  }
+  if (paciente === null) {
     return <div className="not-found">{t("common.notFound")}</div>;
   }
 

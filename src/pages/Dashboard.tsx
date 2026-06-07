@@ -3,34 +3,22 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { Users, HeartPulse, Bell, ChevronRight } from "lucide-react";
 import NotificationsDrawer from "../components/NotificationsDrawer";
-import type { Stats, AgendaItem, Paciente } from "../types";
+import { useDashboard, usePacientes } from "../hooks";
 import "./Dashboard.css";
-
-interface DashboardProps {
-  /** High-level practice statistics for the current period. */
-  stats: Stats;
-  /** Today's schedule entries shown in the agenda section. */
-  agendaHoje: AgendaItem[];
-  /** Clinician's first name used in the "Bom dia, ..." greeting. */
-  doctorName: string;
-  /** Full patient list used to populate the recent-patients section. */
-  pacientes: Paciente[];
-}
 
 /**
  * Landing page showing a stats overview, today's agenda, and recent patients.
  *
- * Receives all data as props from `App.tsx` (sourced via `dashboardService` and
- * `patientService`). Renders a loading skeleton for 800 ms on mount to simulate
- * an async fetch and prevent content from flashing in before styles settle.
+ * Sources its data via live IndexedDB queries ({@link useDashboard} and
+ * {@link usePacientes}). Renders a loading skeleton while those queries resolve
+ * and for a brief settle delay, preventing content from flashing in before
+ * styles settle.
  *
- * @param props - {@link DashboardProps}
  * @returns The dashboard layout `<div>` with stats grid, agenda, and patient shortcuts.
  *
  * @example
  * // Mounted at the root index route in App.tsx:
- * <Dashboard stats={overview.stats} agendaHoje={overview.agendaHoje}
- *   doctorName={doctor.name} pacientes={pacientes} />
+ * <Dashboard />
  */
 
 /**
@@ -95,27 +83,39 @@ function DashboardSkeleton() {
   );
 }
 
-export default function Dashboard({ stats, agendaHoje, doctorName, pacientes }: DashboardProps) {
-  const { t } = useTranslation();
-  const [loading, setLoading] = useState(true);
+export default function Dashboard() {
+  const { t, i18n } = useTranslation();
+  const overview = useDashboard();
+  const pacientes = usePacientes();
+  const [settled, setSettled] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const navigate = useNavigate();
-  const firstName = doctorName.split(" ").slice(1).join(" ");
-  const idByNome = new Map(pacientes.map((p) => [p.nome, p.id]));
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setSettled(true), 800);
+    return () => clearTimeout(timer);
   }, []);
 
-  if (loading) return <DashboardSkeleton />;
+  if (!settled || !overview || !pacientes) return <DashboardSkeleton />;
+
+  const { stats, agendaHoje, doctor } = overview;
+  const firstName = doctor ? doctor.name.split(" ").slice(1).join(" ") : "";
+  const idByNome = new Map(pacientes.map((p) => [p.nome, p.id]));
+
+  // Real current date, localized (e.g. "Terça-feira, 28 de abril"), capitalized.
+  const dateLabel = new Intl.DateTimeFormat(i18n.language, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(new Date());
+  const dataHoje = dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1);
 
   return (
     <div className="dashboard content-appear">
       <div className="dashboard-header">
         <div>
           <h1>{t("dashboard.greeting", { name: firstName })}</h1>
-          <p className="header-subtitle">{t("dashboard.headerSubtitle", { count: stats.pacientesHoje })}</p>
+          <p className="header-subtitle">{t("dashboard.headerSubtitle", { date: dataHoje, count: stats.pacientesHoje })}</p>
         </div>
         <button className="notification-btn" onClick={() => setNotifOpen(true)} aria-label={t("dashboard.notifications")}>
           <Bell size={18} aria-hidden="true" />

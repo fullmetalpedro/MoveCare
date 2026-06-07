@@ -2,6 +2,7 @@ import { useOutletContext } from "react-router-dom";
 import { FileText, Plus, Download, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { Paciente } from "../types";
+import { usePatientDocuments } from "../hooks";
 import { documentService } from "../services";
 import "./PacienteDocumentos.css";
 
@@ -10,8 +11,8 @@ import "./PacienteDocumentos.css";
  * with download and delete actions.
  *
  * Receives the active patient via `useOutletContext<Paciente>()` provided by
- * `PacienteDetail`. Document data is sourced from {@link documentService.getForPatient}.
- * Mounted at `/pacientes/:id/documentos`.
+ * `PacienteDetail`. Document data is sourced from the live
+ * {@link usePatientDocuments} query. Mounted at `/pacientes/:id/documentos`.
  *
  * @returns The documents grid `<div>` with a document card per file and an
  *   upload drop zone.
@@ -22,7 +23,7 @@ import "./PacienteDocumentos.css";
 export default function PacienteDocumentos() {
   const { t } = useTranslation();
   const paciente = useOutletContext<Paciente>();
-  const docs = documentService.getForPatient(paciente.id);
+  const docs = usePatientDocuments(paciente.id) ?? [];
 
   return (
     <div className="documentos-page">
@@ -32,7 +33,7 @@ export default function PacienteDocumentos() {
 
       <div className="documentos-grid">
         {docs.map((doc) => (
-          <div key={doc.id} className="doc-card">
+          <div key={doc.pk} className="doc-card">
             <div className="doc-thumb">
               <FileText size={32} aria-hidden="true" />
               <span className="doc-tipo">{doc.tipo}</span>
@@ -43,7 +44,13 @@ export default function PacienteDocumentos() {
             </div>
             <div className="doc-actions">
               <button className="doc-btn" aria-label={t("common.download")}><Download size={14} aria-hidden="true" /></button>
-              <button className="doc-btn doc-btn-del" aria-label={t("common.delete")}><Trash2 size={14} aria-hidden="true" /></button>
+              <button
+                className="doc-btn doc-btn-del"
+                aria-label={t("common.delete")}
+                onClick={() => doc.pk !== undefined && documentService.remove(doc.pk)}
+              >
+                <Trash2 size={14} aria-hidden="true" />
+              </button>
             </div>
           </div>
         ))}

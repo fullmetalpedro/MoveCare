@@ -3,37 +3,33 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
-import type { Doctor } from "../types";
+import { useDashboard } from "../hooks";
 import "./Layout.css";
-
-interface LayoutProps {
-  /** Authenticated clinician profile; forwarded to {@link Sidebar} for identity display. */
-  doctor: Doctor;
-  /** Total number of active patient alerts — drives the red badge on the Dashboard nav item. */
-  alertCount: number;
-}
 
 /**
  * Root application shell that renders the navigation {@link Sidebar} alongside
  * the active route's content via React Router's `<Outlet>`.
  *
- * Manages sidebar collapsed/expanded state and the mobile slide-over overlay.
- * The `page-fade` wrapper is keyed on the first three path segments so
- * entrance animations re-trigger on top-level route changes without flashing
- * on patient sub-tab navigation.
+ * Sources the clinician profile and alert count via {@link useDashboard} (live
+ * IndexedDB query). Manages sidebar collapsed/expanded state and the mobile
+ * slide-over overlay. The `page-fade` wrapper is keyed on the first three path
+ * segments so entrance animations re-trigger on top-level route changes without
+ * flashing on patient sub-tab navigation.
  *
- * @param props - {@link LayoutProps}
  * @returns A two-panel `<div>` containing the sidebar and a `<main>` content
  *   area rendered by `<Outlet>`.
  *
  * @example
  * // Registered as a parent route element in App.tsx:
- * <Route element={<Layout doctor={doctor} alertCount={alertCount} />}>
+ * <Route element={<Layout />}>
  *   <Route index element={<Dashboard />} />
  * </Route>
  */
-export default function Layout({ doctor, alertCount }: LayoutProps) {
+export default function Layout() {
   const { t } = useTranslation();
+  const overview = useDashboard();
+  const doctor = overview?.doctor;
+  const alertCount = overview?.alertCount ?? 0;
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();

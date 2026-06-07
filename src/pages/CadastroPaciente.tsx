@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { User, Phone, Mail, Activity, Calendar } from "lucide-react";
 import PageHeader from "../components/PageHeader";
@@ -15,6 +15,9 @@ import {
 import type { ChipTone } from "../components/primitives";
 import { validatePatientForm } from "../lib/validation";
 import { evaColor } from "../lib/format";
+import { calcAltaDate, formatDayMonth } from "../lib/schedule";
+import { patientService } from "../services";
+import type { AdesaoDia, Paciente } from "../types";
 import "./CadastroPaciente.css";
 
 interface FormData {
@@ -27,10 +30,15 @@ interface FormData {
   email: string;
   totalSessoes: string;
   dorEVA: string;
-  previsaoAlta: string;
   proximaSessaoData: string;
   proximaSessaoHora: string;
   observacoes: string;
+}
+
+/** Router state forwarded from the scheduling modal's "New patient" button. */
+interface NovoPacienteState {
+  data?: string;
+  hora?: string;
 }
 
 const SEXO_OPTIONS = ["Masculino", "Feminino", "Outro"];
@@ -40,6 +48,24 @@ const STATUS_OPTIONS: { value: string; tone: ChipTone }[] = [
   { value: "Alta", tone: "neutral" },
 ];
 const EVA_OPTIONS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+
+/** Weekday labels for a fresh (all-incomplete) weekly adherence record. */
+const EMPTY_ADESAO_SEMANAL: AdesaoDia[] = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"].map(
+  (dia) => ({ dia, feito: false }),
+);
+
+/**
+ * Derives up-to-two-letter uppercase initials from a full name (e.g.
+ * `"Maria Silva"` → `"MS"`), used for the patient {@link Avatar}.
+ *
+ * @param nome - The patient's full name.
+ * @returns The initials, or `"?"` if the name is empty.
+ */
+function deriveInitials(nome: string): string {
+  const parts = nome.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  return parts.slice(0, 2).map((p) => p[0]!.toUpperCase()).join("");
+}
 
 /**
  * New patient registration form with sections for personal data, contact,
@@ -60,6 +86,8 @@ const EVA_OPTIONS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 export default function CadastroPaciente() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  // Pre-fill the first session from a slot selected in the scheduling modal.
+  const prefill = (useLocation().state as NovoPacienteState | null) ?? {};
   const [form, setForm] = useState<FormData>({
     nome: "",
     idade: "",
@@ -70,9 +98,8 @@ export default function CadastroPaciente() {
     email: "",
     totalSessoes: "",
     dorEVA: "5",
-    previsaoAlta: "",
-    proximaSessaoData: "",
-    proximaSessaoHora: "",
+    proximaSessaoData: prefill.data ?? "",
+    proximaSessaoHora: prefill.hora ?? "",
     observacoes: "",
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
@@ -86,7 +113,7 @@ export default function CadastroPaciente() {
     return validatePatientForm(form);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
@@ -94,6 +121,38 @@ export default function CadastroPaciente() {
       scrollToFirstError();
       return;
     }
+
+    const dorEVA = parseInt(form.dorEVA, 10) || 0;
+    const totalSessoes = parseInt(form.totalSessoes, 10) || 0;
+    const dataInicio = form.proximaSessaoData;
+    // The recurring weekly slot drives the calendar; "alta" is the last session.
+    const sessao = dataInicio ? { dataInicio, hora: form.proximaSessaoHora } : null;
+    const novoPaciente: Paciente = {
+      id: `p-${Date.now()}`,
+      nome: form.nome.trim(),
+      initials: deriveInitials(form.nome),
+      idade: parseInt(form.idade, 10) || 0,
+      sexo: form.sexo,
+      status: form.status,
+      condicao: form.condicao.trim(),
+      sessoes: 0,
+      totalSessoes,
+      adesao: 0,
+      adesaoVariacao: 0,
+      ultimaVisita: "—",
+      dorEVA,
+      dorInicio: dorEVA,
+      previsaoAlta: sessao ? calcAltaDate(dataInicio, totalSessoes) : "—",
+      proximaSessao: sessao
+        ? { data: formatDayMonth(dataInicio), hora: form.proximaSessaoHora, label: "" }
+        : null,
+      sessao,
+      ultimaEvolucao: null,
+      adesaoSemanal: EMPTY_ADESAO_SEMANAL,
+      planoTratamento: null,
+    };
+
+    await patientService.create(novoPaciente);
     navigate("/pacientes");
   }
 
@@ -249,15 +308,6 @@ export default function CadastroPaciente() {
                 </span>
               ))}
             </div>
-          </FormField>
-
-          <FormField label={t("cadastroPaciente.fields.previsaoAlta")} htmlFor="previsaoAlta">
-            <TextField
-              id="previsaoAlta"
-              type="date"
-              value={form.previsaoAlta}
-              onChange={e => set("previsaoAlta", e.target.value)}
-            />
           </FormField>
         </FormSection>
 

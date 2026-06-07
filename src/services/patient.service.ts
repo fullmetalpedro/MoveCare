@@ -1,41 +1,81 @@
-import { loadDataset } from "./_client";
+import { db } from "../db";
 import type { Paciente } from "../types";
 
 /**
- * Data-access service for patient records.
+ * Data-access service for patient records, backed by IndexedDB (Dexie).
  *
- * All reads go through this object so that switching from mock data to a real
- * API endpoint is a single-function change in `_client.ts` or here.
+ * All methods are asynchronous. Reads return promises that `useLiveQuery`
+ * subscribes to, so any write through {@link patientService.create} or
+ * {@link patientService.update} re-renders subscribed components automatically.
  *
  * @example
- * const all = patientService.getAll();
- * const one = patientService.getById("pac-001");
+ * const all = await patientService.getAll();
+ * const one = await patientService.getById("p3");
  */
 export const patientService = {
   /**
-   * Returns every patient in the dataset.
+   * Returns every patient in the database.
    *
-   * @returns Array of all {@link Paciente} records, in dataset order.
+   * @returns Promise of all {@link Paciente} records.
    *
    * @example
-   * const pacientes = patientService.getAll();
-   * console.log(pacientes.length); // e.g. 8
+   * const pacientes = await patientService.getAll();
    */
-  getAll(): Paciente[] {
-    return loadDataset().pacientes;
+  getAll(): Promise<Paciente[]> {
+    return db.pacientes.toArray();
   },
 
   /**
    * Finds a single patient by their unique identifier.
    *
    * @param id - The patient's unique string ID (matches `Paciente.id`).
-   * @returns The matching {@link Paciente}, or `undefined` if no record has that ID.
+   * @returns Promise of the matching {@link Paciente}, or `undefined` if none exists.
    *
    * @example
-   * const p = patientService.getById("pac-003");
-   * if (p) console.log(p.nome);
+   * const p = await patientService.getById("p3");
    */
-  getById(id: string): Paciente | undefined {
-    return loadDataset().pacientes.find((p) => p.id === id);
+  getById(id: string): Promise<Paciente | undefined> {
+    return db.pacientes.get(id);
+  },
+
+  /**
+   * Inserts a new patient record.
+   *
+   * @param paciente - The complete {@link Paciente} to persist.
+   * @returns Promise of the inserted patient.
+   *
+   * @example
+   * await patientService.create(novoPaciente);
+   */
+  async create(paciente: Paciente): Promise<Paciente> {
+    await db.pacientes.add(paciente);
+    return paciente;
+  },
+
+  /**
+   * Applies a partial update to an existing patient.
+   *
+   * @param id - The patient's unique identifier.
+   * @param patch - Fields to merge into the stored record.
+   * @returns Promise of the number of records updated (`0` if `id` was not found).
+   *
+   * @example
+   * await patientService.update("p1", { planoTratamento });
+   */
+  update(id: string, patch: Partial<Paciente>): Promise<number> {
+    return db.pacientes.update(id, patch);
+  },
+
+  /**
+   * Permanently deletes a patient record.
+   *
+   * @param id - The patient's unique identifier.
+   * @returns Promise resolving once the record is removed (no-op if absent).
+   *
+   * @example
+   * await patientService.remove("p1");
+   */
+  remove(id: string): Promise<void> {
+    return db.pacientes.delete(id);
   },
 };

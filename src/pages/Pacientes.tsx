@@ -6,29 +6,24 @@ import PageHeader from "../components/PageHeader";
 import Avatar from "../components/Avatar";
 import { Button, SearchInput, Tabs, Badge } from "../components/primitives";
 import type { BadgeTone } from "../components/primitives";
-import type { Paciente } from "../types";
+import { usePacientes } from "../hooks";
 import { filterPatients } from "../lib/patient";
 import "./Pacientes.css";
-
-interface PacientesProps {
-  /** Full patient list to display; filtering is applied client-side via {@link filterPatients}. */
-  pacientes: Paciente[];
-}
 
 /**
  * Patient list page with status tab filtering and free-text search.
  *
- * Filtering is performed client-side by {@link filterPatients} from
- * `src/lib/patient.ts`. The active filter can be pre-set via the `?filter=`
- * query parameter (used by Dashboard shortcuts).
+ * Sources the patient list via the live {@link usePacientes} query. Filtering is
+ * performed client-side by {@link filterPatients} from `src/lib/patient.ts`. The
+ * active filter can be pre-set via the `?filter=` query parameter (used by
+ * Dashboard shortcuts).
  *
- * @param props - {@link PacientesProps}
  * @returns The patients page `<div>` with a search bar, tab filters, and a
  *   sortable table of patient rows.
  *
  * @example
  * // Mounted at /pacientes in App.tsx:
- * <Pacientes pacientes={pacientes} />
+ * <Pacientes />
  */
 
 type FilterType = "Todos" | "Ativos" | "Avaliação" | "Alta";
@@ -74,8 +69,9 @@ function StatusBadge({ status }: { status: string }) {
 
 const FILTERS: FilterType[] = ["Todos", "Ativos", "Avaliação", "Alta"];
 
-export default function Pacientes({ pacientes }: PacientesProps) {
+export default function Pacientes() {
   const { t } = useTranslation();
+  const pacientes = usePacientes();
   const [searchParams] = useSearchParams();
   const paramFilter = searchParams.get("filter") as FilterType | null;
   const initialFilter: FilterType =
@@ -84,7 +80,7 @@ export default function Pacientes({ pacientes }: PacientesProps) {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const filtered = filterPatients(pacientes, filter, search);
+  const filtered = filterPatients(pacientes ?? [], filter, search);
 
   const filterItems = FILTERS.map(f => ({
     value: f,

@@ -1,6 +1,7 @@
 import { FileText, Plus, Download, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import PageHeader from "../components/PageHeader";
+import { useDocumentTemplates } from "../hooks";
 import { documentService } from "../services";
 import "./PacienteDocumentos.css";
 
@@ -8,7 +9,7 @@ import "./PacienteDocumentos.css";
  * Global documents page listing clinic-level templates and shared files
  * (contracts, guides, forms) with download and delete actions.
  *
- * Data is sourced from {@link documentService.getTemplates}.
+ * Data is sourced from the live {@link useDocumentTemplates} query.
  * Mounted at `/documentos`.
  *
  * @returns The documents grid `<div>` with a document card per file and an
@@ -19,7 +20,7 @@ import "./PacienteDocumentos.css";
  */
 export default function Documentos() {
   const { t } = useTranslation();
-  const docs = documentService.getTemplates();
+  const docs = useDocumentTemplates() ?? [];
 
   return (
     <div className="documentos-page">
@@ -27,7 +28,7 @@ export default function Documentos() {
 
       <div className="documentos-grid">
         {docs.map((doc) => (
-          <div key={doc.id} className="doc-card">
+          <div key={doc.pk} className="doc-card">
             <div className="doc-thumb">
               <FileText size={32} aria-hidden="true" />
               <span className="doc-tipo">{doc.tipo}</span>
@@ -38,7 +39,13 @@ export default function Documentos() {
             </div>
             <div className="doc-actions">
               <button className="doc-btn" aria-label={t("common.download")}><Download size={14} aria-hidden="true" /></button>
-              <button className="doc-btn doc-btn-del" aria-label={t("common.delete")}><Trash2 size={14} aria-hidden="true" /></button>
+              <button
+                className="doc-btn doc-btn-del"
+                aria-label={t("common.delete")}
+                onClick={() => doc.pk !== undefined && documentService.remove(doc.pk)}
+              >
+                <Trash2 size={14} aria-hidden="true" />
+              </button>
             </div>
           </div>
         ))}

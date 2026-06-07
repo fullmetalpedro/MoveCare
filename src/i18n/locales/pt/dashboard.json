@@ -1,6 +1,6 @@
 {
   "greeting": "Bom dia, {{name}}",
-  "headerSubtitle": "Terça-feira, 29 de Abril · {{count}} pacientes hoje",
+  "headerSubtitle": "{{date}} · {{count}} pacientes hoje",
   "notifications": "Notificações",
   "stats": {
     "pacientesHoje": "Pacientes Hoje",

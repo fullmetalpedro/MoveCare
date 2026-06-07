@@ -34,3 +34,19 @@ export function filterPatients(
     return true;
   });
 }
+
+/**
+ * Abbreviates a full name to the `"Nome S."` style used by agenda events
+ * (e.g. `"Maria Silva"` → `"Maria S."`).
+ *
+ * @param nome - The patient's full name.
+ * @returns The abbreviated name; the input unchanged if it is a single word.
+ *
+ * @example
+ * abreviarNome("Maria Silva"); // "Maria S."
+ */
+export function abreviarNome(nome: string): string {
+  const parts = nome.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+}

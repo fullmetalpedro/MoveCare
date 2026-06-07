@@ -7,8 +7,8 @@ import Avatar from "./Avatar";
 import "./Sidebar.css";
 
 interface SidebarProps {
-  /** Clinician profile data rendered in the bottom footer. */
-  doctor: Doctor;
+  /** Clinician profile rendered in the bottom footer; `undefined` while the live query loads. */
+  doctor?: Doctor;
   /** Number of active alerts; shows a badge on the Dashboard link when greater than 0. */
   alertCount: number;
   /** Whether the sidebar is in narrow (icon-only) collapsed mode. */
@@ -107,14 +107,16 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
         </NavLink>
       </nav>
 
-      <div className="sidebar-footer">
-        <Avatar className="doctor-avatar" name={doctor.name} initials={doctor.initials} size={34} />
-        <div className="doctor-info">
-          <div className="doctor-name">{doctor.name}</div>
-          <div className="doctor-role">{doctor.role} · {doctor.crefito}</div>
+      {doctor && (
+        <div className="sidebar-footer">
+          <Avatar className="doctor-avatar" name={doctor.name} initials={doctor.initials} size={34} />
+          <div className="doctor-info">
+            <div className="doctor-name">{doctor.name}</div>
+            <div className="doctor-role">{doctor.role} · {doctor.crefito}</div>
+          </div>
+          <span className="settings-icon" aria-hidden="true"><Settings size={16} /></span>
         </div>
-        <span className="settings-icon" aria-hidden="true"><Settings size={16} /></span>
-      </div>
+      )}
 
       <button
         className="sidebar-toggle"

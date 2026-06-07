@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { MessageCircle, Plus, Play, GripVertical, Pencil, Trash2, X, Copy, Check } from "lucide-react";
 import type { Paciente, Exercicio } from "../types";
 import { buildPlanWhatsAppText } from "../lib/whatsapp";
+import { patientService } from "../services";
 import "./PlanoTratamento.css";
 
 const CATEGORIA_COLORS: Record<string, string> = {
@@ -141,17 +142,48 @@ export default function PlanoTratamento() {
   const handleDrop = (e: React.DragEvent, targetId: string) => {
     e.preventDefault();
     if (!draggingId || draggingId === targetId) return;
-    setExercicios(prev => {
-      const list = [...prev];
-      const from = list.findIndex(ex => ex.id === draggingId);
-      const to = list.findIndex(ex => ex.id === targetId);
-      const [item] = list.splice(from, 1);
-      list.splice(to, 0, item);
-      return list;
-    });
+    const list = [...exercicios];
+    const from = list.findIndex(ex => ex.id === draggingId);
+    const to = list.findIndex(ex => ex.id === targetId);
+    const [item] = list.splice(from, 1);
+    list.splice(to, 0, item);
+    setExercicios(list);
+    persistOrder(list);
     setDraggingId(null);
     setDragOverId(null);
   };
+
+  /**
+   * Removes an exercise from the plan and persists the new list.
+   *
+   * @param id - The id of the {@link Exercicio} to remove.
+   */
+  function handleDelete(id: string) {
+    const list = exercicios.filter(ex => ex.id !== id);
+    setExercicios(list);
+    persistOrder(list);
+  }
+
+  /**
+   * Persists the reordered exercise list to IndexedDB. Because the displayed
+   * list is flat (phases are only ever flattened for display/counting), the new
+   * order is stored as a single consolidated phase, preserving the plan's
+   * observations and the original first phase's id/name.
+   */
+  function persistOrder(list: Exercicio[]) {
+    if (!plano) return;
+    const fasePrincipal = plano.fases[0];
+    patientService.update(paciente.id, {
+      planoTratamento: {
+        observacoes: plano.observacoes,
+        fases: [{
+          id: fasePrincipal?.id ?? "f1",
+          nome: fasePrincipal?.nome ?? "Plano",
+          exercicios: list,
+        }],
+      },
+    });
+  }
 
   const handleDragEnd = () => {
     setDraggingId(null);
@@ -218,7 +250,7 @@ export default function PlanoTratamento() {
                     <button className="ex-btn" aria-label={t("plano.edit")}>
                       <Pencil size={14} aria-hidden="true" />
                     </button>
-                    <button className="ex-btn ex-btn-del" aria-label={t("plano.delete")}>
+                    <button className="ex-btn ex-btn-del" aria-label={t("plano.delete")} onClick={() => handleDelete(ex.id)}>
                       <Trash2 size={14} aria-hidden="true" />
                     </button>
                   </div>

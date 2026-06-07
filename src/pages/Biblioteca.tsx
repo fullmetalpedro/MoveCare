@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Play, Plus, Dumbbell, StretchHorizontal, Activity, Footprints, HeartPulse, Wind } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { Button, SearchInput, Tabs, Badge } from "../components/primitives";
-import { exerciseService } from "../services";
+import { useExerciseLibrary } from "../hooks";
 import type { LibraryExercicio } from "../types";
 import "./Biblioteca.css";
 
@@ -27,8 +27,6 @@ const CATEGORIA_COLORS: Record<string, string> = {
   Funcional: "#34C759",
   Relaxamento: "#5AC8FA",
 };
-
-const EXERCICIOS = exerciseService.getLibrary();
 
 /**
  * {@link Badge} that maps an exercise difficulty level to a brand color.
@@ -74,9 +72,9 @@ function BibliotecaSkeleton() {
  * Exercise library page showing the full exercise catalogue with category tab
  * filtering and free-text search.
  *
- * Data is sourced from {@link exerciseService.getLibrary}. Renders a skeleton
- * grid for 800 ms on mount before fading in the content.
- * Mounted at `/biblioteca`.
+ * Data is sourced from the live {@link useExerciseLibrary} query. Renders a
+ * skeleton grid until the data loads (and for an 800 ms settle delay) before
+ * fading in the content. Mounted at `/biblioteca`.
  *
  * @returns The library page `<div>` with a search bar, category tabs, and an
  *   exercise card grid.
@@ -87,16 +85,19 @@ function BibliotecaSkeleton() {
 export default function Biblioteca() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(true);
+  const exercicios = useExerciseLibrary();
+  const [settled, setSettled] = useState(false);
   const [filtro, setFiltro] = useState("Todos");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setSettled(true), 800);
+    return () => clearTimeout(timer);
   }, []);
 
-  const filtered: LibraryExercicio[] = EXERCICIOS.filter(ex => {
+  const loading = !settled || !exercicios;
+
+  const filtered: LibraryExercicio[] = (exercicios ?? []).filter(ex => {
     if (filtro !== "Todos" && ex.categoria !== filtro) return false;
     if (search && !ex.nome.toLowerCase().includes(search.toLowerCase())) return false;
     return true;

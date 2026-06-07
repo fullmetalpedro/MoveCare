@@ -101,6 +101,19 @@ export interface ProximaSessao {
   label: string;
 }
 
+/**
+ * A patient's recurring weekly session slot. Sessions repeat every week at the
+ * same weekday/time starting from {@link SessaoSemanal.dataInicio}, for
+ * `Paciente.totalSessoes` occurrences. This is the single source of truth the
+ * agenda and dashboard derive from.
+ */
+export interface SessaoSemanal {
+  /** ISO date (`yyyy-mm-dd`) of the first session — fixes the weekday. */
+  dataInicio: string;
+  /** Time of day in 24h `"HH:mm"` format. */
+  hora: string;
+}
+
 export interface Paciente {
   /** Unique patient identifier. */
   id: string;
@@ -132,8 +145,10 @@ export interface Paciente {
   dorInicio: number;
   /** Expected discharge date string. */
   previsaoAlta: string;
-  /** Upcoming session details, or `null` if none scheduled. */
+  /** Upcoming session details (display summary), or `null` if none scheduled. */
   proximaSessao: ProximaSessao | null;
+  /** Recurring weekly session slot the agenda is derived from, or `null`. */
+  sessao?: SessaoSemanal | null;
   /** Most recent clinical evolution note, or `null` if none exists. */
   ultimaEvolucao: Evolucao | null;
   /** Per-day adherence markers for the current week. */

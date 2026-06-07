@@ -2,19 +2,21 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { Heart } from "lucide-react";
+import { useDashboard, usePacientes } from "../hooks";
 import "./SplashScreen.css";
 
-const VISIBLE_MS = 1750;
+const MIN_VISIBLE_MS = 900;
 const FADE_MS = 450;
 
 /**
- * Full-screen animated loading splash rendered over the app on first mount.
+ * Full-screen animated splash that doubles as the app's loading screen.
  *
- * Visible for {@link VISIBLE_MS} ms, then fades out over {@link FADE_MS} ms
- * before unmounting. Rendered into `document.body` via a portal so it sits
- * above all app content regardless of stacking context. Locks
- * `overflow: hidden` on `<html>` while visible to prevent the scrollbar from
- * appearing and shifting the layout behind the splash.
+ * It stays visible until **both** the initial data has loaded (the live
+ * dashboard and patient queries have resolved) **and** a minimum
+ * {@link MIN_VISIBLE_MS} has elapsed so the animation isn't cut off on a fast
+ * load — then fades out over {@link FADE_MS} ms before unmounting. Rendered into
+ * `document.body` via a portal so it sits above all app content, and locks
+ * `overflow: hidden` on `<html>` while visible to avoid scrollbar layout shifts.
  *
  * @returns A portal wrapping the animated splash `<div>`, or `null` once the
  *   fade-out completes.
@@ -28,33 +30,43 @@ const FADE_MS = 450;
  */
 export default function SplashScreen() {
   const { t } = useTranslation();
-  const [phase, setPhase] = useState<"show" | "hide" | "done">("show");
+  const [done, setDone] = useState(false);
+  const [minElapsed, setMinElapsed] = useState(false);
+
+  // The initial data is ready once these live queries have produced a value.
+  const overview = useDashboard();
+  const pacientes = usePacientes();
+  const dataReady = overview !== undefined && pacientes !== undefined;
+
+  // Hide once the data has loaded and the minimum animation time has elapsed.
+  const hiding = minElapsed && dataReady;
 
   useEffect(() => {
     // Lock page scroll while the splash is up so the viewport width stays
-    // constant (the dashboard loading behind it would otherwise toggle the
-    // scrollbar and shift the centered content horizontally).
+    // constant (content loading behind it would otherwise toggle the scrollbar
+    // and shift the centered layout horizontally).
     const html = document.documentElement;
     const prevOverflow = html.style.overflow;
     html.style.overflow = "hidden";
 
-    const t1 = setTimeout(() => setPhase("hide"), VISIBLE_MS);
-    const t2 = setTimeout(() => {
-      setPhase("done");
-      html.style.overflow = prevOverflow;
-    }, VISIBLE_MS + FADE_MS);
-
+    const t1 = setTimeout(() => setMinElapsed(true), MIN_VISIBLE_MS);
     return () => {
       clearTimeout(t1);
-      clearTimeout(t2);
       html.style.overflow = prevOverflow;
     };
   }, []);
 
-  if (phase === "done") return null;
+  // Once hiding, unmount after the fade completes.
+  useEffect(() => {
+    if (!hiding) return;
+    const tDone = setTimeout(() => setDone(true), FADE_MS);
+    return () => clearTimeout(tDone);
+  }, [hiding]);
+
+  if (done) return null;
 
   return createPortal(
-    <div className={`splash${phase === "hide" ? " hide" : ""}`} aria-hidden="true">
+    <div className={`splash${hiding ? " hide" : ""}`} aria-hidden="true">
       <div className="splash-content">
         <svg width="0" height="0" style={{ position: "absolute" }}>
           <defs>

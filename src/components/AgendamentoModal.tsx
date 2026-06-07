@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { X, CalendarPlus, Search, ChevronRight, ChevronDown, UserPlus } from "lucide-react";
+import { REFERENCE_WEEK, weekdayLabel } from "../lib/schedule";
 import type { Paciente, AgendaSemanal } from "../types";
 
 const DIAS = ["Seg", "Ter", "Qua", "Qui", "Sex"] as const;
@@ -27,6 +28,11 @@ interface Props {
    * search section first since the time is already chosen.
    */
   horaInicial?: string | null;
+  /**
+   * ISO date (`yyyy-mm-dd`) of the clicked calendar slot, if any. Forwarded to
+   * the new-patient form so the first session is pre-filled with the real date.
+   */
+  dataInicial?: string | null;
   /**
    * Pre-selected patient. When provided the modal enters "edit" mode: the title
    * and confirm label change, and the date/time section opens first so the user
@@ -67,6 +73,7 @@ export default function AgendamentoModal({
   eventos,
   diaInicial,
   horaInicial,
+  dataInicial,
   pacienteInicial,
   onClose,
   onConfirm,
@@ -124,8 +131,15 @@ export default function AgendamentoModal({
   }
 
   function handleNewPatient() {
+    // Forward the chosen slot to the registration form's first-session step.
+    // Prefer the real clicked date when its weekday still matches the (possibly
+    // changed) selection; otherwise map the selected weekday to the reference week.
+    const data =
+      dataInicial && weekdayLabel(dataInicial) === diaSelecionado
+        ? dataInicial
+        : REFERENCE_WEEK[diaSelecionado];
     onClose();
-    navigate("/pacientes/novo");
+    navigate("/pacientes/novo", { state: { data, hora: horaSelecionada ?? "" } });
   }
 
   const canConfirm = pacienteSelecionado !== null && horaSelecionada !== null;

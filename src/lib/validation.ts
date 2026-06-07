@@ -14,7 +14,6 @@ export interface PatientFormData {
   email: string;
   totalSessoes: string;
   dorEVA: string;
-  previsaoAlta: string;
   proximaSessaoData: string;
   proximaSessaoHora: string;
   observacoes: string;

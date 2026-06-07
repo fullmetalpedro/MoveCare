@@ -1,8 +1,8 @@
 {
   "doctor": {
     "id": "dr-001",
-    "name": "Dr. Carlos Reis",
-    "initials": "CR",
+    "name": "Dra. Ana Paula",
+    "initials": "AP",
     "role": "Fisioterapeuta",
     "crefito": "CREFITO-3"
   },
@@ -15,17 +15,62 @@
     "pacientesEmAvaliacao": 4
   },
   "agendaHoje": [
-    { "hora": "08:00", "paciente": "Maria Silva", "tipo": "Sessão #12", "status": "confirmado" },
-    { "hora": "09:00", "paciente": "João Pereira", "tipo": "Avaliação Inicial", "status": "avaliacao" },
-    { "hora": "10:00", "paciente": "Ana Lima", "tipo": "Sessão #5", "status": "confirmado" },
-    { "hora": "11:00", "paciente": null, "tipo": "Horário livre", "status": "livre" },
-    { "hora": "14:00", "paciente": "Pedro Rocha", "tipo": "Sessão #8", "status": "confirmado" },
-    { "hora": "15:00", "paciente": "Fernanda Dias", "tipo": "Sessão #3", "status": "confirmado" }
+    {
+      "hora": "08:00",
+      "paciente": "Maria Silva",
+      "tipo": "Sessão #12",
+      "status": "confirmado"
+    },
+    {
+      "hora": "09:00",
+      "paciente": "João Pereira",
+      "tipo": "Avaliação Inicial",
+      "status": "avaliacao"
+    },
+    {
+      "hora": "10:00",
+      "paciente": "Ana Lima",
+      "tipo": "Sessão #5",
+      "status": "confirmado"
+    },
+    {
+      "hora": "11:00",
+      "paciente": null,
+      "tipo": "Horário livre",
+      "status": "livre"
+    },
+    {
+      "hora": "14:00",
+      "paciente": "Pedro Rocha",
+      "tipo": "Sessão #8",
+      "status": "confirmado"
+    },
+    {
+      "hora": "15:00",
+      "paciente": "Fernanda Dias",
+      "tipo": "Sessão #3",
+      "status": "confirmado"
+    }
   ],
   "alertas": [
-    { "id": "a1", "paciente": "João Pereira", "mensagem": "Sem exercícios há 5 dias", "severidade": "alta" },
-    { "id": "a2", "paciente": "Carla Mendes", "mensagem": "Adesão caiu para 40%", "severidade": "media" },
-    { "id": "a3", "paciente": "Pedro Rocha", "mensagem": "Relatou dor no último registro", "severidade": "baixa" }
+    {
+      "id": "a1",
+      "paciente": "João Pereira",
+      "mensagem": "Sem exercícios há 5 dias",
+      "severidade": "alta"
+    },
+    {
+      "id": "a2",
+      "paciente": "Carla Mendes",
+      "mensagem": "Adesão caiu para 40%",
+      "severidade": "media"
+    },
+    {
+      "id": "a3",
+      "paciente": "Pedro Rocha",
+      "mensagem": "Relatou dor no último registro",
+      "severidade": "baixa"
+    }
   ],
   "pacientes": [
     {
@@ -44,21 +89,46 @@
       "dorEVA": 3,
       "dorInicio": 7,
       "previsaoAlta": "Jun/26",
-      "proximaSessao": { "data": "29/04", "hora": "08:00", "label": "Amanhã" },
+      "proximaSessao": {
+        "data": "29/04",
+        "hora": "08:00",
+        "label": "Amanhã"
+      },
       "ultimaEvolucao": {
         "data": "28/04/2026",
         "sessao": "Sessão #11",
-        "doutor": "Dr. Carlos",
+        "doutor": "Dra. Ana Paula",
         "texto": "Paciente relata melhora na dor lombar após exercícios de estabilização. Mantida a série de fortalecimento de core. Adicionado exercício de mobilidade de quadril. EVA: 3/10 (anterior: 4/10)."
       },
       "adesaoSemanal": [
-        { "dia": "Seg", "feito": true },
-        { "dia": "Ter", "feito": true },
-        { "dia": "Qua", "feito": false },
-        { "dia": "Qui", "feito": true },
-        { "dia": "Sex", "feito": true },
-        { "dia": "Sáb", "feito": true },
-        { "dia": "Dom", "feito": false }
+        {
+          "dia": "Seg",
+          "feito": true
+        },
+        {
+          "dia": "Ter",
+          "feito": true
+        },
+        {
+          "dia": "Qua",
+          "feito": false
+        },
+        {
+          "dia": "Qui",
+          "feito": true
+        },
+        {
+          "dia": "Sex",
+          "feito": true
+        },
+        {
+          "dia": "Sáb",
+          "feito": true
+        },
+        {
+          "dia": "Dom",
+          "feito": false
+        }
       ],
       "planoTratamento": {
         "observacoes": "Paciente deve evitar flexão de tronco com carga. Priorizar exercícios em decúbito nas primeiras semanas. Revisão do plano prevista para sessão #15.",
@@ -67,51 +137,187 @@
             "id": "f1",
             "nome": "Fase 1 — Analgesia",
             "exercicios": [
-              { "id": "e1", "nome": "Alongamento Lombar", "categoria": "Flexibilidade", "series": "2×30s", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "descricao": "Deite de costas, leve os joelhos ao peito e segure por 30 segundos." },
-              { "id": "e2", "nome": "Respiração Diafragmática", "categoria": "Relaxamento", "series": "3×10", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "descricao": "Inspire pelo nariz expandindo o abdômen, expire lentamente pela boca." }
+              {
+                "id": "e1",
+                "nome": "Alongamento Lombar",
+                "categoria": "Flexibilidade",
+                "series": "2×30s",
+                "temVideo": true,
+                "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                "descricao": "Deite de costas, leve os joelhos ao peito e segure por 30 segundos."
+              },
+              {
+                "id": "e2",
+                "nome": "Respiração Diafragmática",
+                "categoria": "Relaxamento",
+                "series": "3×10",
+                "temVideo": true,
+                "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                "descricao": "Inspire pelo nariz expandindo o abdômen, expire lentamente pela boca."
+              }
             ]
           },
           {
             "id": "f2",
             "nome": "Fase 2 — Fortalecimento",
             "exercicios": [
-              { "id": "e3", "nome": "Ponte Glútea", "categoria": "Fortalecimento", "series": "3×15", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-              { "id": "e4", "nome": "Prancha Frontal", "categoria": "Estabilização", "series": "3×30s", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-              { "id": "e5", "nome": "Bird Dog", "categoria": "Estabilização", "series": "3×10 (cada lado)", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-              { "id": "e6", "nome": "Along. Piriforme", "categoria": "Flexibilidade", "series": "2×30s", "temVideo": false, "descricao": "Deitado, cruze a perna e puxe o joelho em direção ao ombro oposto, mantendo 30 segundos." },
-              { "id": "e7", "nome": "Mob. Quadril (CAR)", "categoria": "Mobilidade", "series": "2×8", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+              {
+                "id": "e3",
+                "nome": "Ponte Glútea",
+                "categoria": "Fortalecimento",
+                "series": "3×15",
+                "temVideo": true,
+                "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              },
+              {
+                "id": "e4",
+                "nome": "Prancha Frontal",
+                "categoria": "Estabilização",
+                "series": "3×30s",
+                "temVideo": true,
+                "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              },
+              {
+                "id": "e5",
+                "nome": "Bird Dog",
+                "categoria": "Estabilização",
+                "series": "3×10 (cada lado)",
+                "temVideo": true,
+                "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              },
+              {
+                "id": "e6",
+                "nome": "Along. Piriforme",
+                "categoria": "Flexibilidade",
+                "series": "2×30s",
+                "temVideo": false,
+                "descricao": "Deitado, cruze a perna e puxe o joelho em direção ao ombro oposto, mantendo 30 segundos."
+              },
+              {
+                "id": "e7",
+                "nome": "Mob. Quadril (CAR)",
+                "categoria": "Mobilidade",
+                "series": "2×8",
+                "temVideo": true,
+                "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              }
             ]
           },
           {
             "id": "f3",
             "nome": "Fase 3 — Funcional",
             "exercicios": [
-              { "id": "e8", "nome": "Agachamento Parcial", "categoria": "Funcional", "series": "3×12", "temVideo": true, "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-              { "id": "e9", "nome": "Step-up Lateral", "categoria": "Equilíbrio", "series": "3×10", "temVideo": false, "descricao": "Suba e desça do step lateralmente, mantendo o tronco ereto e o joelho alinhado com o pé." }
+              {
+                "id": "e8",
+                "nome": "Agachamento Parcial",
+                "categoria": "Funcional",
+                "series": "3×12",
+                "temVideo": true,
+                "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              },
+              {
+                "id": "e9",
+                "nome": "Step-up Lateral",
+                "categoria": "Equilíbrio",
+                "series": "3×10",
+                "temVideo": false,
+                "descricao": "Suba e desça do step lateralmente, mantendo o tronco ereto e o joelho alinhado com o pé."
+              }
             ]
           }
         ]
       },
       "registrosSessoes": [
-        { "id": "rs1", "data": "15/03/2026", "sessaoNum": 3, "observacoes": "Paciente realizou todos os exercícios com boa técnica. Relatou dor EVA 5 no início, EVA 3 ao fim. Progresso satisfatório no Bird Dog.", "exerciciosFeitos": 5, "totalExercicios": 7 },
-        { "id": "rs2", "data": "22/03/2026", "sessaoNum": 5, "observacoes": "Dificuldade na prancha frontal — limitado a 20s. Restante dos exercícios concluídos. Orientada sobre técnica respiratória.", "exerciciosFeitos": 6, "totalExercicios": 7 },
-        { "id": "rs3", "data": "05/04/2026", "sessaoNum": 8, "observacoes": "Excelente adesão. Conseguiu completar 3×30s na prancha. Iniciamos fase de fortalecimento funcional.", "exerciciosFeitos": 7, "totalExercicios": 7 },
-        { "id": "rs4", "data": "28/04/2026", "sessaoNum": 11, "observacoes": "Paciente relata melhora na dor lombar. Adicionado exercício de mobilidade de quadril. EVA: 3/10.", "exerciciosFeitos": 6, "totalExercicios": 9 }
+        {
+          "id": "rs1",
+          "data": "15/03/2026",
+          "sessaoNum": 3,
+          "observacoes": "Paciente realizou todos os exercícios com boa técnica. Relatou dor EVA 5 no início, EVA 3 ao fim. Progresso satisfatório no Bird Dog.",
+          "exerciciosFeitos": 5,
+          "totalExercicios": 7
+        },
+        {
+          "id": "rs2",
+          "data": "22/03/2026",
+          "sessaoNum": 5,
+          "observacoes": "Dificuldade na prancha frontal — limitado a 20s. Restante dos exercícios concluídos. Orientada sobre técnica respiratória.",
+          "exerciciosFeitos": 6,
+          "totalExercicios": 7
+        },
+        {
+          "id": "rs3",
+          "data": "05/04/2026",
+          "sessaoNum": 8,
+          "observacoes": "Excelente adesão. Conseguiu completar 3×30s na prancha. Iniciamos fase de fortalecimento funcional.",
+          "exerciciosFeitos": 7,
+          "totalExercicios": 7
+        },
+        {
+          "id": "rs4",
+          "data": "28/04/2026",
+          "sessaoNum": 11,
+          "observacoes": "Paciente relata melhora na dor lombar. Adicionado exercício de mobilidade de quadril. EVA: 3/10.",
+          "exerciciosFeitos": 6,
+          "totalExercicios": 9
+        }
       ],
       "avaliacoes": [
-        { "id": "av1", "data": "10/03/2026", "doutor": "Dr. Carlos", "testes": [
-          { "tipo": "tug", "tempoSegundos": 14.2, "distanciaMetros": 3 },
-          { "tipo": "dinamometria", "esquerda": 22.5, "direita": 24.0 }
-        ]},
-        { "id": "av2", "data": "15/04/2026", "doutor": "Dr. Carlos", "testes": [
-          { "tipo": "tug", "tempoSegundos": 11.8, "distanciaMetros": 3 },
-          { "tipo": "dinamometria", "esquerda": 25.0, "direita": 26.5 }
-        ]},
-        { "id": "av3", "data": "12/05/2026", "doutor": "Dr. Carlos", "testes": [
-          { "tipo": "tug", "tempoSegundos": 9.4, "distanciaMetros": 3 },
-          { "tipo": "dinamometria", "esquerda": 27.5, "direita": 28.0 }
-        ]}
-      ]
+        {
+          "id": "av1",
+          "data": "10/03/2026",
+          "doutor": "Dra. Ana Paula",
+          "testes": [
+            {
+              "tipo": "tug",
+              "tempoSegundos": 14.2,
+              "distanciaMetros": 3
+            },
+            {
+              "tipo": "dinamometria",
+              "esquerda": 22.5,
+              "direita": 24
+            }
+          ]
+        },
+        {
+          "id": "av2",
+          "data": "15/04/2026",
+          "doutor": "Dra. Ana Paula",
+          "testes": [
+            {
+              "tipo": "tug",
+              "tempoSegundos": 11.8,
+              "distanciaMetros": 3
+            },
+            {
+              "tipo": "dinamometria",
+              "esquerda": 25,
+              "direita": 26.5
+            }
+          ]
+        },
+        {
+          "id": "av3",
+          "data": "12/05/2026",
+          "doutor": "Dra. Ana Paula",
+          "testes": [
+            {
+              "tipo": "tug",
+              "tempoSegundos": 9.4,
+              "distanciaMetros": 3
+            },
+            {
+              "tipo": "dinamometria",
+              "esquerda": 27.5,
+              "direita": 28
+            }
+          ]
+        }
+      ],
+      "sessao": {
+        "dataInicio": "2026-04-28",
+        "hora": "08:00"
+      }
     },
     {
       "id": "p2",
@@ -129,18 +335,47 @@
       "dorEVA": 6,
       "dorInicio": 6,
       "previsaoAlta": "Ago/26",
-      "proximaSessao": { "data": "29/04", "hora": "09:00", "label": "Amanhã" },
+      "proximaSessao": {
+        "data": "29/04",
+        "hora": "09:00",
+        "label": "Amanhã"
+      },
       "ultimaEvolucao": null,
       "adesaoSemanal": [
-        { "dia": "Seg", "feito": false },
-        { "dia": "Ter", "feito": false },
-        { "dia": "Qua", "feito": false },
-        { "dia": "Qui", "feito": false },
-        { "dia": "Sex", "feito": false },
-        { "dia": "Sáb", "feito": false },
-        { "dia": "Dom", "feito": false }
+        {
+          "dia": "Seg",
+          "feito": false
+        },
+        {
+          "dia": "Ter",
+          "feito": false
+        },
+        {
+          "dia": "Qua",
+          "feito": false
+        },
+        {
+          "dia": "Qui",
+          "feito": false
+        },
+        {
+          "dia": "Sex",
+          "feito": false
+        },
+        {
+          "dia": "Sáb",
+          "feito": false
+        },
+        {
+          "dia": "Dom",
+          "feito": false
+        }
       ],
-      "planoTratamento": null
+      "planoTratamento": null,
+      "sessao": {
+        "dataInicio": "2026-04-28",
+        "hora": "09:00"
+      }
     },
     {
       "id": "p3",
@@ -158,21 +393,46 @@
       "dorEVA": 4,
       "dorInicio": 8,
       "previsaoAlta": "Jul/26",
-      "proximaSessao": { "data": "30/04", "hora": "10:00", "label": "Quarta" },
+      "proximaSessao": {
+        "data": "30/04",
+        "hora": "10:00",
+        "label": "Quarta"
+      },
       "ultimaEvolucao": {
         "data": "27/04/2026",
         "sessao": "Sessão #5",
-        "doutor": "Dr. Carlos",
+        "doutor": "Dra. Ana Paula",
         "texto": "Paciente apresenta melhora na amplitude de movimento do ombro direito. Dor reduzida durante abdução acima de 90°."
       },
       "adesaoSemanal": [
-        { "dia": "Seg", "feito": true },
-        { "dia": "Ter", "feito": true },
-        { "dia": "Qua", "feito": false },
-        { "dia": "Qui", "feito": true },
-        { "dia": "Sex", "feito": false },
-        { "dia": "Sáb", "feito": true },
-        { "dia": "Dom", "feito": false }
+        {
+          "dia": "Seg",
+          "feito": true
+        },
+        {
+          "dia": "Ter",
+          "feito": true
+        },
+        {
+          "dia": "Qua",
+          "feito": false
+        },
+        {
+          "dia": "Qui",
+          "feito": true
+        },
+        {
+          "dia": "Sex",
+          "feito": false
+        },
+        {
+          "dia": "Sáb",
+          "feito": true
+        },
+        {
+          "dia": "Dom",
+          "feito": false
+        }
       ],
       "planoTratamento": {
         "observacoes": "Evitar movimentos acima da cabeça com carga. Gelo após sessões.",
@@ -181,15 +441,33 @@
             "id": "f1",
             "nome": "Fase 1 — Analgesia",
             "exercicios": [
-              { "id": "e1", "nome": "Pendular de Codman", "categoria": "Mobilidade", "series": "3×1min", "temVideo": true },
-              { "id": "e2", "nome": "Isométrico de Rotação", "categoria": "Fortalecimento", "series": "3×10s", "temVideo": true }
+              {
+                "id": "e1",
+                "nome": "Pendular de Codman",
+                "categoria": "Mobilidade",
+                "series": "3×1min",
+                "temVideo": true
+              },
+              {
+                "id": "e2",
+                "nome": "Isométrico de Rotação",
+                "categoria": "Fortalecimento",
+                "series": "3×10s",
+                "temVideo": true
+              }
             ]
           },
           {
             "id": "f2",
             "nome": "Fase 2 — Fortalecimento",
             "exercicios": [
-              { "id": "e3", "nome": "Elevação Lateral com Faixa", "categoria": "Fortalecimento", "series": "3×12", "temVideo": true }
+              {
+                "id": "e3",
+                "nome": "Elevação Lateral com Faixa",
+                "categoria": "Fortalecimento",
+                "series": "3×12",
+                "temVideo": true
+              }
             ]
           },
           {
@@ -198,6 +476,10 @@
             "exercicios": []
           }
         ]
+      },
+      "sessao": {
+        "dataInicio": "2026-04-29",
+        "hora": "10:00"
       }
     },
     {
@@ -216,21 +498,46 @@
       "dorEVA": 5,
       "dorInicio": 7,
       "previsaoAlta": "Set/26",
-      "proximaSessao": { "data": "29/04", "hora": "14:00", "label": "Amanhã" },
+      "proximaSessao": {
+        "data": "29/04",
+        "hora": "14:00",
+        "label": "Amanhã"
+      },
       "ultimaEvolucao": {
         "data": "25/04/2026",
         "sessao": "Sessão #8",
-        "doutor": "Dr. Carlos",
+        "doutor": "Dra. Ana Paula",
         "texto": "Paciente relata dor ao subir escadas. Ajustado plano para reduzir impacto. Adicionado fortalecimento de quadríceps."
       },
       "adesaoSemanal": [
-        { "dia": "Seg", "feito": true },
-        { "dia": "Ter", "feito": false },
-        { "dia": "Qua", "feito": true },
-        { "dia": "Qui", "feito": false },
-        { "dia": "Sex", "feito": true },
-        { "dia": "Sáb", "feito": false },
-        { "dia": "Dom", "feito": false }
+        {
+          "dia": "Seg",
+          "feito": true
+        },
+        {
+          "dia": "Ter",
+          "feito": false
+        },
+        {
+          "dia": "Qua",
+          "feito": true
+        },
+        {
+          "dia": "Qui",
+          "feito": false
+        },
+        {
+          "dia": "Sex",
+          "feito": true
+        },
+        {
+          "dia": "Sáb",
+          "feito": false
+        },
+        {
+          "dia": "Dom",
+          "feito": false
+        }
       ],
       "planoTratamento": {
         "observacoes": "Evitar exercícios de alto impacto. Monitorar edema pós-sessão.",
@@ -239,15 +546,33 @@
             "id": "f1",
             "nome": "Fase 1 — Analgesia",
             "exercicios": [
-              { "id": "e1", "nome": "Mobilização Patelar", "categoria": "Mobilidade", "series": "3×2min", "temVideo": true }
+              {
+                "id": "e1",
+                "nome": "Mobilização Patelar",
+                "categoria": "Mobilidade",
+                "series": "3×2min",
+                "temVideo": true
+              }
             ]
           },
           {
             "id": "f2",
             "nome": "Fase 2 — Fortalecimento",
             "exercicios": [
-              { "id": "e2", "nome": "Extensão de Joelho", "categoria": "Fortalecimento", "series": "3×12", "temVideo": true },
-              { "id": "e3", "nome": "Mini-agachamento", "categoria": "Funcional", "series": "3×10", "temVideo": true }
+              {
+                "id": "e2",
+                "nome": "Extensão de Joelho",
+                "categoria": "Fortalecimento",
+                "series": "3×12",
+                "temVideo": true
+              },
+              {
+                "id": "e3",
+                "nome": "Mini-agachamento",
+                "categoria": "Funcional",
+                "series": "3×10",
+                "temVideo": true
+              }
             ]
           },
           {
@@ -258,15 +583,45 @@
         ]
       },
       "avaliacoes": [
-        { "id": "av1", "data": "08/03/2026", "doutor": "Dr. Carlos", "testes": [
-          { "tipo": "tug", "tempoSegundos": 16.5, "distanciaMetros": 3 },
-          { "tipo": "dinamometria", "esquerda": 28.0, "direita": 31.5 }
-        ]},
-        { "id": "av2", "data": "14/04/2026", "doutor": "Dr. Carlos", "testes": [
-          { "tipo": "tug", "tempoSegundos": 13.2, "distanciaMetros": 3 },
-          { "tipo": "dinamometria", "esquerda": 30.5, "direita": 33.0 }
-        ]}
-      ]
+        {
+          "id": "av1",
+          "data": "08/03/2026",
+          "doutor": "Dra. Ana Paula",
+          "testes": [
+            {
+              "tipo": "tug",
+              "tempoSegundos": 16.5,
+              "distanciaMetros": 3
+            },
+            {
+              "tipo": "dinamometria",
+              "esquerda": 28,
+              "direita": 31.5
+            }
+          ]
+        },
+        {
+          "id": "av2",
+          "data": "14/04/2026",
+          "doutor": "Dra. Ana Paula",
+          "testes": [
+            {
+              "tipo": "tug",
+              "tempoSegundos": 13.2,
+              "distanciaMetros": 3
+            },
+            {
+              "tipo": "dinamometria",
+              "esquerda": 30.5,
+              "direita": 33
+            }
+          ]
+        }
+      ],
+      "sessao": {
+        "dataInicio": "2026-04-28",
+        "hora": "14:00"
+      }
     },
     {
       "id": "p5",
@@ -284,21 +639,46 @@
       "dorEVA": 6,
       "dorInicio": 9,
       "previsaoAlta": "Ago/26",
-      "proximaSessao": { "data": "30/04", "hora": "08:00", "label": "Quarta" },
+      "proximaSessao": {
+        "data": "30/04",
+        "hora": "08:00",
+        "label": "Quarta"
+      },
       "ultimaEvolucao": {
         "data": "20/04/2026",
         "sessao": "Sessão #20",
-        "doutor": "Dr. Carlos",
+        "doutor": "Dra. Ana Paula",
         "texto": "Paciente com baixa adesão ao plano domiciliar. Reforçada importância dos exercícios. Dor estável."
       },
       "adesaoSemanal": [
-        { "dia": "Seg", "feito": true },
-        { "dia": "Ter", "feito": false },
-        { "dia": "Qua", "feito": false },
-        { "dia": "Qui", "feito": false },
-        { "dia": "Sex", "feito": true },
-        { "dia": "Sáb", "feito": false },
-        { "dia": "Dom", "feito": false }
+        {
+          "dia": "Seg",
+          "feito": true
+        },
+        {
+          "dia": "Ter",
+          "feito": false
+        },
+        {
+          "dia": "Qua",
+          "feito": false
+        },
+        {
+          "dia": "Qui",
+          "feito": false
+        },
+        {
+          "dia": "Sex",
+          "feito": true
+        },
+        {
+          "dia": "Sáb",
+          "feito": false
+        },
+        {
+          "dia": "Dom",
+          "feito": false
+        }
       ],
       "planoTratamento": {
         "observacoes": "Contraindicado: flexão de tronco com rotação. Paciente com dificuldade de adesão.",
@@ -307,14 +687,26 @@
             "id": "f1",
             "nome": "Fase 1 — Analgesia",
             "exercicios": [
-              { "id": "e1", "nome": "Williams Flexion", "categoria": "Flexibilidade", "series": "3×30s", "temVideo": true }
+              {
+                "id": "e1",
+                "nome": "Williams Flexion",
+                "categoria": "Flexibilidade",
+                "series": "3×30s",
+                "temVideo": true
+              }
             ]
           },
           {
             "id": "f2",
             "nome": "Fase 2 — Fortalecimento",
             "exercicios": [
-              { "id": "e2", "nome": "Prancha Lateral", "categoria": "Estabilização", "series": "3×20s", "temVideo": true }
+              {
+                "id": "e2",
+                "nome": "Prancha Lateral",
+                "categoria": "Estabilização",
+                "series": "3×20s",
+                "temVideo": true
+              }
             ]
           },
           {
@@ -323,6 +715,10 @@
             "exercicios": []
           }
         ]
+      },
+      "sessao": {
+        "dataInicio": "2026-04-29",
+        "hora": "08:00"
       }
     },
     {
@@ -345,19 +741,41 @@
       "ultimaEvolucao": {
         "data": "15/04/2026",
         "sessao": "Sessão #30",
-        "doutor": "Dr. Carlos",
+        "doutor": "Dra. Ana Paula",
         "texto": "Paciente com alta funcional. Marcha independente, sem dor. Orientado sobre manutenção."
       },
       "adesaoSemanal": [
-        { "dia": "Seg", "feito": true },
-        { "dia": "Ter", "feito": true },
-        { "dia": "Qua", "feito": true },
-        { "dia": "Qui", "feito": true },
-        { "dia": "Sex", "feito": true },
-        { "dia": "Sáb", "feito": true },
-        { "dia": "Dom", "feito": false }
+        {
+          "dia": "Seg",
+          "feito": true
+        },
+        {
+          "dia": "Ter",
+          "feito": true
+        },
+        {
+          "dia": "Qua",
+          "feito": true
+        },
+        {
+          "dia": "Qui",
+          "feito": true
+        },
+        {
+          "dia": "Sex",
+          "feito": true
+        },
+        {
+          "dia": "Sáb",
+          "feito": true
+        },
+        {
+          "dia": "Dom",
+          "feito": false
+        }
       ],
-      "planoTratamento": null
+      "planoTratamento": null,
+      "sessao": null
     },
     {
       "id": "p7",
@@ -375,21 +793,46 @@
       "dorEVA": 2,
       "dorInicio": 7,
       "previsaoAlta": "Jun/26",
-      "proximaSessao": { "data": "29/04", "hora": "15:00", "label": "Amanhã" },
+      "proximaSessao": {
+        "data": "29/04",
+        "hora": "15:00",
+        "label": "Amanhã"
+      },
       "ultimaEvolucao": {
         "data": "28/04/2026",
         "sessao": "Sessão #3",
-        "doutor": "Dr. Carlos",
+        "doutor": "Dra. Ana Paula",
         "texto": "Boa evolução. Edema reduzido. Iniciado treino proprioceptivo em solo instável."
       },
       "adesaoSemanal": [
-        { "dia": "Seg", "feito": true },
-        { "dia": "Ter", "feito": true },
-        { "dia": "Qua", "feito": true },
-        { "dia": "Qui", "feito": true },
-        { "dia": "Sex", "feito": true },
-        { "dia": "Sáb", "feito": true },
-        { "dia": "Dom", "feito": true }
+        {
+          "dia": "Seg",
+          "feito": true
+        },
+        {
+          "dia": "Ter",
+          "feito": true
+        },
+        {
+          "dia": "Qua",
+          "feito": true
+        },
+        {
+          "dia": "Qui",
+          "feito": true
+        },
+        {
+          "dia": "Sex",
+          "feito": true
+        },
+        {
+          "dia": "Sáb",
+          "feito": true
+        },
+        {
+          "dia": "Dom",
+          "feito": true
+        }
       ],
       "planoTratamento": {
         "observacoes": "Progressão para treino em superfície instável. Retorno ao esporte em 6 semanas.",
@@ -398,35 +841,121 @@
             "id": "f1",
             "nome": "Fase 1 — Analgesia",
             "exercicios": [
-              { "id": "e1", "nome": "Mobilização Articular", "categoria": "Mobilidade", "series": "3×2min", "temVideo": true }
+              {
+                "id": "e1",
+                "nome": "Mobilização Articular",
+                "categoria": "Mobilidade",
+                "series": "3×2min",
+                "temVideo": true
+              }
             ]
           },
           {
             "id": "f2",
             "nome": "Fase 2 — Fortalecimento",
             "exercicios": [
-              { "id": "e2", "nome": "Calf Raise", "categoria": "Fortalecimento", "series": "3×15", "temVideo": true }
+              {
+                "id": "e2",
+                "nome": "Calf Raise",
+                "categoria": "Fortalecimento",
+                "series": "3×15",
+                "temVideo": true
+              }
             ]
           },
           {
             "id": "f3",
             "nome": "Fase 3 — Funcional",
             "exercicios": [
-              { "id": "e3", "nome": "Equilíbrio Unipodal", "categoria": "Propriocepção", "series": "3×30s", "temVideo": true }
+              {
+                "id": "e3",
+                "nome": "Equilíbrio Unipodal",
+                "categoria": "Propriocepção",
+                "series": "3×30s",
+                "temVideo": true
+              }
             ]
           }
         ]
+      },
+      "sessao": {
+        "dataInicio": "2026-04-28",
+        "hora": "15:00"
       }
     }
   ],
   "agendaSemanal": [
-    { "id": "ag1", "dia": "Seg", "diaNum": 28, "hora": "08:00", "paciente": "Carla M.", "tipo": "Sessão", "cor": "green" },
-    { "id": "ag2", "dia": "Ter", "diaNum": 29, "hora": "08:00", "paciente": "Maria S.", "tipo": "Sessão", "cor": "green" },
-    { "id": "ag3", "dia": "Ter", "diaNum": 29, "hora": "09:00", "paciente": "João P.", "tipo": "Avaliação", "cor": "yellow" },
-    { "id": "ag4", "dia": "Ter", "diaNum": 29, "hora": "10:00", "paciente": "Ana L.", "tipo": "Sessão", "cor": "green" },
-    { "id": "ag5", "dia": "Ter", "diaNum": 29, "hora": "14:00", "paciente": "Pedro R.", "tipo": "Sessão", "cor": "green" },
-    { "id": "ag6", "dia": "Ter", "diaNum": 29, "hora": "15:00", "paciente": "Fernanda D.", "tipo": "Sessão", "cor": "green" },
-    { "id": "ag7", "dia": "Qui", "diaNum": 1, "hora": "10:00", "paciente": "Lucas T.", "tipo": "Retorno", "cor": "blue" },
-    { "id": "ag8", "dia": "Sex", "diaNum": 2, "hora": "16:00", "paciente": "Rita G.", "tipo": "Sessão", "cor": "green" }
+    {
+      "id": "ag1",
+      "dia": "Seg",
+      "diaNum": 28,
+      "hora": "08:00",
+      "paciente": "Carla M.",
+      "tipo": "Sessão",
+      "cor": "green"
+    },
+    {
+      "id": "ag2",
+      "dia": "Ter",
+      "diaNum": 29,
+      "hora": "08:00",
+      "paciente": "Maria S.",
+      "tipo": "Sessão",
+      "cor": "green"
+    },
+    {
+      "id": "ag3",
+      "dia": "Ter",
+      "diaNum": 29,
+      "hora": "09:00",
+      "paciente": "João P.",
+      "tipo": "Avaliação",
+      "cor": "yellow"
+    },
+    {
+      "id": "ag4",
+      "dia": "Ter",
+      "diaNum": 29,
+      "hora": "10:00",
+      "paciente": "Ana L.",
+      "tipo": "Sessão",
+      "cor": "green"
+    },
+    {
+      "id": "ag5",
+      "dia": "Ter",
+      "diaNum": 29,
+      "hora": "14:00",
+      "paciente": "Pedro R.",
+      "tipo": "Sessão",
+      "cor": "green"
+    },
+    {
+      "id": "ag6",
+      "dia": "Ter",
+      "diaNum": 29,
+      "hora": "15:00",
+      "paciente": "Fernanda D.",
+      "tipo": "Sessão",
+      "cor": "green"
+    },
+    {
+      "id": "ag7",
+      "dia": "Qui",
+      "diaNum": 1,
+      "hora": "10:00",
+      "paciente": "Lucas T.",
+      "tipo": "Retorno",
+      "cor": "blue"
+    },
+    {
+      "id": "ag8",
+      "dia": "Sex",
+      "diaNum": 2,
+      "hora": "16:00",
+      "paciente": "Rita G.",
+      "tipo": "Sessão",
+      "cor": "green"
+    }
   ]
 }
