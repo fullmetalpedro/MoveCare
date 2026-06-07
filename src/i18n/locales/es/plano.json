@@ -1,21 +1,19 @@
 {
-  "plano": {
-    "title": "Plan de Tratamiento",
-    "sendWhatsApp": "Enviar por WhatsApp",
-    "addFromLibrary": "Agregar de la Biblioteca",
-    "noExercises": "Ningún ejercicio registrado en el plan.",
-    "noPlan": "Ningún plan de tratamiento registrado para este paciente.",
-    "series": "Series: {{count}}",
-    "noVideo": "Sin video",
-    "dragZone": "Arrastrar de la Biblioteca o hacer clic para agregar",
-    "observations": "Observaciones del Plan",
-    "drag": "Arrastrar ejercicio",
-    "edit": "Editar ejercicio",
-    "delete": "Eliminar ejercicio",
-    "wa": {
-      "title": "Compartir en WhatsApp",
-      "subtitle": "Copie el texto y péguelo en la conversación con el paciente",
-      "copyText": "Copiar texto"
-    }
+  "title": "Plan de Tratamiento",
+  "sendWhatsApp": "Enviar por WhatsApp",
+  "addFromLibrary": "Agregar de la Biblioteca",
+  "noExercises": "Ningún ejercicio registrado en el plan.",
+  "noPlan": "Ningún plan de tratamiento registrado para este paciente.",
+  "series": "Series: {{count}}",
+  "noVideo": "Sin video",
+  "dragZone": "Arrastrar de la Biblioteca o hacer clic para agregar",
+  "observations": "Observaciones del Plan",
+  "drag": "Arrastrar ejercicio",
+  "edit": "Editar ejercicio",
+  "delete": "Eliminar ejercicio",
+  "wa": {
+    "title": "Compartir en WhatsApp",
+    "subtitle": "Copie el texto y péguelo en la conversación con el paciente",
+    "copyText": "Copiar texto"
   }
 }

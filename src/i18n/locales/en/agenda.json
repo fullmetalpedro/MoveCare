@@ -19,6 +19,7 @@
   "stepDateTime": "Date and time",
   "searchPatient": "Search patient...",
   "noPatientFound": "No active patient found.",
+  "newPatient": "New patient",
   "slotOccupied": "Time slot occupied",
   "slotScheduleAt": "Schedule at {{time}}",
   "confirmAppointment": "Confirm appointment"

@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { X, CalendarPlus, Search, ChevronRight, ChevronDown } from "lucide-react";
+import { X, CalendarPlus, Search, ChevronRight, ChevronDown, UserPlus } from "lucide-react";
 import type { Paciente, AgendaSemanal } from "../types";
 
 const DIAS = ["Seg", "Ter", "Qua", "Qui", "Sex"] as const;
@@ -87,6 +88,7 @@ export default function AgendamentoModal({
   const [horaSelecionada, setHoraSelecionada] = useState<string | null>(horaInicial ?? null);
   const [closing, setClosing] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const pacientesAtivos = useMemo(
     () => pacientes.filter((p) => p.status === "Ativo"),
@@ -119,6 +121,11 @@ export default function AgendamentoModal({
     if (!pacienteSelecionado || !horaSelecionada) return;
     onConfirm(pacienteSelecionado.id, diaSelecionado, horaSelecionada);
     handleClose();
+  }
+
+  function handleNewPatient() {
+    onClose();
+    navigate("/pacientes/novo");
   }
 
   const canConfirm = pacienteSelecionado !== null && horaSelecionada !== null;
@@ -201,6 +208,10 @@ export default function AgendamentoModal({
                   ))
                 )}
               </div>
+              <button className="mag-new-patient" onClick={handleNewPatient}>
+                <UserPlus size={15} aria-hidden="true" />
+                {t("agenda.newPatient")}
+              </button>
             </div>
           </div>
         </div>

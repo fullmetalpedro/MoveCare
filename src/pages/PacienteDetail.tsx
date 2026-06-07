@@ -1,6 +1,6 @@
 import { Suspense, useRef, useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, NavLink, Outlet, useLocation } from "react-router-dom";
-import { ChevronLeft, TrendingUp, CalendarDays, Heart, Clock, ClipboardList, Stethoscope, BarChart3, FolderOpen, ClipboardPlus } from "lucide-react";
+import { ChevronLeft, ClipboardList, Stethoscope, BarChart3, FolderOpen, ClipboardPlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { Paciente } from "../types";
 import Avatar from "../components/Avatar";
@@ -104,37 +104,25 @@ export default function PacienteDetail({ pacientes }: PacienteDetailProps) {
       </div>
 
       <div className="detail-stats">
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">{t("patientDetail.stats.adesao")}</span>
-            <span className="stat-icon stat-icon-green"><TrendingUp size={18} aria-hidden="true" /></span>
-          </div>
+        <div className="stat-card stat-card-centered">
+          <span className="stat-label">{t("patientDetail.stats.adesao")}</span>
           <div className="stat-value">{paciente.adesao}%</div>
           <div className={`stat-detail ${paciente.adesaoVariacao >= 0 ? "positive" : "negative"}`}>
             {t("patientDetail.vsLastMonth", { arrow: paciente.adesaoVariacao >= 0 ? "↑" : "↓", pct: Math.abs(paciente.adesaoVariacao) })}
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">{t("patientDetail.stats.sessoes")}</span>
-            <span className="stat-icon stat-icon-green"><CalendarDays size={18} aria-hidden="true" /></span>
-          </div>
+        <div className="stat-card stat-card-centered">
+          <span className="stat-label">{t("patientDetail.stats.sessoes")}</span>
           <div className="stat-value">{paciente.sessoes}/{paciente.totalSessoes}</div>
           <div className="stat-detail">{t("patientDetail.previsaoAlta", { date: paciente.previsaoAlta })}</div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">{t("patientDetail.stats.dorEva")}</span>
-            <span className="stat-icon stat-icon-green"><Heart size={18} aria-hidden="true" /></span>
-          </div>
+        <div className="stat-card stat-card-centered">
+          <span className="stat-label">{t("patientDetail.stats.dorEva")}</span>
           <div className="stat-value">{paciente.dorEVA}/10</div>
           <div className="stat-detail">{t("patientDetail.dorInicio", { value: paciente.dorInicio })}</div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-header">
-            <span className="stat-label">{t("patientDetail.stats.proximaSessao")}</span>
-            <span className="stat-icon stat-icon-green"><Clock size={18} aria-hidden="true" /></span>
-          </div>
+        <div className="stat-card stat-card-centered">
+          <span className="stat-label">{t("patientDetail.stats.proximaSessao")}</span>
           <div className="stat-value">{paciente.proximaSessao?.data ?? "—"}</div>
           <div className="stat-detail">
             {paciente.proximaSessao ? `${paciente.proximaSessao.hora} — ${paciente.proximaSessao.label}` : t("patientDetail.semSessaoAgendada")}
