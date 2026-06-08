@@ -1,0 +1,410 @@
+.ds-page {
+  width: 100%;
+}
+
+/* ─── Sections ─── */
+
+.ds-section {
+  margin-bottom: 32px;
+}
+
+.ds-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+/* ─── Layout helpers ─── */
+
+.ds-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ds-row-wrap {
+  flex-wrap: wrap;
+}
+
+.ds-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ─── Color tokens ─── */
+
+.ds-tokens-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ds-token {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.ds-token-swatch {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-token-name {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: "SF Mono", "Fira Code", monospace;
+  text-align: center;
+  max-width: 80px;
+  word-break: break-all;
+}
+
+/* ─── Buttons ─── */
+
+.ds-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ds-btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-btn-primary:disabled:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.ds-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ds-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ds-btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background: var(--danger);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ds-btn-sm {
+  padding: 7px 14px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+.ds-btn-lg {
+  padding: 13px 28px;
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+.ds-btn-loading {
+  opacity: 0.65;
+}
+
+/* ─── Spin animation ─── */
+
+@keyframes ds-spin {
+  to { transform: rotate(360deg); }
+}
+
+.ds-spin {
+  animation: ds-spin 0.8s linear infinite;
+}
+
+/* ─── Icon buttons ─── */
+
+.ds-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ds-icon-btn-danger {
+  border-color: rgba(224, 79, 95, 0.3);
+  color: var(--danger);
+  background: rgba(224, 79, 95, 0.05);
+}
+
+/* ─── Cards ─── */
+
+.ds-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 28px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.ds-card-interactive {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.ds-card-interactive:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.ds-card-lg {
+  border-radius: var(--radius-lg);
+  padding: 28px 36px;
+}
+
+/* ─── Badges ─── */
+
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ds-badge-neutral {
+  background: var(--border-light);
+  color: var(--text-muted);
+}
+
+.ds-badge-accent {
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--accent);
+}
+
+.ds-badge-cat {
+  /* color/bg injected inline */
+}
+
+/* ─── Toggle ─── */
+
+.ds-toggle {
+  position: relative;
+  width: 51px;
+  height: 31px;
+  border-radius: 100px;
+  border: none;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.25s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.ds-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ds-toggle.on {
+  background: var(--accent);
+}
+
+.ds-toggle.on::after {
+  transform: translateX(20px);
+}
+
+.ds-toggle:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.ds-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  box-shadow: var(--shadow-sm);
+  max-width: 420px;
+}
+
+.ds-toggle-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ds-toggle-sublabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ─── Slide tabs override (fit-content in design system context) ─── */
+
+.ds-slide-tabs-fit {
+  width: fit-content;
+}
+
+/* ─── Underline tabs ─── */
+
+.ds-underline-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border-light);
+}
+
+.ds-underline-tab {
+  padding: 8px 20px;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s;
+}
+
+.ds-underline-tab.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.ds-underline-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+}
+
+.ds-underline-tab:hover {
+  box-shadow: none;
+  transform: none;
+  color: var(--text-primary);
+}
+
+/* ─── Form input hint ─── */
+
+.ds-input-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ─── Modal pieces ─── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeInUp 0.2s both;
+}
+
+.modal-dialog {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 440px;
+  margin: 0 16px;
+  animation: fadeInUp 0.22s both;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 18px 20px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px 18px;
+  border-top: 1px solid var(--border-light);
+}

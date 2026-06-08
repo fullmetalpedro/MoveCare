@@ -21,6 +21,7 @@ const Documentos = lazy(() => import("./pages/Documentos"));
 const Biblioteca = lazy(() => import("./pages/Biblioteca"));
 const CadastroPaciente = lazy(() => import("./pages/CadastroPaciente"));
 const CadastroExercicio = lazy(() => import("./pages/CadastroExercicio"));
+const DesignSystem = lazy(() => import("./pages/DesignSystem"));
 // Design-system showcase (not linked in the sidebar; visit /styleguide directly).
 const Styleguide = lazy(() => import("./pages/Styleguide"));
 
@@ -72,6 +73,7 @@ export default function App() {
             <Route path="biblioteca/novo" element={<CadastroExercicio />} />
             <Route path="pacientes/novo" element={<CadastroPaciente />} />
             <Route path="documentos" element={<Documentos />} />
+            <Route path="design-system" element={<DesignSystem />} />
           </Route>
           <Route path="/styleguide" element={<Styleguide />} />
         </Routes>
