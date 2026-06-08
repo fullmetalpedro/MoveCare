@@ -14,6 +14,7 @@ import Documentos from "./pages/Documentos";
 import Biblioteca from "./pages/Biblioteca";
 import CadastroPaciente from "./pages/CadastroPaciente";
 import CadastroExercicio from "./pages/CadastroExercicio";
+import DesignSystem from "./pages/DesignSystem";
 import mockData from "./data/mock.json";
 import type { MockData } from "./types";
 
@@ -49,6 +50,7 @@ export default function App() {
         <Route path="biblioteca/novo" element={<CadastroExercicio />} />
         <Route path="pacientes/novo" element={<CadastroPaciente />} />
         <Route path="documentos" element={<Documentos />} />
+        <Route path="design-system" element={<DesignSystem />} />
       </Route>
     </Routes>
     </>

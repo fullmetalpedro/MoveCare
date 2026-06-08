@@ -1,6 +1,6 @@
 import { useRef, useEffect, useLayoutEffect, useCallback, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Heart, LayoutDashboard, Calendar, Users, BookOpen, FileText, Settings, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { Heart, LayoutDashboard, Calendar, Users, BookOpen, FileText, Settings, PanelLeftClose, PanelLeftOpen, Palette } from "lucide-react";
 import type { Doctor } from "../types";
 import "./Sidebar.css";
 
@@ -76,6 +76,10 @@ export default function Sidebar({ doctor, alertCount, collapsed, onToggle }: Sid
         <NavLink to="/documentos" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Documentos">
           <span className="nav-icon"><FileText size={18} /></span>
           <span className="nav-label">Documentos</span>
+        </NavLink>
+        <NavLink to="/design-system" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title="Design System">
+          <span className="nav-icon"><Palette size={18} /></span>
+          <span className="nav-label">Design System</span>
         </NavLink>
       </nav>
 
