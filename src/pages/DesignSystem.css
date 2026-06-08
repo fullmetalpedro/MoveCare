@@ -408,3 +408,220 @@
   padding: 14px 20px 18px;
   border-top: 1px solid var(--border-light);
 }
+
+/* ─── Search box (from Pacientes.css) ─── */
+
+.ds-page .search-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card-bg);
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  width: 200px;
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-page .search-box input {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--text-primary);
+  width: 100%;
+  background: transparent;
+}
+
+.ds-page .search-box input::placeholder {
+  color: var(--text-muted);
+}
+
+.ds-page .search-icon {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Status badges (from Pacientes.css) ─── */
+
+.ds-page .status-badge {
+  font-size: 12px;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.ds-page .badge-ativo {
+  background: rgba(52, 199, 89, 0.1);
+  color: var(--success);
+}
+
+.ds-page .badge-avaliacao {
+  background: rgba(255, 149, 0, 0.1);
+  color: var(--warning);
+}
+
+.ds-page .badge-alta {
+  background: var(--border-light);
+  color: var(--text-muted);
+}
+
+/* ─── Form primitives (from CadastroPaciente.css) ─── */
+
+.ds-page .form-section {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 24px 28px;
+}
+
+.ds-page .section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.ds-page .section-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ds-page .section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ds-page .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.ds-page .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ds-page .form-group.col-2 {
+  grid-column: span 2;
+}
+
+.ds-page .form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ds-page .required {
+  color: var(--danger);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.ds-page .form-input {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+.ds-page .form-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+.ds-page .form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.ds-page .form-textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.ds-page .has-error .form-input {
+  border-color: var(--danger);
+}
+
+.ds-page .has-error .form-input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.1);
+}
+
+.ds-page .form-error {
+  font-size: 12px;
+  color: var(--danger);
+  font-weight: 500;
+}
+
+/* ─── Selectable chips (from CadastroPaciente.css) ─── */
+
+.ds-page .select-chip {
+  padding: 7px 18px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.ds-page .select-chip.active.chip-ativo {
+  background: rgba(52, 199, 89, 0.1);
+  border-color: #34C759;
+  color: #34C759;
+  font-weight: 600;
+}
+
+.ds-page .select-chip.active.chip-avaliacao {
+  background: rgba(255, 149, 0, 0.1);
+  border-color: #FF9500;
+  color: #FF9500;
+  font-weight: 600;
+}
+
+.ds-page .select-chip.active.chip-alta {
+  background: var(--border-light);
+  border-color: var(--text-muted);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ─── Cancel button (from CadastroPaciente.css) ─── */
+
+.ds-page .btn-cancelar {
+  padding: 11px 24px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
